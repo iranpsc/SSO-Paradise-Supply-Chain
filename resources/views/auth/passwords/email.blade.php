@@ -17,7 +17,7 @@
                     <form method="POST" action="{{ route('password.email') }}">
                         @csrf
 
-                        <x-forms.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
+                        <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">

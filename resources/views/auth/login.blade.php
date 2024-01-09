@@ -11,11 +11,11 @@
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
-                            <x-forms.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
+                            <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
 
-                            <x-forms.text :label="__('Password')" for="password" name="password" type="password" required autocomplete="current-password" />
+                            <x-form.text :label="__('Password')" for="password" name="password" type="password" required autocomplete="current-password" />
 
-                            <x-forms.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember" :checked="old('remember')" />
+                            <x-form.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember" :checked="old('remember')" />
 
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">

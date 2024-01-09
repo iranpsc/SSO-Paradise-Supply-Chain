@@ -25,23 +25,23 @@
                                 </div>
                             </div>
 
-                            <x-forms.text for="first_name" name="first_name" label="{{ __('First Name') }}" :value="old('first_name') ?? $personalInfo->first_name" />
-                            <x-forms.text for="last_name" name="last_name" label="{{ __('Last Name') }}" :value="old('last_name') ?? $personalInfo->last_name" />
-                            <x-forms.text for="mobile" name="mobile" label="{{ __('Phone Number') }}" :value="old('mobile') ?? $personalInfo->mobile" />
-                            <x-forms.text for="telephone" name="telephone" label="{{ __('Telephone Number') }}" :value="old('telephone') ?? $personalInfo->telephone" />
-                            <x-forms.text for="national_code" name="national_code" label="{{ __('National Code') }}" :value="old('national_code') ?? $personalInfo->national_code" />
-                            <x-forms.text for="address" name="address" label="{{ __('Address') }}" :value="old('address') ?? $personalInfo->address" />
-                            <x-forms.file for="melli_card_scan" name="melli_card_scan" label="{{ __('Melli Card Scan (Back and Front)') }}"/>
-                            <x-forms.file for="certificate_scan" name="certificate_scan" label="{{ __('Certificate Scan') }}" />
-                            <x-forms.file for="bank_card_scan" name="bank_card_scan" label="{{ __('Bank Card Scan') }}" />
+                            <x-form.text for="first_name" name="first_name" label="{{ __('First Name') }}" :value="old('first_name') ?? $personalInfo->first_name" />
+                            <x-form.text for="last_name" name="last_name" label="{{ __('Last Name') }}" :value="old('last_name') ?? $personalInfo->last_name" />
+                            <x-form.text for="mobile" name="mobile" label="{{ __('Phone Number') }}" :value="old('mobile') ?? $personalInfo->mobile" />
+                            <x-form.text for="telephone" name="telephone" label="{{ __('Telephone Number') }}" :value="old('telephone') ?? $personalInfo->telephone" />
+                            <x-form.text for="national_code" name="national_code" label="{{ __('National Code') }}" :value="old('national_code') ?? $personalInfo->national_code" />
+                            <x-form.text for="address" name="address" label="{{ __('Address') }}" :value="old('address') ?? $personalInfo->address" />
+                            <x-form.file for="melli_card_scan" name="melli_card_scan" label="{{ __('Melli Card Scan (Back and Front)') }}"/>
+                            <x-form.file for="certificate_scan" name="certificate_scan" label="{{ __('Certificate Scan') }}" />
+                            <x-form.file for="bank_card_scan" name="bank_card_scan" label="{{ __('Bank Card Scan') }}" />
                             
                             <div id="company_information" class="@if(old('is_company') || $personalInfo->is_company) d-block @else d-none @endIf">
-                                <x-forms.text for="company_name" name="company_name" label="{{ __('Company Name') }}" :value="old('company_name') ?? $personalInfo->company_name" />
-                                <x-forms.text for="company_address" name="company_address" label="{{ __('Company Address') }}" :value="old('company_address') ?? $personalInfo->company_address" />
-                                <x-forms.text for="company_national_number" name="company_national_number" label="{{ __('Company National Number') }}" :value="old('company_national_number') ?? $personalInfo->company_national_number" />
-                                <x-forms.text for="company_registration_number" name="company_registration_number" label="{{ __('Company Registration Number') }}" :value="old('company_registration_number') ?? $personalInfo->company_registration_number" />
-                                <x-forms.text for="company_tax_number" name="company_tax_number" label="{{ __('Company Tax Number') }}" :value="old('company_tax_number') ?? $personalInfo->company_tax_number" />
-                                <x-forms.text for="company_executive_name" name="company_executive_name" label="{{ __('Company Executive Name') }}" :value="old('company_executive_name') ?? $personalInfo->company_executive_name" />
+                                <x-form.text for="company_name" name="company_name" label="{{ __('Company Name') }}" :value="old('company_name') ?? $personalInfo->company_name" />
+                                <x-form.text for="company_address" name="company_address" label="{{ __('Company Address') }}" :value="old('company_address') ?? $personalInfo->company_address" />
+                                <x-form.text for="company_national_number" name="company_national_number" label="{{ __('Company National Number') }}" :value="old('company_national_number') ?? $personalInfo->company_national_number" />
+                                <x-form.text for="company_registration_number" name="company_registration_number" label="{{ __('Company Registration Number') }}" :value="old('company_registration_number') ?? $personalInfo->company_registration_number" />
+                                <x-form.text for="company_tax_number" name="company_tax_number" label="{{ __('Company Tax Number') }}" :value="old('company_tax_number') ?? $personalInfo->company_tax_number" />
+                                <x-form.text for="company_executive_name" name="company_executive_name" label="{{ __('Company Executive Name') }}" :value="old('company_executive_name') ?? $personalInfo->company_executive_name" />
                             </div>
 
                             <div class="row mb-3">

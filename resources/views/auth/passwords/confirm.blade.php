@@ -13,7 +13,7 @@
                     <form method="POST" action="{{ route('password.confirm') }}">
                         @csrf
 
-                        <x-forms.text :label="__('Password')" for="password" name="password" type="password" required autocomplete="current-password" />
+                        <x-form.text :label="__('Password')" for="password" name="password" type="password" required autocomplete="current-password" />
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
