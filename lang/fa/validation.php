@@ -97,7 +97,13 @@ return [
     "not_in"           => ":attribute انتخاب شده، معتبر نیست.",
     'not_regex'        => ':attribute فرمت معتبر نیست.',
     "numeric"          => ":attribute باید شامل عدد باشد.",
-    'password'         => 'رمز عبور اشتباه است.',
+    'password' => [
+        'letters' => 'فیلد :attribute باید حداقل شامل یک حرف باشد.',
+        'mixed' => 'فیلد :attribute باید حداقل شامل یک حرف بزرگ و یک حرف کوچک باشد.',
+        'numbers' => 'فیلد :attribute باید حداقل شامل یک عدد باشد.',
+        'symbols' => 'فیلد :attribute باید حداقل شامل یک نماد باشد.',
+        'uncompromised' => 'فیلد :attribute وارد شده در یک نشتی داده ظاهر شده است. لطفاً یک :attribute دیگر انتخاب کنید.',
+    ],
     'present'          => ':attribute باید وجود داشته باشد.',
     'prohibited'       => 'فیلد :attribute ممنوع است.',
     'prohibited_if'    => 'هنگام که :other، :value است فیلد :attribute ممنوع است.',
@@ -125,6 +131,7 @@ return [
     'uploaded'         => 'فیلد :attribute به درستی اپلود نشد.',
     "url"              => "فرمت آدرس :attribute اشتباه است.",
     'uuid'             => ':attribute باید یک فرمت درست UUID باشد.',
+    'current_password' => 'رمز عبور فعلی اشتباه است.',
 
     /*
     |--------------------------------------------------------------------------
@@ -182,6 +189,18 @@ return [
         "available" => "موجود",
         "size" => "اندازه",
 		"file" => "فایل",
-		"fullname" => "نام کامل"
+		"fullname" => "نام کامل",
+        "national_code" => "کد ملی",
+        "telephone" => "تلفن",
+        "melli_card_scan" => "اسکن کارت ملی",
+        "certificate_scan" => "اسکن شناسنامه",
+        "bank_card_scan" => "اسکن کارت بانکی",
+        "is_company" => "شرکت است؟",
+        "company_name" => "نام شرکت",
+        "company_address" => "آدرس شرکت",
+        "company_registration_number" => "شماره ثبت شرکت",
+        "company_national_number" => "شماره ملی شرکت",
+        "company_tax_number" => "شماره مالیات شرکت",
+        "company_executive_name" => "نام مدیر عامل شرکت",
     ],
 ];
