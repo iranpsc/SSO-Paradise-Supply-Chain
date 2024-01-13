@@ -13,6 +13,9 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <!-- Import bootstrap rtl css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
 
@@ -33,10 +36,10 @@
                     <ul class="navbar-nav me-auto">
                         @auth
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('account.show') }}">{{ __('Account') }}</a>
+                                <a class="nav-link @if(Route::currentRouteName() == 'account.show') active @endif" href="{{ route('account.show') }}">{{ __('Account') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
+                                <a class="nav-link @if(Route::currentRouteName() == 'personal-info.show') active @endif" href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
                             </li>
                         @endauth
                     </ul>

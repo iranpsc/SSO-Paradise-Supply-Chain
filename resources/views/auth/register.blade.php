@@ -8,8 +8,22 @@
                     <div class="card-header">{{ __('Register') }}</div>
 
                     <div class="card-body">
+
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li class="mb-0">{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
+
+                            <input type="hidden" name="client_id" value="{{ request()->query('client_id') }}">
+                            <input type="hidden" name="redirect_uri" value="{{ request()->query('redirect_uri') }}">
 
                             <x-form.text :label="__('Name')" for="name" name="name" required autofocus />
 

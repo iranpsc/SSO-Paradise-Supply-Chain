@@ -83,5 +83,12 @@
     "Account Type": "نوع حساب کاربری",
     "Certificate Scan": "اسکن مدارک فعالیت",
     "Bank Card Scan": "اسکن کارت بانکی",
-    "Melli Card Scan (Back and Front)": "اسکن کارت ملی (پشت و رو)"
+    "Melli Card Scan (Back and Front)": "اسکن کارت ملی (پشت و رو)",
+    "Create account": "ایجاد حساب کاربری",
+    "is requesting permission to access your account.": "درخواست دسترسی به حساب کاربری شما را دارد.",
+    "Authorize": "اجازه دادن",
+    "Cancel": "لغو",
+    "Authorization Request": "درخواست اجازه دسترسی",
+    "Authorization": "اجازه دسترسی",
+    "Go to Gmail": "رفتن به Gmail"
 }

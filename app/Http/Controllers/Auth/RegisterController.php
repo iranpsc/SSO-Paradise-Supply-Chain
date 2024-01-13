@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Passport\Client;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -60,6 +61,8 @@ class RegisterController extends Controller
                 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised()
             ],
+            'client_id' => ['required', 'exists:oauth_clients,id'],
+            'redirect_uri' => ['required', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
         ]);
     }
 
@@ -86,8 +89,10 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
+        $request->session()->put('redirect_uri', $request->input('redirect_uri', $this->redirectPath()));
+
         $user->personalInfo()->create();
 
-        return redirect($this->redirectPath());
+        return redirect()->route('home');
     }
 }

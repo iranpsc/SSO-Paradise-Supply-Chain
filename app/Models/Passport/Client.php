@@ -13,6 +13,6 @@ class Client extends PassportClient
      */
     public function skipsAuthorization(): bool
     {
-        return $this->firstParty();
+        return true;
     }
 }

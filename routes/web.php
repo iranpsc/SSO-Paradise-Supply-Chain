@@ -32,9 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 Auth::routes();
 
-Route::get('/logout', function () {
-    return view('auth.logout');
-})->middleware('auth')->name('logout');
+Route::view('/logout', 'auth.logout')->middleware('auth');
 
 Route::controller(VerificationController::class)->prefix('email')->as('verification.')->group(function () {
     Route::get('/verify', 'show')->name('notice');
