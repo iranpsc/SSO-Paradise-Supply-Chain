@@ -21,6 +21,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:api')->get('/auth/check', function (Request $request) {
+    return response()->json([], 200);
+});
+
 Route::post('/users/get', function (Request $request) {
 
     $token = '#x#NmgxBHV3KA(4c)EpzH$xxY(C@%Z)uthcLvJM&';
