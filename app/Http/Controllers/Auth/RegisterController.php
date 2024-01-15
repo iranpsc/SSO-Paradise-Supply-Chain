@@ -54,7 +54,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255', 'not_regex:/^(HM-|hm-|Hm-|hM-).*$/'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
             'password' => [
                 'required',
                 'string',
@@ -63,6 +63,7 @@ class RegisterController extends Controller
             ],
             'client_id' => ['required', 'exists:oauth_clients,id'],
             'redirect_uri' => ['required', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
+            'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
     }
 
@@ -78,6 +79,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'referral' => $data['referral'],
         ]);
     }
 
@@ -89,7 +91,7 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        $request->session()->put('redirect_uri', $request->input('redirect_uri', $this->redirectPath()));
+        $request->session()->put('redirect_uri', $request->input('redirect_uri'));
 
         $user->personalInfo()->create();
 

@@ -202,5 +202,6 @@ return [
         "company_national_number" => "شماره ملی شرکت",
         "company_tax_number" => "شماره مالیات شرکت",
         "company_executive_name" => "نام مدیر عامل شرکت",
+        "referral" => "کد معرف"
     ],
 ];

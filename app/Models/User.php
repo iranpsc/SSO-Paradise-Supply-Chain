@@ -23,6 +23,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         'name',
         'email',
         'password',
+        'code',
+        'mobile',
+        'referral',
     ];
 
     /**
@@ -45,6 +48,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         'password' => 'hashed',
     ];
 
+    /**
+     * Get the user's personal info.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function personalInfo()
     {
         return $this->hasOne(PersonalInfo::class);

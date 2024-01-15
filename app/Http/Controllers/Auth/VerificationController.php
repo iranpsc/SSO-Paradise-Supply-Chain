@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class VerificationController extends Controller
@@ -43,8 +44,28 @@ class VerificationController extends Controller
 
     protected function verified(Request $request)
     {
+        $request->user()->update([
+            'code' => $this->generateCode(),
+        ]);
+
         $url = $request->session()->pull('redirect_uri', $this->redirectPath());
 
         return redirect()->to($url);
+    }
+
+    /**
+     * Generate user code.
+     *
+     * @return string
+     */
+    public function generateCode()
+    {
+        $lastCode = User::orderBy('code', 'desc')->first()->code;
+        $lastCode = substr($lastCode, 3);
+        $lastCode = intval($lastCode);
+        $lastCode++;
+        $lastCode = str_pad($lastCode, 6, '0', STR_PAD_LEFT);
+        $code = 'hm-' . $lastCode;
+        return $code;
     }
 }
