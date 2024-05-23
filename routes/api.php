@@ -22,7 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->get('/auth/check', function (Request $request) {
-    return response()->json([], 200);
+    return response()->json([
+        'user' => $request->user()->only(['id', 'name', 'email', 'code']),
+    ], 200);
 });
 
 Route::post('/users/get', function (Request $request) {
