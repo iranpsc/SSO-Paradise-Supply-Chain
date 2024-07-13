@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Confirm Password') }}</div>
 
-                <div class="card-body">
+                <div class="flex flex-col gap-7">
                     {{ __('Please confirm your password before continuing.') }}
 
                     <form method="POST" action="{{ route('password.confirm') }}">
@@ -17,7 +17,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-max   ">
                                     {{ __('Confirm Password') }}
                                 </button>
 
