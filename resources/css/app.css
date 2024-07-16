@@ -87,7 +87,7 @@ Tree rows
 }
 
 .tree ul li {
-  padding: 1em 1em 0 0;
+  padding: 3px 1em 0 0;
 }
 
 /* تغییر در اینجا */
@@ -103,7 +103,8 @@ Tree labels
   display: inline-block;
   font-weight: bold;
   border-radius: 10px;
-  padding: 14px;
+  padding: 12px;
+  padding-right: 0px;
 }
 
 label.tree_label {

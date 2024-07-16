@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="space-y-10">
         <div class="text-center">
             <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]"> رمز جدیدی برای حساب کار بری خود بسازید.</p>
         </div>

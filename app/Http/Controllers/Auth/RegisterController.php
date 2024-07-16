@@ -61,8 +61,8 @@ class RegisterController extends Controller
                 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised()
             ],
-            'client_id' => ['required', 'exists:oauth_clients,id'],
-            'redirect_uri' => ['required', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
+            'client_id' => ['nullable', 'exists:oauth_clients,id'],
+            'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
     }

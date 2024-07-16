@@ -17,12 +17,7 @@
 
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<style>
-    @font-face {
-  font-family: rokh;
-  src: url("{{ asset('style/fonts/RokhFaNum-Bold.ttf') }}");
-}
-</style>
+
 
     @vite('resources/css/app.css')
 </head>
@@ -46,10 +41,11 @@
                         </div>
                         <!-- end open btn nav -->
                         <div class="w-max lg:w-auto flex justify-center items-center">
-                            <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt="faq"></a>
+                            <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}"
+                                    alt="faq"></a>
                         </div>
                     </div>
-                   
+
 
                 </div>
 
@@ -69,7 +65,8 @@
                         <div
                             class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
                             <div class="flex items-center gap-1">
-                                <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt=""></a>
+                                <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}"
+                                        alt=""></a>
                             </div>
 
                             <!-- start close btn nav -->
@@ -77,24 +74,31 @@
                                 <div id="close-nav-btn"
                                     class="bg-slate-200 dark:bg-[#090909] w-10 h-10 p-3 rounded-full cursor-pointer flex items-center justify-center  "
                                     onclick="closeNav2()">
-                                    <img src="https://3d.irpsc.com/home-page/images/aroowww.svg" alt="" class="w-[60%] ">
+                                    <img src="https://3d.irpsc.com/home-page/images/aroowww.svg" alt=""
+                                        class="w-[60%] ">
                                 </div>
                             </div>
                             <!-- end close btn nav -->
                         </div>
                         <!-- end head icon RGB -->
+
+                    </div>
+                    <div class=" h-auto  lg:h-[30vh] xl:h-[35vh] 2xl:h-[45vh] 3xl:h-[60vh] overflow-y-auto  space-y-1">
+                        @auth
                         <div>
                             <ul class="tree">
                                 <li class="flex flex-col gap-4">
+
+
                                     <input type="checkbox" id="c1" class="peer" />
                                     <label
                                         class="px-[20px] py-4 w-full rounded-[10px]  text-[#282828]  font-bold  dark:text-[#868B90]   peer-checked:[&>div>svg]:rotate-180 transition-[3s] flex  items-center"
                                         for="c1">
                                         <div class="flex w-full items-center justify-between gap-5">
                                             <div class="flex items-center gap-4">
-                                                <img src="../icon/profile3d.png" alt=""
-                                                    class="w-7 h-7  rounded-full">
-                                                <a href="#">نام یوزرنیم</a>
+                                                <img src="{{ Auth::user()->getFirstMediaUrl('avatars') }}"
+                                                    alt="{{ Auth::user()->name }}" class="w-7 h-7  rounded-full">
+                                                <a href="#"> {{ Auth::user()->name }} </a>
                                             </div>
                                             <svg class="transition-[5s] duration-300" width="15" height="9"
                                                 viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,40 +110,85 @@
 
                                     </label>
                                     <ul>
-                                        @auth
                                         <li>
                                             <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <div class="flex justify-between items-center">
-                                                    
-                                                    
-                                                    <img src="../icon/Union.svg" alt="" class="w-7 h-7  ">
-                                                    <div class="nav-item">
+                                                <div class="flex gap-3 items-center">
+                                                    <svg width="22" height="22" viewBox="0 0 22 22"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
+                                                            fill="#868B90"></path>
+                                                    </svg>
+                                                    <div class="nav-item flex items-center">
                                                         <a class="nav-link @if (Route::currentRouteName() == 'account.show') active @endif"
                                                             href="{{ route('account.show') }}">{{ __('Account') }}</a>
                                                     </div>
-                                                    
-                                                
                                                 </div>
                                             </label>
                                         </li>
-                                        <li> 
+                                        <li>
                                             <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <img src="../icon/Union.svg" alt="" class="w-7 h-7  ">
-                                                <div class="nav-item">
-                                                    <a class="nav-link @if (Route::currentRouteName() == 'personal-info.show') active @endif"
-                                                        href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
+                                                <div class="flex gap-3 items-center">
+                                                    <svg width="22" height="22" viewBox="0 0 22 22"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
+                                                            fill="#868B90"></path>
+                                                    </svg>
+                                                    <div class="nav-item flex items-center">
+                                                        <a class="nav-link @if (Route::currentRouteName() == 'personal-info.show') active @endif"
+                                                            href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
+                                                    </div>
                                                 </div>
                                             </label>
-                                            
+
                                         </li>
-                                        @endauth
+                                        <li>
+                                            <label class="text-[#868B90] before:text-transparent tree_label">
+                                                <div class="flex gap-3 items-center">
+                                                    <svg class="w-[24px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
+                                                        <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
+                                                        <g><g><g><path fill="#868B90" data-title="Layer 0" xs="0" d="M116.8,25.8c-39.6,5.1-73.7,33.4-86.2,71.7l-2.3,7.1l-1.1-1.8c-0.6-1-3.1-5.5-5.5-9.9c-5.4-10.1-7-11.3-10.4-8.7c-2.5,2-2.1,3.3,7,20c4.6,8.6,8.8,16,9.2,16.4c0.8,1,3,1.2,4.6,0.6c0.4-0.2,6.4-6,13.2-13.1C57,96,57.6,95.2,57.6,93.3c0-2.6-1.3-3.9-4-3.9c-2,0-2.5,0.4-9.2,7.3l-7.1,7.4l0.7-2.6c4.7-16,15.9-33.1,29-44.4c35-30,85.3-31.8,121.8-4.3c16.5,12.4,28.8,29.9,34.1,48.6c1.7,6.2,2.8,7.8,5.2,7.8c1.9,0,3.2-0.9,4.1-2.6c0.7-1.3,0.6-1.9-0.5-6c-11.3-39.3-45.4-68.8-86.4-74.6C139.2,25.1,122.9,25,116.8,25.8z"/><path fill="#868B90" data-title="Layer 1" xs="1" d="M121.2,67.3c-13.1,3.2-20.9,13.8-21.7,29.9l-0.4,6.4l-5.2,0.3c-4.7,0.3-5.4,0.4-7.4,1.9c-2.7,1.9-4.5,4.4-5.3,7.3c-0.4,1.3-0.5,12.2-0.4,30.6c0.2,28.3,0.2,28.5,1.3,30.7c0.6,1.2,1.9,2.8,2.9,3.6c3.9,3.3,1.3,3.1,44,3.1c28.4,0,39.6-0.2,40.8-0.6c2.6-1,5-3.1,6.5-5.8l1.5-2.5l0.2-27.7c0.2-30.1,0.1-32-2.6-35.6c-2.6-3.5-4.9-4.6-10.7-4.9l-5.1-0.3l-0.3-5.6c-0.6-10.3-3.5-17.5-9.4-23.4c-3.6-3.6-9.1-6.6-14-7.6C132,66.2,124.9,66.3,121.2,67.3z M137.5,76.1c8,2.5,12.5,9.4,13.5,21.3c0.6,6.7,3,6-22,6h-21.6v-2.9c0-4.4,1-10.9,2.2-14.2c1.7-4.4,6.2-8.7,10.7-10.2C125,74.6,132.7,74.6,137.5,76.1z M168.8,113.3c0.5,0.7,0.7,6.6,0.7,29.2c0,27.6-0.1,28.3-1.1,29.3c-1.1,1.1-1.8,1.1-39,1.1c-33.4,0-38-0.1-39.1-0.9l-1.2-0.8v-28.9c0-27.6,0.1-28.9,1-29.5c0.8-0.5,8.6-0.7,39.4-0.6C166,112.3,168.1,112.3,168.8,113.3z"/><path fill="#868B90" data-title="Layer 2" xs="2" d="M125.1,125.1c-2.5,1.3-4.8,4.1-5.5,6.7c-0.4,1.3-0.5,5.2-0.4,9.8c0.2,7.5,0.2,7.7,1.8,9.9c3.4,4.9,9.2,6,13.8,2.8c3.8-2.7,4.2-4,4.2-14.4c0-10.2-0.3-11.1-4-14C132.4,124.2,127.9,123.7,125.1,125.1z M130.8,140.1l0.2,7.7h-1.7h-1.6v-7.4c0-4.1,0.2-7.6,0.4-7.8c0.2-0.2,0.9-0.3,1.5-0.2C130.6,132.5,130.6,133,130.8,140.1z"/><path fill="#868B90" data-title="Layer 3" xs="3" d="M226.7,132.2c-1.2,0.5-27.2,24.1-27.8,25.3c-1.4,2.7,0.5,5.9,3.6,5.9c1.9,0,2.2-0.2,12.2-9.2c3.8-3.5,7-6.2,7.1-6.1c0.4,0.3-3.1,11-4.9,15.3c-5.7,13.3-14.6,25.6-25.1,34.8c-26.4,23.2-62,30.4-95.2,19.3c-23.5-7.8-43.8-25.3-55-47.1c-3.6-7-4.8-10.1-6.6-16.6c-0.7-2.7-1.7-5-2.5-5.8c-2.3-2.3-6-1.1-6.9,2.3c-0.7,2.8,3.3,13.9,8.7,24.3c15.4,29.8,45,50.7,78.4,55.5c7.4,1,21.8,1,29.4-0.1c30.9-4.3,58.3-22.2,75-49c5.1-8.1,8.3-15.7,12.5-29.3c0.2-0.4,0.3-0.6,0.4-0.5c0.1,0.1,1.9,4.1,4,8.8c2.1,4.7,4.4,9.1,5,9.7c2.4,2.6,6.9,0.9,6.9-2.5c0-2-13.5-32-15.1-33.6C229.5,132.2,227.9,131.7,226.7,132.2z"/></g></g></g>
+                                                        </svg>
+                                                    <div class="nav-item flex items-center">
+                                                        <a href="{{ route('password.edit') }}"
+                                                            class="nav-link">{{ __('Change Password') }}</a>
+                                                    </div>
+                                                </div>
+                                            </label>
+
+                                        </li>
+                                        <li>
+                                            <label class="text-[#868B90] before:text-transparent tree_label">
+                                                <div class="flex gap-3 items-center">
+                                                    <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path class="stroke-[#868B90] " d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path class="stroke-[#868B90] " d="M1 10.5078H13.88" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path class="stroke-[#868B90] " d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                    <div class="nav-item flex items-center">
+                                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                                            onclick="event.preventDefault();
+                                                           document.getElementById('logout-form').submit();">
+                                                            {{ __('Logout') }}
+                                                        </a>
+
+                                                        <form id="logout-form" action="{{ route('logout') }}"
+                                                            method="POST" class="d-none">
+                                                            @csrf
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </label>
+
+                                        </li>
+
+
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-
-                    </div>
-                    <div class=" h-auto  lg:h-[30vh] xl:h-[35vh] 2xl:h-[45vh] 3xl:h-[60vh] overflow-y-auto  space-y-1">
+                    @endauth
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
 
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
@@ -242,11 +291,18 @@
                         class="space-y-6  lg:absolute bottom-0  w-full h-auto lg:h-1/5 2xl:h-1/6 bg-white  dark:bg-[#0F0F0E] pb-10 lg:pb-1">
                         <div
                             class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
-                            <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path class="stroke-white dark:stroke-black" d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path class="stroke-white dark:stroke-black"  d="M1 10.5078H13.88" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path class="stroke-white dark:stroke-black" d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
+                            <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path class="stroke-white dark:stroke-black"
+                                    d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                    stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path class="stroke-white dark:stroke-black"
+                                    d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
                             <a href="#" class="font-bold">ورود</a>
                         </div>
                         <div class="pt-5 border-t-2 border-[#EFEFEF]   dark:border-[#868B90] ">
@@ -298,7 +354,8 @@
                         <!-- end open btn nav -->
                         <div class="w-7  flex items-center justify-center">
                             <a href="./index.html" class="w-full">
-                                <img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt="" class="w-full">
+                                <img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt=""
+                                    class="w-full">
                             </a>
                         </div>
                         {{-- <div class="w-7 flex items-center justify-center">
@@ -326,7 +383,8 @@
                         </div>
                         <div class=" w-7 h-7  ">
                             <a href="https://animal.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/animal.irpsc.png') }}" alt="animal" class="w-full">
+                                <img src="{{ asset('images/logo/animal.irpsc.png') }}" alt="animal"
+                                    class="w-full">
                             </a>
                         </div>
                         <div class="w-7 h-7">
@@ -336,7 +394,8 @@
                         </div>
                         <div class="w-7 h-7 ">
                             <a href="https://art.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/art.irpsc.png') }}" alt="meta art" class="w-full h-full">
+                                <img src="{{ asset('images/logo/art.irpsc.png') }}" alt="meta art"
+                                    class="w-full h-full">
                             </a>
                         </div>
                         <div class="w-7 h-7">
@@ -351,17 +410,18 @@
                         </div>
                         <div class="w-7 h-7">
                             <a href="https://rgb.irpsc.com" class="w-full">
-                                <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="metargb" class="w-full">
+                                <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="metargb"
+                                    class="w-full">
                             </a>
                         </div>
                         <div class="w-7 h-7">
                             <a href="#" class="w-full">
-                                <svg width="22" height="22" viewBox="0 0 22 22"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M6.86523 11H6.11523H6.86523ZM14.8652 11H15.6152H14.8652ZM10.8652 15V15.75V15ZM12.9346 20.7856L13.0891 21.5195L12.9346 20.7856ZM8.79583 20.7856L8.6414 21.5195L8.79583 20.7856ZM1.60384 7.22119L0.909524 6.93761H0.909524L1.60384 7.22119ZM1.07962 13.0694L0.345688 13.2238L1.07962 13.0694ZM8.79583 1.21438L8.6414 0.480454L8.79583 1.21438ZM12.9346 1.21438L13.0891 0.480455L12.9346 1.21438ZM20.0461 7.25728L20.2638 7.97499L20.0461 7.25728ZM1.6832 7.25692L1.9009 6.53921L1.6832 7.25692ZM19.4333 7.50731C19.8727 8.58399 20.1152 9.76274 20.1152 11H21.6152C21.6152 9.56509 21.3337 8.19407 20.8221 6.94055L19.4333 7.50731ZM20.1152 11C20.1152 11.6573 20.0468 12.2978 19.9169 12.915L21.3848 13.2238C21.5359 12.5057 21.6152 11.7617 21.6152 11H20.1152ZM19.9169 12.915C19.1655 16.4862 16.3514 19.3002 12.7802 20.0517L13.0891 21.5195C17.2422 20.6456 20.5109 17.377 21.3848 13.2238L19.9169 12.915ZM12.7802 20.0517C12.163 20.1816 11.5225 20.25 10.8652 20.25V21.75C11.6269 21.75 12.3709 21.6707 13.0891 21.5195L12.7802 20.0517ZM10.8652 20.25C10.208 20.25 9.56748 20.1816 8.95026 20.0517L8.6414 21.5195C9.35957 21.6707 10.1035 21.75 10.8652 21.75V20.25ZM1.61523 11C1.61523 9.76178 1.85813 8.58215 2.29816 7.50478L0.909524 6.93761C0.397214 8.19193 0.115235 9.56397 0.115235 11H1.61523ZM8.95026 20.0517C5.37906 19.3002 2.565 16.4862 1.81354 12.915L0.345688 13.2238C1.21959 17.377 4.48828 20.6456 8.6414 21.5195L8.95026 20.0517ZM1.81354 12.915C1.68367 12.2978 1.61523 11.6573 1.61523 11H0.115235C0.115235 11.7617 0.19457 12.5057 0.345688 13.2238L1.81354 12.915ZM2.29816 7.50478C3.44348 4.70064 5.92609 2.58466 8.95026 1.94831L8.6414 0.480454C5.1226 1.22088 2.2401 3.6799 0.909524 6.93761L2.29816 7.50478ZM8.95026 1.94831C9.56748 1.81844 10.208 1.75 10.8652 1.75V0.25C10.1035 0.25 9.35957 0.329336 8.6414 0.480454L8.95026 1.94831ZM10.8652 1.75C11.5225 1.75 12.163 1.81844 12.7802 1.94831L13.0891 0.480455C12.3709 0.329336 11.6269 0.25 10.8652 0.25V1.75ZM12.7802 1.94831C15.8053 2.58485 18.2885 4.70192 19.4333 7.50731L20.8221 6.94055C19.4921 3.68138 16.6089 1.22111 13.0891 0.480455L12.7802 1.94831ZM12.2201 1.44237C12.4961 2.30712 13.5174 5.63305 13.9361 8.68885L15.4222 8.48526C14.9849 5.29348 13.9292 1.86407 13.6492 0.986399L12.2201 1.44237ZM13.9361 8.68885C14.0483 9.5078 14.1152 10.2943 14.1152 11H15.6152C15.6152 10.2056 15.5403 9.34758 15.4222 8.48526L13.9361 8.68885ZM19.8284 6.53956C18.7309 6.87243 16.6696 7.45704 14.543 7.84951L14.8153 9.3246C17.0208 8.91754 19.1426 8.31505 20.2638 7.97499L19.8284 6.53956ZM14.543 7.84951C13.253 8.0876 11.9649 8.25 10.8652 8.25V9.75C12.0945 9.75 13.4831 9.57046 14.8153 9.3246L14.543 7.84951ZM14.1152 11C14.1152 12.0455 13.9684 13.2621 13.7489 14.4899L15.2255 14.7539C15.4527 13.4833 15.6152 12.1698 15.6152 11H14.1152ZM13.7489 14.4899C13.2677 17.1811 12.4593 19.808 12.2201 20.5576L13.6492 21.0136C13.8946 20.2443 14.7268 17.5432 15.2255 14.7539L13.7489 14.4899ZM20.4229 12.3549C19.6733 12.5941 17.0464 13.4025 14.3552 13.8836L14.6192 15.3602C17.4084 14.8615 20.1096 14.0294 20.8788 13.7839L20.4229 12.3549ZM14.3552 13.8836C13.1274 14.1032 11.9107 14.25 10.8652 14.25V15.75C12.0351 15.75 13.3485 15.5874 14.6192 15.3602L14.3552 13.8836ZM10.8652 14.25C9.81975 14.25 8.6031 14.1032 7.3753 13.8836L7.11129 15.3602C8.38194 15.5874 9.69541 15.75 10.8652 15.75V14.25ZM7.3753 13.8836C4.6841 13.4025 2.0572 12.5941 1.3076 12.3549L0.851632 13.7839C1.62092 14.0294 4.32207 14.8615 7.11129 15.3602L7.3753 13.8836ZM6.11523 11C6.11523 12.1698 6.27782 13.4833 6.50501 14.7539L7.98159 14.4899C7.76206 13.2621 7.61523 12.0455 7.61523 11H6.11523ZM6.50501 14.7539C7.00371 17.5432 7.83586 20.2443 8.08132 21.0136L9.51034 20.5576C9.27116 19.808 8.46277 17.1811 7.98159 14.4899L6.50501 14.7539ZM8.08132 0.986398C7.80127 1.86407 6.74553 5.29348 6.30828 8.48526L7.7944 8.68885C8.21302 5.63305 9.23442 2.30712 9.51034 1.44237L8.08132 0.986398ZM6.30828 8.48526C6.19015 9.34758 6.11523 10.2056 6.11523 11H7.61523C7.61523 10.2943 7.68221 9.5078 7.7944 8.68885L6.30828 8.48526ZM10.8652 8.25C9.76558 8.25 8.47748 8.0876 7.18746 7.84951L6.91522 9.3246C8.24735 9.57046 9.63601 9.75 10.8652 9.75V8.25ZM7.18746 7.84951C5.06013 7.4569 2.9981 6.87202 1.9009 6.53921L1.4655 7.97463C2.58638 8.31462 4.70884 8.9174 6.91522 9.3246L7.18746 7.84951ZM19.7821 6.55831C19.7954 6.55142 19.8113 6.54476 19.8284 6.53956L20.2638 7.97499C20.3377 7.95255 20.4074 7.92382 20.4734 7.88955L19.7821 6.55831ZM1.21255 7.86103C1.29027 7.90856 1.37463 7.94706 1.4655 7.97463L1.9009 6.53921C1.93557 6.54972 1.96753 6.56448 1.99514 6.58136L1.21255 7.86103Z"
-                                    fill="#888888" />
-                            </svg>
+                                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6.86523 11H6.11523H6.86523ZM14.8652 11H15.6152H14.8652ZM10.8652 15V15.75V15ZM12.9346 20.7856L13.0891 21.5195L12.9346 20.7856ZM8.79583 20.7856L8.6414 21.5195L8.79583 20.7856ZM1.60384 7.22119L0.909524 6.93761H0.909524L1.60384 7.22119ZM1.07962 13.0694L0.345688 13.2238L1.07962 13.0694ZM8.79583 1.21438L8.6414 0.480454L8.79583 1.21438ZM12.9346 1.21438L13.0891 0.480455L12.9346 1.21438ZM20.0461 7.25728L20.2638 7.97499L20.0461 7.25728ZM1.6832 7.25692L1.9009 6.53921L1.6832 7.25692ZM19.4333 7.50731C19.8727 8.58399 20.1152 9.76274 20.1152 11H21.6152C21.6152 9.56509 21.3337 8.19407 20.8221 6.94055L19.4333 7.50731ZM20.1152 11C20.1152 11.6573 20.0468 12.2978 19.9169 12.915L21.3848 13.2238C21.5359 12.5057 21.6152 11.7617 21.6152 11H20.1152ZM19.9169 12.915C19.1655 16.4862 16.3514 19.3002 12.7802 20.0517L13.0891 21.5195C17.2422 20.6456 20.5109 17.377 21.3848 13.2238L19.9169 12.915ZM12.7802 20.0517C12.163 20.1816 11.5225 20.25 10.8652 20.25V21.75C11.6269 21.75 12.3709 21.6707 13.0891 21.5195L12.7802 20.0517ZM10.8652 20.25C10.208 20.25 9.56748 20.1816 8.95026 20.0517L8.6414 21.5195C9.35957 21.6707 10.1035 21.75 10.8652 21.75V20.25ZM1.61523 11C1.61523 9.76178 1.85813 8.58215 2.29816 7.50478L0.909524 6.93761C0.397214 8.19193 0.115235 9.56397 0.115235 11H1.61523ZM8.95026 20.0517C5.37906 19.3002 2.565 16.4862 1.81354 12.915L0.345688 13.2238C1.21959 17.377 4.48828 20.6456 8.6414 21.5195L8.95026 20.0517ZM1.81354 12.915C1.68367 12.2978 1.61523 11.6573 1.61523 11H0.115235C0.115235 11.7617 0.19457 12.5057 0.345688 13.2238L1.81354 12.915ZM2.29816 7.50478C3.44348 4.70064 5.92609 2.58466 8.95026 1.94831L8.6414 0.480454C5.1226 1.22088 2.2401 3.6799 0.909524 6.93761L2.29816 7.50478ZM8.95026 1.94831C9.56748 1.81844 10.208 1.75 10.8652 1.75V0.25C10.1035 0.25 9.35957 0.329336 8.6414 0.480454L8.95026 1.94831ZM10.8652 1.75C11.5225 1.75 12.163 1.81844 12.7802 1.94831L13.0891 0.480455C12.3709 0.329336 11.6269 0.25 10.8652 0.25V1.75ZM12.7802 1.94831C15.8053 2.58485 18.2885 4.70192 19.4333 7.50731L20.8221 6.94055C19.4921 3.68138 16.6089 1.22111 13.0891 0.480455L12.7802 1.94831ZM12.2201 1.44237C12.4961 2.30712 13.5174 5.63305 13.9361 8.68885L15.4222 8.48526C14.9849 5.29348 13.9292 1.86407 13.6492 0.986399L12.2201 1.44237ZM13.9361 8.68885C14.0483 9.5078 14.1152 10.2943 14.1152 11H15.6152C15.6152 10.2056 15.5403 9.34758 15.4222 8.48526L13.9361 8.68885ZM19.8284 6.53956C18.7309 6.87243 16.6696 7.45704 14.543 7.84951L14.8153 9.3246C17.0208 8.91754 19.1426 8.31505 20.2638 7.97499L19.8284 6.53956ZM14.543 7.84951C13.253 8.0876 11.9649 8.25 10.8652 8.25V9.75C12.0945 9.75 13.4831 9.57046 14.8153 9.3246L14.543 7.84951ZM14.1152 11C14.1152 12.0455 13.9684 13.2621 13.7489 14.4899L15.2255 14.7539C15.4527 13.4833 15.6152 12.1698 15.6152 11H14.1152ZM13.7489 14.4899C13.2677 17.1811 12.4593 19.808 12.2201 20.5576L13.6492 21.0136C13.8946 20.2443 14.7268 17.5432 15.2255 14.7539L13.7489 14.4899ZM20.4229 12.3549C19.6733 12.5941 17.0464 13.4025 14.3552 13.8836L14.6192 15.3602C17.4084 14.8615 20.1096 14.0294 20.8788 13.7839L20.4229 12.3549ZM14.3552 13.8836C13.1274 14.1032 11.9107 14.25 10.8652 14.25V15.75C12.0351 15.75 13.3485 15.5874 14.6192 15.3602L14.3552 13.8836ZM10.8652 14.25C9.81975 14.25 8.6031 14.1032 7.3753 13.8836L7.11129 15.3602C8.38194 15.5874 9.69541 15.75 10.8652 15.75V14.25ZM7.3753 13.8836C4.6841 13.4025 2.0572 12.5941 1.3076 12.3549L0.851632 13.7839C1.62092 14.0294 4.32207 14.8615 7.11129 15.3602L7.3753 13.8836ZM6.11523 11C6.11523 12.1698 6.27782 13.4833 6.50501 14.7539L7.98159 14.4899C7.76206 13.2621 7.61523 12.0455 7.61523 11H6.11523ZM6.50501 14.7539C7.00371 17.5432 7.83586 20.2443 8.08132 21.0136L9.51034 20.5576C9.27116 19.808 8.46277 17.1811 7.98159 14.4899L6.50501 14.7539ZM8.08132 0.986398C7.80127 1.86407 6.74553 5.29348 6.30828 8.48526L7.7944 8.68885C8.21302 5.63305 9.23442 2.30712 9.51034 1.44237L8.08132 0.986398ZM6.30828 8.48526C6.19015 9.34758 6.11523 10.2056 6.11523 11H7.61523C7.61523 10.2943 7.68221 9.5078 7.7944 8.68885L6.30828 8.48526ZM10.8652 8.25C9.76558 8.25 8.47748 8.0876 7.18746 7.84951L6.91522 9.3246C8.24735 9.57046 9.63601 9.75 10.8652 9.75V8.25ZM7.18746 7.84951C5.06013 7.4569 2.9981 6.87202 1.9009 6.53921L1.4655 7.97463C2.58638 8.31462 4.70884 8.9174 6.91522 9.3246L7.18746 7.84951ZM19.7821 6.55831C19.7954 6.55142 19.8113 6.54476 19.8284 6.53956L20.2638 7.97499C20.3377 7.95255 20.4074 7.92382 20.4734 7.88955L19.7821 6.55831ZM1.21255 7.86103C1.29027 7.90856 1.37463 7.94706 1.4655 7.97463L1.9009 6.53921C1.93557 6.54972 1.96753 6.56448 1.99514 6.58136L1.21255 7.86103Z"
+                                        fill="#888888" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -370,13 +430,20 @@
                         <div class="w-10  justify-center items-center">
                             <a href="#"
                                 class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
-                                
-<svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path class="stroke-white dark:stroke-black" d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path class="stroke-white dark:stroke-black"  d="M1 10.5078H13.88" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path class="stroke-white dark:stroke-black" d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    
+
+                                <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
                             </a>
                         </div>
                         <div class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   dark:border-[#868B90]">
@@ -419,7 +486,7 @@
                 class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-32 lg:mt-14">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
-                        <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk" >
+                        <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk">
                             زیرساخت های فعال زنجیره تامین بهشت
                         </p>
                         <p class="text-[#868B90] text-xs md:text-2xl">
@@ -444,36 +511,11 @@
                                     <div
                                         class=" p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
                                         <a style="font-family: rokh;"
-                                            class="{{ Request::is('register') ? 'text-primery-blue' : '' }}"
+                                            class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
                                             href="{{ route('register') }}">{{ __('Register') }}</a>
                                     </div>
                                 @endif
-                            @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
-                                        role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false" v-pre>
-                                        {{ Auth::user()->name }}
-                                        <img src="{{ Auth::user()->getFirstMediaUrl('avatars') }}"
-                                            alt="{{ Auth::user()->name }}" width="30" height="30"
-                                            class="rounded-circle">
-                                    </a>
 
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a href="{{ route('password.edit') }}"
-                                            class="nav-link">{{ __('Change Password') }}</a>
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                               document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                            class="d-none">
-                                            @csrf
-                                        </form>
-                                    </div>
-                                </li>
                             @endguest
                         </div>
 
@@ -485,11 +527,14 @@
             </div>
         </div>
         <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-16 ">
-            <div class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
-                <a href="https://irpsc.com" style="width:55px ;" target="_blank " title="وزارت تعاون کار و رفاه اجتماعی">
+            <div
+                class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
+                <a href="https://irpsc.com" style="width:55px ;" target="_blank "
+                    title="وزارت تعاون کار و رفاه اجتماعی">
                     <img src="https://irpsc.com/img-icon/vezarat.png" class="rounded-lg">
                 </a>
-                <a class="active" href="#" target="_blank " style="width:55px ;" title="نماد اعتماد الکترونیک">
+                <a class="active" href="#" target="_blank " style="width:55px ;"
+                    title="نماد اعتماد الکترونیک">
                     <img src="https://irpsc.com/img-icon/enamad.png" class="rounded-lg" alt="نماد اعتماد الکترونیک">
 
                 </a>
@@ -528,7 +573,8 @@
                 <a href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
                     <img src="https://irpsc.com/img-icon/uni.png" class="rounded-lg" alt="دانشگاه متاورس">
                 </a>
-                <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;" title="استخدام | دانش محور">
+                <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
+                    title="استخدام | دانش محور">
                     <img src="https://irpsc.com/img-icon/knowledge.png" class="rounded-lg" alt="استخدام | دانش محور">
                 </a>
                 <a href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
@@ -550,7 +596,8 @@
                     <img src="https://irpsc.com/img-icon/home-soon.png" class="rounded-lg">
                 </a>
             </div>
-            <div class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between">
+            <div
+                class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between">
                 <div class="flex flex-col gap-10 w-full lg:w-[60%]">
                     <div class="flex gap-2">
                         <img src="" alt="" class="w-[71px] h-[71px] aspect-square ">
@@ -911,8 +958,8 @@
 
 
     <script>
-                // dark mode
-                const enableDarkModeButton = document.querySelector('.enable-dark-mode');
+        // dark mode
+        const enableDarkModeButton = document.querySelector('.enable-dark-mode');
         const disableDarkModeButton = document.querySelector('.disable-dark-mode');
         if (enableDarkModeButton && disableDarkModeButton) {
             // Set initial state based on local storage
@@ -944,32 +991,31 @@
                 localStorage.setItem('dark-mode', false);
             });
         };
+
         function openNav2() {
-           
-           var element = document.querySelector("#main-nav");
-           element.classList.replace("sidenav", "sidnav-t");
-           var element = document.querySelector(".main-content-smallNav");
-           element.classList.replace("main-content-smallNav", "main-content-activeNav");
-           element.classList.replace("sidenav", "sidnav-t");
-           document.getElementById("open00").style.display = 'flex';
-           document.getElementById("close00").style.display = 'none';
-           document.getElementById("close-nav-btn").style.display = 'flex';
-           document.getElementById("open-nav-btn").style.display = 'none';
 
-       };
+            var element = document.querySelector("#main-nav");
+            element.classList.replace("sidenav", "sidnav-t");
+            var element = document.querySelector(".main-content-smallNav");
+            element.classList.replace("main-content-smallNav", "main-content-activeNav");
+            element.classList.replace("sidenav", "sidnav-t");
+            document.getElementById("open00").style.display = 'flex';
+            document.getElementById("close00").style.display = 'none';
+            document.getElementById("close-nav-btn").style.display = 'flex';
+            document.getElementById("open-nav-btn").style.display = 'none';
 
-       function closeNav2() {
-           var element = document.querySelector("#main-nav");
-           element.classList.replace("sidnav-t", "sidenav");
-           var element = document.querySelector(".main-content-activeNav");
-           element.classList.replace("main-content-activeNav", "main-content-smallNav");
-           document.getElementById("open00").style.display = 'none';
-           document.getElementById("close00").style.display = 'flex';
-           document.getElementById("close-nav-btn").style.display = 'none';
-           document.getElementById("open-nav-btn").style.display = 'flex';
-       };
+        };
 
-
+        function closeNav2() {
+            var element = document.querySelector("#main-nav");
+            element.classList.replace("sidnav-t", "sidenav");
+            var element = document.querySelector(".main-content-activeNav");
+            element.classList.replace("main-content-activeNav", "main-content-smallNav");
+            document.getElementById("open00").style.display = 'none';
+            document.getElementById("close00").style.display = 'flex';
+            document.getElementById("close-nav-btn").style.display = 'none';
+            document.getElementById("open-nav-btn").style.display = 'flex';
+        };
     </script>
     <!-- Import jquery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
