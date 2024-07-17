@@ -4,20 +4,20 @@
 
 @font-face {
   font-family: 'AzarMehr';
-  src: url("{{ asset('style/fonts/AzarMehr-DS2-FD-Bold.ttf') }}") format('truetype');
+  src: url("../../public/style/fonts/AzarMehr-DS2-FD-Bold.ttf") format('truetype');
   font-weight: 700; /* Bold weight */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'AzarMehr';
-  src: url("{{ asset('style/fonts/AzarMehr-FD[DSTY,KSHD,wght].ttf') }}") format('truetype');
+  src: url("../../public/style/fonts/AzarMehr-FD[DSTY\,KSHD\,wght].ttf") format('truetype');
   font-weight: 400; /* Normal weight */
   font-style: normal;
 }
 @font-face {
   font-family:'rokh';
-  src: url("{{ asset('style/fonts/RokhFaNum-Bold.ttf') }}") format('truetype');
+  src: url("../../public/style/fonts/RokhFaNum-Bold.ttf") format('truetype');
   font-weight: 700; /* Bold weight */
 }
 

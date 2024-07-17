@@ -59,136 +59,172 @@
             <!-- start opened nav -->
             <div id="open00" dir="ltr"
                 class="hidden bg-white  dark:bg-[#0F0F0E]  p-4  relative  pr-0 h-full !overflow-y-scroll scrollbar !z-[5000]">
-                <nav dir="rtl" class="w-full   space-y-6  relative">
-                    <div class="space-y-6 ">
-                        <!-- strat head icon RGB -->
-                        <div
-                            class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
-                            <div class="flex items-center gap-1">
-                                <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}"
-                                        alt=""></a>
-                            </div>
+                <nav dir="rtl" class="w-full   space-y-6  relative lg:overflow-hidden">
 
-                            <!-- start close btn nav -->
-                            <div>
-                                <div id="close-nav-btn"
-                                    class="bg-slate-200 dark:bg-[#090909] w-10 h-10 p-3 rounded-full cursor-pointer flex items-center justify-center  "
-                                    onclick="closeNav2()">
-                                    <img src="https://3d.irpsc.com/home-page/images/aroowww.svg" alt=""
-                                        class="w-[60%] ">
-                                </div>
-                            </div>
-                            <!-- end close btn nav -->
-                        </div>
-                        <!-- end head icon RGB -->
-
-                    </div>
-                    <div class=" h-auto  lg:h-[30vh] xl:h-[35vh] 2xl:h-[45vh] 3xl:h-[60vh] overflow-y-auto  space-y-1">
-                        @auth
-                        <div>
-                            <ul class="tree">
-                                <li class="flex flex-col gap-4">
-
-
-                                    <input type="checkbox" id="c1" class="peer" />
-                                    <label
-                                        class="px-[20px] py-4 w-full rounded-[10px]  text-[#282828]  font-bold  dark:text-[#868B90]   peer-checked:[&>div>svg]:rotate-180 transition-[3s] flex  items-center"
-                                        for="c1">
-                                        <div class="flex w-full items-center justify-between gap-5">
-                                            <div class="flex items-center gap-4">
-                                                <img src="{{ Auth::user()->getFirstMediaUrl('avatars') }}"
-                                                    alt="{{ Auth::user()->name }}" class="w-7 h-7  rounded-full">
-                                                <a href="#"> {{ Auth::user()->name }} </a>
+                    <div class="  lg:h-full lg:pb-[220px] overflow-y-scroll scrollbar  space-y-1 relative">
+                        <div class="space-y-6   sticky top-0 mt-[-10px] pb-3 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-white dark:bg-[#0F0F0E]">
+                            <!-- strat head icon RGB -->
+                            <div
+                                class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
+                                <div class="flex items-center gap-2">
+                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts1.png') }}"
+                                            alt="تونل زمان"></a>
+                                            <div class="flex flex-col justify-between ">
+                                                <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
+                                                <span class="text-[#939393] text-sm">ورود / ثبت نام مرکزی</span>
                                             </div>
-                                            <svg class="transition-[5s] duration-300" width="15" height="9"
-                                                viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path class="dark:stroke-[#2C2F32]" d="M14 1L7.5 7.5L1 0.999999"
-                                                    stroke="black" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
-
-                                    </label>
-                                    <ul>
-                                        <li>
-                                            <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <div class="flex gap-3 items-center">
-                                                    <svg width="22" height="22" viewBox="0 0 22 22"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
-                                                            fill="#868B90"></path>
-                                                    </svg>
-                                                    <div class="nav-item flex items-center">
-                                                        <a class="nav-link @if (Route::currentRouteName() == 'account.show') active @endif"
-                                                            href="{{ route('account.show') }}">{{ __('Account') }}</a>
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <div class="flex gap-3 items-center">
-                                                    <svg width="22" height="22" viewBox="0 0 22 22"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
-                                                            fill="#868B90"></path>
-                                                    </svg>
-                                                    <div class="nav-item flex items-center">
-                                                        <a class="nav-link @if (Route::currentRouteName() == 'personal-info.show') active @endif"
-                                                            href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
-                                                    </div>
-                                                </div>
-                                            </label>
-
-                                        </li>
-                                        <li>
-                                            <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <div class="flex gap-3 items-center">
-                                                    <svg class="w-[24px]" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
-                                                        <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
-                                                        <g><g><g><path fill="#868B90" data-title="Layer 0" xs="0" d="M116.8,25.8c-39.6,5.1-73.7,33.4-86.2,71.7l-2.3,7.1l-1.1-1.8c-0.6-1-3.1-5.5-5.5-9.9c-5.4-10.1-7-11.3-10.4-8.7c-2.5,2-2.1,3.3,7,20c4.6,8.6,8.8,16,9.2,16.4c0.8,1,3,1.2,4.6,0.6c0.4-0.2,6.4-6,13.2-13.1C57,96,57.6,95.2,57.6,93.3c0-2.6-1.3-3.9-4-3.9c-2,0-2.5,0.4-9.2,7.3l-7.1,7.4l0.7-2.6c4.7-16,15.9-33.1,29-44.4c35-30,85.3-31.8,121.8-4.3c16.5,12.4,28.8,29.9,34.1,48.6c1.7,6.2,2.8,7.8,5.2,7.8c1.9,0,3.2-0.9,4.1-2.6c0.7-1.3,0.6-1.9-0.5-6c-11.3-39.3-45.4-68.8-86.4-74.6C139.2,25.1,122.9,25,116.8,25.8z"/><path fill="#868B90" data-title="Layer 1" xs="1" d="M121.2,67.3c-13.1,3.2-20.9,13.8-21.7,29.9l-0.4,6.4l-5.2,0.3c-4.7,0.3-5.4,0.4-7.4,1.9c-2.7,1.9-4.5,4.4-5.3,7.3c-0.4,1.3-0.5,12.2-0.4,30.6c0.2,28.3,0.2,28.5,1.3,30.7c0.6,1.2,1.9,2.8,2.9,3.6c3.9,3.3,1.3,3.1,44,3.1c28.4,0,39.6-0.2,40.8-0.6c2.6-1,5-3.1,6.5-5.8l1.5-2.5l0.2-27.7c0.2-30.1,0.1-32-2.6-35.6c-2.6-3.5-4.9-4.6-10.7-4.9l-5.1-0.3l-0.3-5.6c-0.6-10.3-3.5-17.5-9.4-23.4c-3.6-3.6-9.1-6.6-14-7.6C132,66.2,124.9,66.3,121.2,67.3z M137.5,76.1c8,2.5,12.5,9.4,13.5,21.3c0.6,6.7,3,6-22,6h-21.6v-2.9c0-4.4,1-10.9,2.2-14.2c1.7-4.4,6.2-8.7,10.7-10.2C125,74.6,132.7,74.6,137.5,76.1z M168.8,113.3c0.5,0.7,0.7,6.6,0.7,29.2c0,27.6-0.1,28.3-1.1,29.3c-1.1,1.1-1.8,1.1-39,1.1c-33.4,0-38-0.1-39.1-0.9l-1.2-0.8v-28.9c0-27.6,0.1-28.9,1-29.5c0.8-0.5,8.6-0.7,39.4-0.6C166,112.3,168.1,112.3,168.8,113.3z"/><path fill="#868B90" data-title="Layer 2" xs="2" d="M125.1,125.1c-2.5,1.3-4.8,4.1-5.5,6.7c-0.4,1.3-0.5,5.2-0.4,9.8c0.2,7.5,0.2,7.7,1.8,9.9c3.4,4.9,9.2,6,13.8,2.8c3.8-2.7,4.2-4,4.2-14.4c0-10.2-0.3-11.1-4-14C132.4,124.2,127.9,123.7,125.1,125.1z M130.8,140.1l0.2,7.7h-1.7h-1.6v-7.4c0-4.1,0.2-7.6,0.4-7.8c0.2-0.2,0.9-0.3,1.5-0.2C130.6,132.5,130.6,133,130.8,140.1z"/><path fill="#868B90" data-title="Layer 3" xs="3" d="M226.7,132.2c-1.2,0.5-27.2,24.1-27.8,25.3c-1.4,2.7,0.5,5.9,3.6,5.9c1.9,0,2.2-0.2,12.2-9.2c3.8-3.5,7-6.2,7.1-6.1c0.4,0.3-3.1,11-4.9,15.3c-5.7,13.3-14.6,25.6-25.1,34.8c-26.4,23.2-62,30.4-95.2,19.3c-23.5-7.8-43.8-25.3-55-47.1c-3.6-7-4.8-10.1-6.6-16.6c-0.7-2.7-1.7-5-2.5-5.8c-2.3-2.3-6-1.1-6.9,2.3c-0.7,2.8,3.3,13.9,8.7,24.3c15.4,29.8,45,50.7,78.4,55.5c7.4,1,21.8,1,29.4-0.1c30.9-4.3,58.3-22.2,75-49c5.1-8.1,8.3-15.7,12.5-29.3c0.2-0.4,0.3-0.6,0.4-0.5c0.1,0.1,1.9,4.1,4,8.8c2.1,4.7,4.4,9.1,5,9.7c2.4,2.6,6.9,0.9,6.9-2.5c0-2-13.5-32-15.1-33.6C229.5,132.2,227.9,131.7,226.7,132.2z"/></g></g></g>
-                                                        </svg>
-                                                    <div class="nav-item flex items-center">
-                                                        <a href="{{ route('password.edit') }}"
-                                                            class="nav-link">{{ __('Change Password') }}</a>
-                                                    </div>
-                                                </div>
-                                            </label>
-
-                                        </li>
-                                        <li>
-                                            <label class="text-[#868B90] before:text-transparent tree_label">
-                                                <div class="flex gap-3 items-center">
-                                                    <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path class="stroke-[#868B90] " d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path class="stroke-[#868B90] " d="M1 10.5078H13.88" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        <path class="stroke-[#868B90] " d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                    <div class="nav-item flex items-center">
-                                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                                            onclick="event.preventDefault();
-                                                           document.getElementById('logout-form').submit();">
-                                                            {{ __('Logout') }}
-                                                        </a>
-
-                                                        <form id="logout-form" action="{{ route('logout') }}"
-                                                            method="POST" class="d-none">
-                                                            @csrf
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </label>
-
-                                        </li>
-
-
-                                    </ul>
-                                </li>
-                            </ul>
+                                </div>
+    
+                                <!-- start close btn nav -->
+                                <div>
+                                    <div id="close-nav-btn"
+                                        class="bg-slate-200 dark:bg-[#090909] w-10 h-10 p-3 rounded-full cursor-pointer flex items-center justify-center  "
+                                        onclick="closeNav2()">
+                                        <img src="https://3d.irpsc.com/home-page/images/aroowww.svg" alt=""
+                                            class="w-[60%] ">
+                                    </div>
+                                </div>
+                                <!-- end close btn nav -->
+                            </div>
+                            <!-- end head icon RGB -->
+    
                         </div>
-                    @endauth
+                        @auth
+                            <div>
+                                <ul class="tree">
+                                    <li class="flex flex-col gap-4">
+
+
+                                        <input type="checkbox" id="c1" class="peer" />
+                                        <label
+                                            class="px-[20px] py-4 w-full rounded-[10px]  text-[#282828]  font-bold  dark:text-[#868B90]   peer-checked:[&>div>svg]:rotate-180 transition-[3s] flex  items-center"
+                                            for="c1">
+                                            <div class="flex w-full items-center justify-between gap-5">
+                                                <div class="flex items-center gap-4">
+                                                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') }}"
+                                                        alt="{{ Auth::user()->name }}" class="w-7 h-7  rounded-full">
+                                                    <a href="#"> {{ Auth::user()->name }} </a>
+                                                </div>
+                                                <svg class="transition-[5s] duration-300" width="15" height="9"
+                                                    viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path class="dark:stroke-[#2C2F32]" d="M14 1L7.5 7.5L1 0.999999"
+                                                        stroke="black" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </div>
+
+                                        </label>
+                                        <ul>
+                                            <li>
+                                                <label class="text-[#868B90] before:text-transparent tree_label">
+                                                    <div class="flex gap-3 items-center">
+                                                        <svg width="22" height="22" viewBox="0 0 22 22"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
+                                                                fill="#868B90"></path>
+                                                        </svg>
+                                                        <div class="nav-item flex items-center">
+                                                            <a class="nav-link @if (Route::currentRouteName() == 'account.show') active @endif"
+                                                                href="{{ route('account.show') }}">{{ __('Account') }}</a>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="text-[#868B90] before:text-transparent tree_label">
+                                                    <div class="flex gap-3 items-center">
+                                                        <svg width="22" height="22" viewBox="0 0 22 22"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M20.5 10.75C20.5 5.64137 16.3586 1.5 11.25 1.5C6.14137 1.5 2 5.64137 2 10.75C2 13.0237 2.82034 15.1058 4.18119 16.7164C4.5435 16.0371 5.11916 15.4274 5.86153 14.9278L5.86315 14.9267C7.37286 13.9166 9.32687 13.4351 11.2427 13.4351C13.1588 13.4351 15.1166 13.9166 16.6352 14.9253L16.6352 14.9253L16.6389 14.9278C17.3812 15.4273 17.9568 16.0369 18.3191 16.7161C19.6798 15.1055 20.5 13.0235 20.5 10.75ZM8.7461 19.6571C9.54246 19.8805 10.3823 20 11.25 20C12.2198 20 13.1548 19.8508 14.0331 19.574C15.1949 19.2072 16.2569 18.6163 17.1719 17.8501C17.0041 17.2859 16.5736 16.6923 15.8034 16.1736C14.5821 15.363 12.9308 14.9351 11.2427 14.9351C9.55398 14.9351 7.90836 15.3634 6.69814 16.1728C5.92728 16.6918 5.49645 17.2857 5.32861 17.8501C6.31632 18.6772 7.47532 19.3 8.7461 19.6571ZM9.54622 21.3657C10.1011 21.4541 10.6702 21.5 11.25 21.5C17.1871 21.5 22 16.6871 22 10.75C22 4.81294 17.1871 0 11.25 0C5.31294 0 0.5 4.81294 0.5 10.75C0.5 16.0408 4.32213 20.4388 9.35585 21.3337C9.41912 21.3449 9.48258 21.3556 9.54622 21.3657ZM11.2503 5.72998C12.6546 5.72998 13.7803 6.8627 13.7803 8.25998C13.7803 9.60876 12.7266 10.7085 11.3916 10.7784C11.2996 10.7709 11.2016 10.7702 11.1063 10.7782C9.77704 10.7072 8.72901 9.61176 8.72027 8.25786C8.72142 6.86305 9.85519 5.72998 11.2503 5.72998ZM15.2803 8.25998C15.2803 6.03726 13.486 4.22998 11.2503 4.22998C9.02606 4.22998 7.22027 6.03577 7.22027 8.25998V8.26422H7.22029C7.23254 10.4326 8.93809 12.2057 11.1047 12.2795C11.1487 12.281 11.1928 12.2787 11.2363 12.2724C11.232 12.2731 11.2312 12.273 11.234 12.2728C11.2365 12.2727 11.2408 12.2725 11.2465 12.2725C11.2588 12.2725 11.2702 12.2733 11.2772 12.2742C11.3166 12.2791 11.3562 12.2809 11.3958 12.2795C13.5587 12.2058 15.2803 10.4354 15.2803 8.25998Z"
+                                                                fill="#868B90"></path>
+                                                        </svg>
+                                                        <div class="nav-item flex items-center">
+                                                            <a class="nav-link @if (Route::currentRouteName() == 'personal-info.show') active @endif"
+                                                                href="{{ route('personal-info.show') }}">{{ __('Personal Information') }}</a>
+                                                        </div>
+                                                    </div>
+                                                </label>
+
+                                            </li>
+                                            <li>
+                                                <label class="text-[#868B90] before:text-transparent tree_label">
+                                                    <div class="flex gap-3 items-center">
+                                                        <svg class="w-[24px]" version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                            viewBox="0 0 256 256" enable-background="new 0 0 256 256"
+                                                            xml:space="preserve">
+                                                            <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon
+                                                            </metadata>
+                                                            <g>
+                                                                <g>
+                                                                    <g>
+                                                                        <path fill="#868B90" data-title="Layer 0"
+                                                                            xs="0"
+                                                                            d="M116.8,25.8c-39.6,5.1-73.7,33.4-86.2,71.7l-2.3,7.1l-1.1-1.8c-0.6-1-3.1-5.5-5.5-9.9c-5.4-10.1-7-11.3-10.4-8.7c-2.5,2-2.1,3.3,7,20c4.6,8.6,8.8,16,9.2,16.4c0.8,1,3,1.2,4.6,0.6c0.4-0.2,6.4-6,13.2-13.1C57,96,57.6,95.2,57.6,93.3c0-2.6-1.3-3.9-4-3.9c-2,0-2.5,0.4-9.2,7.3l-7.1,7.4l0.7-2.6c4.7-16,15.9-33.1,29-44.4c35-30,85.3-31.8,121.8-4.3c16.5,12.4,28.8,29.9,34.1,48.6c1.7,6.2,2.8,7.8,5.2,7.8c1.9,0,3.2-0.9,4.1-2.6c0.7-1.3,0.6-1.9-0.5-6c-11.3-39.3-45.4-68.8-86.4-74.6C139.2,25.1,122.9,25,116.8,25.8z" />
+                                                                        <path fill="#868B90" data-title="Layer 1"
+                                                                            xs="1"
+                                                                            d="M121.2,67.3c-13.1,3.2-20.9,13.8-21.7,29.9l-0.4,6.4l-5.2,0.3c-4.7,0.3-5.4,0.4-7.4,1.9c-2.7,1.9-4.5,4.4-5.3,7.3c-0.4,1.3-0.5,12.2-0.4,30.6c0.2,28.3,0.2,28.5,1.3,30.7c0.6,1.2,1.9,2.8,2.9,3.6c3.9,3.3,1.3,3.1,44,3.1c28.4,0,39.6-0.2,40.8-0.6c2.6-1,5-3.1,6.5-5.8l1.5-2.5l0.2-27.7c0.2-30.1,0.1-32-2.6-35.6c-2.6-3.5-4.9-4.6-10.7-4.9l-5.1-0.3l-0.3-5.6c-0.6-10.3-3.5-17.5-9.4-23.4c-3.6-3.6-9.1-6.6-14-7.6C132,66.2,124.9,66.3,121.2,67.3z M137.5,76.1c8,2.5,12.5,9.4,13.5,21.3c0.6,6.7,3,6-22,6h-21.6v-2.9c0-4.4,1-10.9,2.2-14.2c1.7-4.4,6.2-8.7,10.7-10.2C125,74.6,132.7,74.6,137.5,76.1z M168.8,113.3c0.5,0.7,0.7,6.6,0.7,29.2c0,27.6-0.1,28.3-1.1,29.3c-1.1,1.1-1.8,1.1-39,1.1c-33.4,0-38-0.1-39.1-0.9l-1.2-0.8v-28.9c0-27.6,0.1-28.9,1-29.5c0.8-0.5,8.6-0.7,39.4-0.6C166,112.3,168.1,112.3,168.8,113.3z" />
+                                                                        <path fill="#868B90" data-title="Layer 2"
+                                                                            xs="2"
+                                                                            d="M125.1,125.1c-2.5,1.3-4.8,4.1-5.5,6.7c-0.4,1.3-0.5,5.2-0.4,9.8c0.2,7.5,0.2,7.7,1.8,9.9c3.4,4.9,9.2,6,13.8,2.8c3.8-2.7,4.2-4,4.2-14.4c0-10.2-0.3-11.1-4-14C132.4,124.2,127.9,123.7,125.1,125.1z M130.8,140.1l0.2,7.7h-1.7h-1.6v-7.4c0-4.1,0.2-7.6,0.4-7.8c0.2-0.2,0.9-0.3,1.5-0.2C130.6,132.5,130.6,133,130.8,140.1z" />
+                                                                        <path fill="#868B90" data-title="Layer 3"
+                                                                            xs="3"
+                                                                            d="M226.7,132.2c-1.2,0.5-27.2,24.1-27.8,25.3c-1.4,2.7,0.5,5.9,3.6,5.9c1.9,0,2.2-0.2,12.2-9.2c3.8-3.5,7-6.2,7.1-6.1c0.4,0.3-3.1,11-4.9,15.3c-5.7,13.3-14.6,25.6-25.1,34.8c-26.4,23.2-62,30.4-95.2,19.3c-23.5-7.8-43.8-25.3-55-47.1c-3.6-7-4.8-10.1-6.6-16.6c-0.7-2.7-1.7-5-2.5-5.8c-2.3-2.3-6-1.1-6.9,2.3c-0.7,2.8,3.3,13.9,8.7,24.3c15.4,29.8,45,50.7,78.4,55.5c7.4,1,21.8,1,29.4-0.1c30.9-4.3,58.3-22.2,75-49c5.1-8.1,8.3-15.7,12.5-29.3c0.2-0.4,0.3-0.6,0.4-0.5c0.1,0.1,1.9,4.1,4,8.8c2.1,4.7,4.4,9.1,5,9.7c2.4,2.6,6.9,0.9,6.9-2.5c0-2-13.5-32-15.1-33.6C229.5,132.2,227.9,131.7,226.7,132.2z" />
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </svg>
+                                                        <div class="nav-item flex items-center">
+                                                            <a href="{{ route('password.edit') }}"
+                                                                class="nav-link">{{ __('Change Password') }}</a>
+                                                        </div>
+                                                    </div>
+                                                </label>
+
+                                            </li>
+                                            <li>
+                                                <label class="text-[#868B90] before:text-transparent tree_label">
+                                                    <div class="flex gap-3 items-center">
+                                                        <svg width="22" height="21" viewBox="0 0 22 21"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path class="stroke-[#868B90] "
+                                                                d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round"></path>
+                                                            <path class="stroke-[#868B90] " d="M1 10.5078H13.88"
+                                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round"></path>
+                                                            <path class="stroke-[#868B90] "
+                                                                d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563"
+                                                                stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round"></path>
+                                                        </svg>
+                                                        <div class="nav-item flex items-center">
+                                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                                onclick="event.preventDefault();
+                                                           document.getElementById('logout-form').submit();">
+                                                                {{ __('Logout') }}
+                                                            </a>
+
+                                                            <form id="logout-form" action="{{ route('logout') }}"
+                                                                method="POST" class="d-none">
+                                                                @csrf
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </label>
+
+                                            </li>
+
+
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endauth
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
 
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
@@ -247,7 +283,6 @@
                             <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="متارنگ">
                             <a href="https://rgb.irpsc.com/" class="text-[#868B90]">متارنگ</a>
                         </div>
-
                         <div>
                             <ul class="tree">
                                 <li class="flex flex-col gap-3">
@@ -288,7 +323,7 @@
                         </div>
                     </div>
                     <div
-                        class="space-y-6  lg:absolute bottom-0  w-full h-auto lg:h-1/5 2xl:h-1/6 bg-white  dark:bg-[#0F0F0E] pb-10 lg:pb-1">
+                        class="space-y-6  lg:absolute bottom-0 lg:h-[150px]  w-full h-auto  bg-white  dark:bg-[#0F0F0E] pb-10 lg:pb-1 pt-5">
                         <div
                             class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
                             <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
@@ -339,9 +374,12 @@
             <!-- start closed nav -->
             <div dir="ltr" id="close00" class=" h-full">
                 <nav dir="rtl"
-                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative">
+                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative ">
+
                     <div
-                        class="w-full space-y-9 flex flex-col items-center justify-center  px-3    lg:h-[30%] xl:[25%] 2xl:h-[20%] 3xl:h-[15%]">
+                        class="flex  items-center flex-col gap-11 h-auto pr-5 lg:h-full lg:pb-[180px] !overflow-y-scroll scrollbar relative">
+                        <div
+                        class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
                         <!-- start open btn nav -->
                         <div id="open-nav-btn" class="items-center w-7 h-7" onclick="openNav2()">
                             <svg class=" dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
@@ -364,8 +402,6 @@
                             </a>
                         </div> --}}
                     </div>
-                    <div
-                        class="flex  items-center flex-col gap-11 h-auto pr-4 lg:h-[30%] xl:h-[35%] 2xl:h-[60%] 3xl:h-[65%] !overflow-y-scroll scrollbar">
                         <div class=" w-7 h-7  ">
                             <a href="https://irpsc.com/" class="w-full">
                                 <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc" class="w-full">
@@ -426,8 +462,8 @@
                         </div>
                     </div>
                     <div
-                        class="w-full space-y-6 px-3   h-auto lg:h-[30%] xl:h-[26%] 2xl:h-[15%] bg-white  dark:bg-[#0F0F0E] pb-5">
-                        <div class="w-10  justify-center items-center">
+                        class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
+                        <div class="w-10 mx-auto  flex justify-center items-center">
                             <a href="#"
                                 class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
 
@@ -446,7 +482,7 @@
 
                             </a>
                         </div>
-                        <div class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   dark:border-[#868B90]">
+                        <div class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   border-[#00000017] dark:border-[#3F3F3F]">
                             <div class=" flex rounded-full w-max p-[6px] bg-[#F4F4F4] dark:bg-[#090909]">
                                 <button
                                     class="enable-dark-mode2 dark:hidden bg-transparent dark:bg-[#0F0F0E] flex justify-center items-center p-1 rounded-full w-5 h-5  ">
@@ -531,76 +567,76 @@
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
                 <a href="https://irpsc.com" style="width:55px ;" target="_blank "
                     title="وزارت تعاون کار و رفاه اجتماعی">
-                    <img src="https://irpsc.com/img-icon/vezarat.png" class="rounded-lg">
+                    <img src="https://irpsc.com/img-icon/vezarat.png" >
                 </a>
                 <a class="active" href="#" target="_blank " style="width:55px ;"
                     title="نماد اعتماد الکترونیک">
-                    <img src="https://irpsc.com/img-icon/enamad.png" class="rounded-lg" alt="نماد اعتماد الکترونیک">
+                    <img src="https://irpsc.com/img-icon/enamad.png"  alt="نماد اعتماد الکترونیک">
 
                 </a>
                 <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="ثبت اسناد و املاک کشور">
-                    <img src="https://irpsc.com/img-icon/qazaii.png" class="rounded-lg" alt="ثبت اسناد و املاک کشور">
+                    <img src="https://irpsc.com/img-icon/qazaii.png"  alt="ثبت اسناد و املاک کشور">
                 </a>
                 <a href="https://video.irpsc.com" target="_blank " style="width:55px ;" title="مرکز آموزش ویدئویی">
-                    <img src="https://irpsc.com/img-icon/video.png" class="rounded-lg" alt="مرکز آموزش ویدئویی">
+                    <img src="https://irpsc.com/img-icon/video.png"  alt="مرکز آموزش ویدئویی">
                 </a>
                 <a href="https://faq.irpsc.com" target="_blank " style="width:55px ;" title="انجمن پرسش و پاسخ">
-                    <img src="https://irpsc.com/img-icon/faq.png" class="rounded-lg" alt="انجمن پرسش و پاسخ">
+                    <img src="https://irpsc.com/img-icon/faq.png"  alt="انجمن پرسش و پاسخ">
                 </a>
                 <a href="https://Shop.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه ملی">
-                    <img src="https://irpsc.com/img-icon/shop.png" class="rounded-lg" alt="فروشگاه ملی">
+                    <img src="https://irpsc.com/img-icon/shop.png"  alt="فروشگاه ملی">
                 </a>
                 <a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
-                    <img src="https://irpsc.com/img-icon/supply.png" class="rounded-lg" alt="تولید کنندگان">
+                    <img src="https://irpsc.com/img-icon/supply.png"  alt="تولید کنندگان">
                 </a><a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
-                    <img src="https://irpsc.com/img-icon/supply.png" class="rounded-lg" alt="تولید کنندگان">
+                    <img src="https://irpsc.com/img-icon/supply.png"  alt="تولید کنندگان">
                 </a>
                 <a href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
-                    <img src="https://irpsc.com/img-icon/crm.png" class="rounded-lg" alt="مدیریت بر مدیران">
+                    <img src="https://irpsc.com/img-icon/crm.png"  alt="مدیریت بر مدیران">
                 </a>
                 <a href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
-                    <img src="https://irpsc.com/img-icon/target.png" class="rounded-lg" alt="نگرش ملی">
+                    <img src="https://irpsc.com/img-icon/target.png"  alt="نگرش ملی">
                 </a>
                 <a href="https://animal.irpsc.com" target="_blank " style="width:55px ;" title="حیوانات و دامپزشک">
-                    <img src="https://irpsc.com/img-icon/animal.png" class="rounded-lg" alt="حیوانات و دامپزشک">
+                    <img src="https://irpsc.com/img-icon/animal.png"  alt="حیوانات و دامپزشک">
                 </a>
                 <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
-                    <img src="https://irpsc.com/img-icon/irpsc.png" class="rounded-lg" alt="رسانه ملی">
+                    <img src="https://irpsc.com/img-icon/irpsc.png"  alt="رسانه ملی">
                 </a>
                 <a href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
-                    <img src="https://irpsc.com/img-icon/meta.png" class="rounded-lg" alt="اخبار متا">
+                    <img src="https://irpsc.com/img-icon/meta.png"  alt="اخبار متا">
                 </a>
                 <a href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
-                    <img src="https://irpsc.com/img-icon/uni.png" class="rounded-lg" alt="دانشگاه متاورس">
+                    <img src="https://irpsc.com/img-icon/uni.png"  alt="دانشگاه متاورس">
                 </a>
                 <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
                     title="استخدام | دانش محور">
-                    <img src="https://irpsc.com/img-icon/knowledge.png" class="rounded-lg" alt="استخدام | دانش محور">
+                    <img src="https://irpsc.com/img-icon/knowledge.png"  alt="استخدام | دانش محور">
                 </a>
                 <a href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
-                    <img src="https://irpsc.com/img-icon/sale.png" class="rounded-lg" alt="فروشگاه مجازی حم">
+                    <img src="https://irpsc.com/img-icon/sale.png"  alt="فروشگاه مجازی حم">
                 </a>
                 <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
-                    <img src="https://irpsc.com/img-icon/ad.png" class="rounded-lg" alt="تبلیغات ملی">
+                    <img src="https://irpsc.com/img-icon/ad.png"  alt="تبلیغات ملی">
                 </a>
                 <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
-                    <img src="https://irpsc.com/img-icon/nft.png" class="rounded-lg">
+                    <img src="https://irpsc.com/img-icon/nft.png" >
                 </a>
                 <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
-                    <img src="https://irpsc.com/img-icon/rgb.png" class="rounded-lg" alt="متاورس رنگ">
+                    <img src="https://irpsc.com/img-icon/rgb.png"  alt="متاورس رنگ">
                 </a>
                 <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
-                    <img src="https://irpsc.com/img-icon/3d.gif" class="rounded-lg" alt="سه بعدی متا">
+                    <img src="https://irpsc.com/img-icon/3d.gif"  alt="سه بعدی متا">
                 </a>
                 <a title="خانه" style="width:55px ;">
-                    <img src="https://irpsc.com/img-icon/home-soon.png" class="rounded-lg">
+                    <img src="https://irpsc.com/img-icon/home-soon.png" >
                 </a>
             </div>
             <div
-                class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between">
+                class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between mb-5">
                 <div class="flex flex-col gap-10 w-full lg:w-[60%]">
                     <div class="flex gap-2">
-                        <img src="" alt="" class="w-[71px] h-[71px] aspect-square ">
+                        <img src="{{ asset('images/logo/accounts1.png') }}" alt="تونل زمان" class="w-[71px] h-[71px] aspect-square ">
                         <div class="text-[#4C4C4C] dark:text-[#FFFFFF] text-2xl flex flex-col justify-between">
                             <p>
                                 متاورس ملی
@@ -608,7 +644,7 @@
                             <p>رهبری جهانی در دنیایی موازی </p>
                         </div>
                     </div>
-                    <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl">
+                    <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl text-justify leading-10">
                         <p>متاورس ملی، یک پروژه بزرگ و پیشرو در دنیای موازی متاورس رنگ است که توسط شرکت تعاونی زنجیره
                             تامین بهشت به اجرا درآمده است. این پروژه، به واقعیت جدیدی در دنیای موازی و مجازی دست یافته و
                             امکاناتی شگفت‌انگیز را به مردمان سرتاسر جهان ارائه می‌دهد تا تجربه‌هایی منحصر به فرد و جذاب
