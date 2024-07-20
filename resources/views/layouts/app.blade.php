@@ -17,7 +17,57 @@
 
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var referrer = document.referrer;
+            var referrerElement = document.getElementById("referrer");
+            var ttwElement = document.getElementById("ttw");
 
+            // لیست از پیش تعریف شده وب‌سایت‌ها و عناوین آنها
+            var websites = {
+                "3drgb.test": "سایت تست",
+                "irpsc.com": "زنجیره تامین بهشت",
+                "3d.irpsc.com": "3 بعدی متا",
+                "rgb.irpsc.com": " متارنگ",
+                "sale.irpsc.com": " فروشگاه مجازی",
+                "map.irpsc.com": " نقشه",
+                "uni.irpsc.com": "دانشگاه متاورس",
+                "meta.irpsc.com": "اخبار متاورس",
+                "animal.irpsc.com": "حیوانات و دامپزشک ",
+                "target.irpsc.com": "حم",
+                "crm.irpsc.com": "مدیریت بر مدیران",
+                "shop.irpsc.com": " فروشگاه ملی",
+                "faq.irpsc.com": " انجمن حم | پرسش و پاسخ عمومی",
+                "video.irpsc.com": "مرکز آموزش ویدویی",
+                "nft.irpsc.com": " nft.irpsc.com",
+                "ad.irpsc.com": "تبلیغات ملی",
+                // وب‌سایت‌های دیگر را به این لیست اضافه کنید
+            };
+
+            // به صورت پیش‌فرض عنصر ttw را مخفی کنید
+            ttwElement.style.display = "none";
+
+            if (referrer) {
+                var referrerURL = new URL(referrer);
+                var referrerHost = referrerURL.hostname;
+
+                if (websites[referrerHost]) {
+                    var link = document.createElement("a");
+                    link.href = referrer;
+                    link.textContent = websites[referrerHost];
+
+                    referrerElement.appendChild(link);
+
+                    // اگر ارجاع‌دهنده یکی از وب‌سایت‌های لیست بود، ttw را نمایش دهید
+                    ttwElement.style.display = "flex";
+                } else {
+                    referrerElement.textContent = referrer;
+                }
+            } else {
+                referrerElement.textContent = "اطلاعات ارجاع‌دهنده در دسترس نیست.";
+            }
+        });
+    </script>
 
     @vite('resources/css/app.css')
 </head>
@@ -30,7 +80,7 @@
                 <div
                     class="flex justify-between items-center w-full fixed right-0 top-0 lg:relative  bg-white dark:bg-[#0F0F0E] lg:bg-transparent lg:p-0 px-5 py-4">
                     <!-- start open btn nav -->
-                    <div class="flex items-center gap-5">
+                    <div class="flex items-center justify-between gap-5 w-full">
                         <div class="w-max  p-3 rounded-full cursor-pointer flex" onclick="openNav2()">
                             <svg class="lg:hidden dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,9 +90,13 @@
                             </svg>
                         </div>
                         <!-- end open btn nav -->
-                        <div class="w-max lg:w-auto flex justify-center items-center">
-                            <a href="./index.html"><img src="{{ asset('images/logo/accounts.irpsc.png') }}"
-                                    alt="faq"></a>
+                        <div class="flex items-center gap-2">
+                            <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts.png') }}"
+                                    alt="تونل زمان"></a>
+                                    <div class="flex flex-col justify-between ">
+                                        <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-sm">تونل زمان</span>
+                                        <span class="text-[#939393] text-xs">ورود / ثبت نام مرکزی</span>
+                                    </div>
                         </div>
                     </div>
 
@@ -67,7 +121,7 @@
                             <div
                                 class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
                                 <div class="flex items-center gap-2">
-                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts1.png') }}"
+                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts.png') }}"
                                             alt="تونل زمان"></a>
                                             <div class="flex flex-col justify-between ">
                                                 <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
@@ -517,9 +571,18 @@
         <!-- End nsvigation -->
     </header>
     <main class="w-full main-content-smallNav">
+        <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-32 lg:mt-7">
+            <div class="hidden text-xl gap-2   items-center" id="ttw">
+                <div class="text-primery-blue" id="referrer"></div>          
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.74958 11.6228L4.94625 7.81948C4.49708 7.37031 4.49708 6.63531 4.94625 6.18615L8.74958 2.38281" stroke="#868B90" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>    
+                <span class="text-[#1A1A18] dark:text-[#FFFFFF]">تونل زمان</span>
+            </div>
+        </div>
         <div class="flex justify-center">
             <div
-                class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-32 lg:mt-14">
+                class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-7">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
                         <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk">
@@ -636,8 +699,8 @@
                 class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between mb-5">
                 <div class="flex flex-col gap-10 w-full lg:w-[60%]">
                     <div class="flex gap-2">
-                        <img src="{{ asset('images/logo/accounts1.png') }}" alt="تونل زمان" class="w-[71px] h-[71px] aspect-square ">
-                        <div class="text-[#4C4C4C] dark:text-[#FFFFFF] text-2xl flex flex-col justify-between">
+                        <img src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان" class="w-[71px] h-[71px] aspect-square ">
+                        <div class="text-[#4C4C4C] dark:text-[#FFFFFF] text-xl md:text-2xl flex flex-col justify-between">
                             <p>
                                 متاورس ملی
                             </p>
@@ -645,14 +708,9 @@
                         </div>
                     </div>
                     <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl text-justify leading-10">
-                        <p>متاورس ملی، یک پروژه بزرگ و پیشرو در دنیای موازی متاورس رنگ است که توسط شرکت تعاونی زنجیره
-                            تامین بهشت به اجرا درآمده است. این پروژه، به واقعیت جدیدی در دنیای موازی و مجازی دست یافته و
-                            امکاناتی شگفت‌انگیز را به مردمان سرتاسر جهان ارائه می‌دهد تا تجربه‌هایی منحصر به فرد و جذاب
-                            را تجربه نمایند.
-                            تعاونی زنجیره تامین بهشت، به عنوان بانی اصلی این پروژه، با استفاده از تکنولوژی‌های پیشرفته و
-                            بهره‌گیری از مفهوم متاورس، به ایجاد یک جوامع مجازی جهانی ارتقا داده است. این پروژه امکان
-                            بهره وری از فناوریIoT، تجربه‌ی محیط سه بعدی واقعیت مجازی، و تعاملات بی‌پایان را در اختیار
-                            مردم قرار می‌دهد.
+                        <p>
+                            سامانه "تونل زمان" توسط هلدینگ تعاونی‌های زنجیره تامین بهشت بهشت طراحی شده است. این سامانه با هدف یکپارچه‌سازی دسترسی کاربران به تمامی سامانه‌های تحت مدیریت این زنجیره توسعه یافته است. با استفاده از "تونل زمان"، کاربران می‌توانند به راحتی ثبت‌نام یا وارد شوند و پس از ورود، به تمامی سامانه‌های مرتبط دسترسی پیدا کنند. این یکپارچه‌سازی به کاربران امکان می‌دهد تا به صورت متمرکز و آسان از خدمات مختلف تعاونی‌ها بهره‌مند شوند.
+
                         </p>
                     </div>
                 </div>
@@ -660,7 +718,7 @@
                     <div class="flex flex-col items-center justify-center gap-8">
                         <p class="text-2xl text-[#4C4C4C] dark:text-[#D4D4D4]">به شبکه های ما ملحق شوید.</p>
                         <div class="grid grid-cols-5  gap-3 md:gap-4">
-                            <a href="#">
+                            <a href="https://rgb.irpsc.com/[lang]/undefined">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_611_7340)" />
@@ -692,7 +750,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.instagram.com/rgb.irpsc/">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -709,7 +767,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://ir.linkedin.com/in/%D8%AD%D8%B3%DB%8C%D9%86-%D9%82%D8%AF%DB%8C%D8%B1%DB%8C-89161a189?original_referer=https%3A%2F%2Frgb.irpsc.com%2F">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -726,7 +784,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.pinterest.com/metarangiran/">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_631_6007)" />
@@ -741,7 +799,7 @@
                                     </defs>
                                 </svg>
                             </a>
-                            <a href="#">
+                            <a href="https://virgool.io/@metarang.iran">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -773,7 +831,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://rubika.ir/metaverse_iran">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -789,7 +847,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.youtube.com/@Irpsc">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -821,7 +879,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://faq.irpsc.com/">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -853,7 +911,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.dalfak.com/metarang">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -869,7 +927,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.aparat.com/Qzparadise.ir">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -901,7 +959,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.namasha.com/qzparadise">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -918,7 +976,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://www.mp4.ir/meta.rang">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_631_6021)" />
@@ -933,7 +991,7 @@
                                     </defs>
                                 </svg>
                             </a>
-                            <a href="#">
+                            <a href="https://medium.com/@metarang.iran">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -950,7 +1008,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a href="https://jabeh.com/c/1nk44b">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
