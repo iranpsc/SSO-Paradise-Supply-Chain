@@ -50,7 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     /**
      * Get the user's personal info.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function personalInfo()

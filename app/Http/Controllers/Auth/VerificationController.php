@@ -61,6 +61,11 @@ class VerificationController extends Controller
     public function generateCode()
     {
         $lastCode = User::orderBy('code', 'desc')->first()->code;
+
+        if (is_null($lastCode)) {
+            $lastCode = 'hm-2000000';
+        }
+
         $lastCode = substr($lastCode, 3);
         $lastCode = intval($lastCode);
         $lastCode++;
