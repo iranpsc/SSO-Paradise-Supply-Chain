@@ -14,19 +14,16 @@
                 <x-form.text for="email" name="email" type="email" required autofocus />
 
                 <x-form.text for="password" name="password" type="password" required autocomplete="current-password" />
-                <div class="flex items-center gap-2 px-1">
+                <div class="flex flex-col  gap-2 px-1">
                     <x-form.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember" :checked="old('remember')" />
-
-                </div>
-                <div>
-
                     @if (Route::has('password.request'))
-                        <a class="text-xs text-primery-blue dark:text-dark-yellow"
+                        <a class="text-xs text-primery-blue dark:text-dark-yellow "
                             href="{{ route('password.request') }}">
                             {{ __('Forgot Your Password?') }}
                         </a>
                     @endif
                 </div>
+
 
                 <div class="flex items-center justify-center">
                     <button type="submit"
