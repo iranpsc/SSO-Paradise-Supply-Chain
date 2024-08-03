@@ -3,7 +3,7 @@
 @section('content')
     <div >
         <div class="flex flex-col gap-7">
-            <div class="card-header">{{ __('Logout') }}</div>
+            
 
             
                 <form action="{{ route('logout') }}" method="post">

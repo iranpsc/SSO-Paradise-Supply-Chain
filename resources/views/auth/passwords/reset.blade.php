@@ -2,19 +2,20 @@
 
 @section('content')
     <div class="space-y-10">
-        <div class="card-header">{{ __('Reset Password') }}</div>
+        
 
         <form method="POST" action="{{ route('password.update') }}">
             <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
+                <div class="text-2xl my-5">{{ __('Reset Password') }}</div>
                 @csrf
 
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="row mb-3">
-                    <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                    <label for="email" class="my-2">{{ __('Email Address') }}</label>
 
                     <div class="col-md-6">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                        <input id="email" type="email" class="bg-[#FCFCFC] dark:bg-[#000000] border-[#DEDEE9] dark:border-[#1A1A18] dark:text-[#FFFFFF] placeholder:text-[#868B90] w-full border-2 rounded-xl py-[10px] focus:border-[#84858F] focus:ring-0 text-[#868B90] font-normal focus:text-[#1A1A18] focus:border-[1px] @error('email') is-invalid @enderror"
                             name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
 
                         @error('email')

@@ -4,19 +4,57 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'تونل زمان') }}</title>
+<meta property="og:type" content="@yield('og:type', 'website')">
+<meta name="description" content="@yield('description' , 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
+<meta name="keywords" content="@yield('keywords', '3d,3dmeta,3drgb,سبعدی,سه بعدی,محصولات سه بعدی,فایل سه بعدی,خرید فایل سبعدی,icon,آیکون,آیکون سه بعدی,خرید آیکون سه بعدی,انیمیشن')">
+<meta name="language" content="fa">
+<meta name="author" content="تونل زمان ">
+<meta property="og:title" content="@yield('og:title', 'سامانه تونل زمان')">
+<meta property="og:description" content="@yield('og:description' , 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
+<meta property="og:image" content="@yield('og:image', asset('images/logo/accounts.png') )">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:site_name" content="تونل زمان ">
+<meta property="og:locale" content="fa_IR">
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <script src="{{ asset('js/script.js') }}"></script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "تونل زمان",
+      "url": "https://accounts.irpsc.com/",
+      "logo": "https://accounts.irpsc.com/images/logo/accounts.png",
+      "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+98-28-33696489",
+        "contactType": "Customer Service",
+        "availableLanguage": "Persian"
+      },
+      "email": "Cq@irpsc.com",
 
-    <!-- fontawesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+      {{-- "foundingDate": "2020-01-01",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "خیابان مثال، پلاک 1",
+        "addressLocality": "شهر مثال",
+        "postalCode": "12345",
+        "addressCountry": "IR"
+      }, --}}
+      "potentialAction": {
+        "@type": "LoginAction",
+        "target": "https://accounts.irpsc.com/login",
+        "query-input": "required name=username"
+      }
+    }
+    </script>
+    
+    
+    
+        
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var referrer = document.referrer;
