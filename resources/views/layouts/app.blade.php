@@ -2,6 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 
 <head>
+    <link rel="icon" href=" {{asset('images/logo/accounts.png')}}" type="image/x-icon">
+<link rel="shortcut icon" href="{{asset('images/logo/accounts.png')}}" type="image/x-icon">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
@@ -51,9 +54,6 @@
       }
     }
     </script>
-    
-    
-    
         
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -375,6 +375,30 @@
                             <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="متارنگ">
                             <a href="https://rgb.irpsc.com/" class="text-[#868B90]">متارنگ</a>
                         </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/supply.irpsc.png') }}" alt="تولید کنندگان">
+                            <a href="https://supply.irpsc.com/" class="text-[#868B90]">تولید کنندگان</a>
+                        </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/target.irpsc.png') }}" alt="حم ">
+                            <a href="https://target.irpsc.com/" class="text-[#868B90]">حم</a>
+                        </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/uni.irpsc.png') }}" alt="دانشگاه متاورس">
+                            <a href="https://uni.irpsc.com/" class="text-[#868B90]">دانشگاه متاورس</a>
+                        </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/sale.irpsc.png') }}" alt="فروش شماره مجازی ">
+                            <a href="https://sale.irpsc.com/" class="text-[#868B90]">فروش شماره مجازی </a>
+                        </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/video.irpsc.png') }}" alt="مرکز آموزش ویدئویی">
+                            <a href="https://video.irpsc.com/" class="text-[#868B90]">مرکز آموزش ویدئویی</a>
+                        </div>
+                        <div class="pr-[20PX] p-[14px] flex items-center gap-4">
+                            <img  src="{{ asset('images/logo/crm.irpsc.png') }}" alt="مدیریت کل">
+                            <a href="https://crm.irpsc.com/" class="text-[#868B90]"> مدیریت کل </a>
+                        </div>
                         <div>
                             <ul class="tree">
                                 <li class="flex flex-col gap-3">
@@ -689,9 +713,6 @@
                 </a>
                 <a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
                     <img src="https://irpsc.com/img-icon/supply.png"  alt="تولید کنندگان">
-                </a><a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
-                    <img src="https://irpsc.com/img-icon/supply.png"  alt="تولید کنندگان">
-                </a>
                 <a href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
                     <img src="https://irpsc.com/img-icon/crm.png"  alt="مدیریت بر مدیران">
                 </a>
@@ -727,7 +748,10 @@
                     <img src="https://irpsc.com/img-icon/rgb.png"  alt="متاورس رنگ">
                 </a>
                 <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
-                    <img src="https://irpsc.com/img-icon/3d.gif"  alt="سه بعدی متا">
+                    <img src="https://irpsc.com/img-icon/3d.png"  alt="سه بعدی متا">
+                </a>
+                <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
+                    <img src="{{asset('images/logo/accounts.gif')}}"  alt="تونل زمان">
                 </a>
                 <a title="خانه" style="width:55px ;">
                     <img src="https://irpsc.com/img-icon/home-soon.png" >
