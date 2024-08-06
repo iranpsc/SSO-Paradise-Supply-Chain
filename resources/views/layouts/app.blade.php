@@ -2,8 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 
 <head>
-    <link rel="icon" href=" {{asset('images/logo/accounts.png')}}" type="image/x-icon">
-<link rel="shortcut icon" href="{{asset('images/logo/accounts.png')}}" type="image/x-icon">
+    <link rel="icon" href=" {{ asset('images/logo/accounts.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('images/logo/accounts.png') }}" type="image/x-icon">
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,19 +11,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'تونل زمان') }}</title>
-<meta property="og:type" content="@yield('og:type', 'website')">
-<meta name="description" content="@yield('description' , 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
-<meta name="keywords" content="@yield('keywords', '3d,3dmeta,3drgb,سبعدی,سه بعدی,محصولات سه بعدی,فایل سه بعدی,خرید فایل سبعدی,icon,آیکون,آیکون سه بعدی,خرید آیکون سه بعدی,انیمیشن')">
-<meta name="language" content="fa">
-<meta name="author" content="تونل زمان ">
-<meta property="og:title" content="@yield('og:title', 'سامانه تونل زمان')">
-<meta property="og:description" content="@yield('og:description' , 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
-<meta property="og:image" content="@yield('og:image', asset('images/logo/accounts.png') )">
-<meta property="og:url" content="{{ url()->current() }}">
-<meta property="og:site_name" content="تونل زمان ">
-<meta property="og:locale" content="fa_IR">
+    <meta property="og:type" content="@yield('og:type', 'website')">
+    <meta name="description" content="@yield('description', 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
+    <meta name="keywords" content="@yield('keywords', '3d,3dmeta,3drgb,سبعدی,سه بعدی,محصولات سه بعدی,فایل سه بعدی,خرید فایل سبعدی,icon,آیکون,آیکون سه بعدی,خرید آیکون سه بعدی,انیمیشن')">
+    <meta name="language" content="fa">
+    <meta name="author" content="تونل زمان ">
+    <meta property="og:title" content="@yield('og:title', 'سامانه تونل زمان')">
+    <meta property="og:description" content="@yield('og:description', 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
+    <meta property="og:image" content="@yield('og:image', asset('images/logo/accounts.png'))">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="تونل زمان ">
+    <meta property="og:locale" content="fa_IR">
 
-<script type="application/ld+json">
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -54,7 +54,7 @@
       }
     }
     </script>
-        
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var referrer = document.referrer;
@@ -129,12 +129,12 @@
                         </div>
                         <!-- end open btn nav -->
                         <div class="flex items-center gap-2">
-                            <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts.png') }}"
-                                    alt="تونل زمان"></a>
-                                    <div class="flex flex-col justify-between ">
-                                        <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-sm">تونل زمان</span>
-                                        <span class="text-[#939393] text-xs">ورود / ثبت نام مرکزی</span>
-                                    </div>
+                            <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
+                                    src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
+                            <div class="flex flex-col justify-between ">
+                                <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-sm">تونل زمان</span>
+                                <span class="text-[#939393] text-xs">ورود / ثبت نام مرکزی</span>
+                            </div>
                         </div>
                     </div>
 
@@ -154,19 +154,20 @@
                 <nav dir="rtl" class="w-full   space-y-6  relative lg:overflow-hidden">
 
                     <div class="  lg:h-full lg:pb-[220px] overflow-y-scroll scrollbar  space-y-1 relative">
-                        <div class="space-y-6   sticky top-0 mt-[-10px] pb-3 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-white dark:bg-[#0F0F0E]">
+                        <div
+                            class="space-y-6   sticky top-0 mt-[-10px] pb-3 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-white dark:bg-[#0F0F0E] z-50">
                             <!-- strat head icon RGB -->
                             <div
                                 class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
                                 <div class="flex items-center gap-2">
-                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full" src="{{ asset('images/logo/accounts.png') }}"
-                                            alt="تونل زمان"></a>
-                                            <div class="flex flex-col justify-between ">
-                                                <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
-                                                <span class="text-[#939393] text-sm">ورود / ثبت نام مرکزی</span>
-                                            </div>
+                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
+                                            src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
+                                    <div class="flex flex-col justify-between ">
+                                        <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
+                                        <span class="text-[#939393] text-sm">ورود / ثبت نام مرکزی</span>
+                                    </div>
                                 </div>
-    
+
                                 <!-- start close btn nav -->
                                 <div>
                                     <div id="close-nav-btn"
@@ -179,7 +180,7 @@
                                 <!-- end close btn nav -->
                             </div>
                             <!-- end head icon RGB -->
-    
+
                         </div>
                         @auth
                             <div>
@@ -376,27 +377,27 @@
                             <a href="https://rgb.irpsc.com/" class="text-[#868B90]">متارنگ</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/supply.irpsc.png') }}" alt="تولید کنندگان">
+                            <img src="{{ asset('images/logo/supply.irpsc.png') }}" alt="تولید کنندگان">
                             <a href="https://supply.irpsc.com/" class="text-[#868B90]">تولید کنندگان</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/target.irpsc.png') }}" alt="حم ">
+                            <img src="{{ asset('images/logo/target.irpsc.png') }}" alt="حم ">
                             <a href="https://target.irpsc.com/" class="text-[#868B90]">حم</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/uni.irpsc.png') }}" alt="دانشگاه متاورس">
+                            <img src="{{ asset('images/logo/uni.irpsc.png') }}" alt="دانشگاه متاورس">
                             <a href="https://uni.irpsc.com/" class="text-[#868B90]">دانشگاه متاورس</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/sale.irpsc.png') }}" alt="فروش شماره مجازی ">
+                            <img src="{{ asset('images/logo/sale.irpsc.png') }}" alt="فروش شماره مجازی ">
                             <a href="https://sale.irpsc.com/" class="text-[#868B90]">فروش شماره مجازی </a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/video.irpsc.png') }}" alt="مرکز آموزش ویدئویی">
+                            <img src="{{ asset('images/logo/video.irpsc.png') }}" alt="مرکز آموزش ویدئویی">
                             <a href="https://video.irpsc.com/" class="text-[#868B90]">مرکز آموزش ویدئویی</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
-                            <img  src="{{ asset('images/logo/crm.irpsc.png') }}" alt="مدیریت کل">
+                            <img src="{{ asset('images/logo/crm.irpsc.png') }}" alt="مدیریت کل">
                             <a href="https://crm.irpsc.com/" class="text-[#868B90]"> مدیریت کل </a>
                         </div>
                         <div>
@@ -495,29 +496,29 @@
                     <div
                         class="flex  items-center flex-col gap-11 h-auto pr-5 lg:h-full lg:pb-[180px] !overflow-y-scroll scrollbar relative">
                         <div
-                        class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
-                        <!-- start open btn nav -->
-                        <div id="open-nav-btn" class="items-center w-7 h-7" onclick="openNav2()">
-                            <svg class=" dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path class="dark:fill-white" fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M0 1.375C0 0.615608 0.6296 0 1.40625 0H28.5938C29.3704 0 30 0.615608 30 1.375C30 2.13439 29.3704 2.75 28.5938 2.75H1.40625C0.6296 2.75 0 2.13439 0 1.375ZM0 11C0 10.2406 0.6296 9.625 1.40625 9.625H28.5938C29.3704 9.625 30 10.2406 30 11C30 11.7594 29.3704 12.375 28.5938 12.375H1.40625C0.6296 12.375 0 11.7594 0 11ZM0 20.625C0 19.8656 0.6296 19.25 1.40625 19.25H28.5938C29.3704 19.25 30 19.8656 30 20.625C30 21.3844 29.3704 22 28.5938 22H1.40625C0.6296 22 0 21.3844 0 20.625Z"
-                                    fill="#0713EF" />
-                            </svg>
-                        </div>
-                        <!-- end open btn nav -->
-                        <div class="w-7  flex items-center justify-center">
-                            <a href="./index.html" class="w-full">
-                                <img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt=""
-                                    class="w-full">
-                            </a>
-                        </div>
-                        {{-- <div class="w-7 flex items-center justify-center">
+                            class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
+                            <!-- start open btn nav -->
+                            <div id="open-nav-btn" class="items-center w-7 h-7" onclick="openNav2()">
+                                <svg class=" dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path class="dark:fill-white" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0 1.375C0 0.615608 0.6296 0 1.40625 0H28.5938C29.3704 0 30 0.615608 30 1.375C30 2.13439 29.3704 2.75 28.5938 2.75H1.40625C0.6296 2.75 0 2.13439 0 1.375ZM0 11C0 10.2406 0.6296 9.625 1.40625 9.625H28.5938C29.3704 9.625 30 10.2406 30 11C30 11.7594 29.3704 12.375 28.5938 12.375H1.40625C0.6296 12.375 0 11.7594 0 11ZM0 20.625C0 19.8656 0.6296 19.25 1.40625 19.25H28.5938C29.3704 19.25 30 19.8656 30 20.625C30 21.3844 29.3704 22 28.5938 22H1.40625C0.6296 22 0 21.3844 0 20.625Z"
+                                        fill="#0713EF" />
+                                </svg>
+                            </div>
+                            <!-- end open btn nav -->
+                            <div class="w-7  flex items-center justify-center">
+                                <a href="./index.html" class="w-full">
+                                    <img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt=""
+                                        class="w-full">
+                                </a>
+                            </div>
+                            {{-- <div class="w-7 flex items-center justify-center">
                             <a href="#" class="w-full">
                                 <img src="../icon/profile3d.png" alt="" class="w-full border rounded-full">
                             </a>
                         </div> --}}
-                    </div>
+                        </div>
                         <div class=" w-7 h-7  ">
                             <a href="https://irpsc.com/" class="w-full">
                                 <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc" class="w-full">
@@ -577,8 +578,7 @@
                             </a>
                         </div>
                     </div>
-                    <div
-                        class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
+                    <div class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
                         <div class="w-10 mx-auto  flex justify-center items-center">
                             <a href="#"
                                 class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
@@ -598,7 +598,8 @@
 
                             </a>
                         </div>
-                        <div class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   border-[#00000017] dark:border-[#3F3F3F]">
+                        <div
+                            class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   border-[#00000017] dark:border-[#3F3F3F]">
                             <div class=" flex rounded-full w-max p-[6px] bg-[#F4F4F4] dark:bg-[#090909]">
                                 <button
                                     class="enable-dark-mode2 dark:hidden bg-transparent dark:bg-[#0F0F0E] flex justify-center items-center p-1 rounded-full w-5 h-5  ">
@@ -635,16 +636,19 @@
     <main class="w-full main-content-smallNav">
         <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-32 lg:mt-7">
             <div class="hidden text-xl gap-2   items-center" id="ttw">
-                <div class="text-primery-blue" id="referrer"></div>          
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.74958 11.6228L4.94625 7.81948C4.49708 7.37031 4.49708 6.63531 4.94625 6.18615L8.74958 2.38281" stroke="#868B90" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>    
+                <div class="text-primery-blue" id="referrer"></div>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M8.74958 11.6228L4.94625 7.81948C4.49708 7.37031 4.49708 6.63531 4.94625 6.18615L8.74958 2.38281"
+                        stroke="#868B90" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
                 <span class="text-[#1A1A18] dark:text-[#FFFFFF]">تونل زمان</span>
             </div>
         </div>
         <div class="flex justify-center">
-            <div
-                class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-7">
+            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-7">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
                         <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk">
@@ -692,77 +696,80 @@
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
                 <a href="https://irpsc.com" style="width:55px ;" target="_blank "
                     title="وزارت تعاون کار و رفاه اجتماعی">
-                    <img src="https://irpsc.com/img-icon/vezarat.png" >
+                    <img src="https://irpsc.com/img-icon/vezarat.png">
                 </a>
                 <a class="active" href="#" target="_blank " style="width:55px ;"
                     title="نماد اعتماد الکترونیک">
-                    <img src="https://irpsc.com/img-icon/enamad.png"  alt="نماد اعتماد الکترونیک">
+                    <img src="https://irpsc.com/img-icon/enamad.png" alt="نماد اعتماد الکترونیک">
 
                 </a>
                 <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="ثبت اسناد و املاک کشور">
-                    <img src="https://irpsc.com/img-icon/qazaii.png"  alt="ثبت اسناد و املاک کشور">
+                    <img src="https://irpsc.com/img-icon/qazaii.png" alt="ثبت اسناد و املاک کشور">
                 </a>
                 <a href="https://video.irpsc.com" target="_blank " style="width:55px ;" title="مرکز آموزش ویدئویی">
-                    <img src="https://irpsc.com/img-icon/video.png"  alt="مرکز آموزش ویدئویی">
+                    <img src="https://irpsc.com/img-icon/video.png" alt="مرکز آموزش ویدئویی">
                 </a>
                 <a href="https://faq.irpsc.com" target="_blank " style="width:55px ;" title="انجمن پرسش و پاسخ">
-                    <img src="https://irpsc.com/img-icon/faq.png"  alt="انجمن پرسش و پاسخ">
+                    <img src="https://irpsc.com/img-icon/faq.png" alt="انجمن پرسش و پاسخ">
                 </a>
                 <a href="https://Shop.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه ملی">
-                    <img src="https://irpsc.com/img-icon/shop.png"  alt="فروشگاه ملی">
+                    <img src="https://irpsc.com/img-icon/shop.png" alt="فروشگاه ملی">
                 </a>
                 <a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
-                    <img src="https://irpsc.com/img-icon/supply.png"  alt="تولید کنندگان">
-                <a href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
-                    <img src="https://irpsc.com/img-icon/crm.png"  alt="مدیریت بر مدیران">
-                </a>
-                <a href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
-                    <img src="https://irpsc.com/img-icon/target.png"  alt="نگرش ملی">
-                </a>
-                <a href="https://animal.irpsc.com" target="_blank " style="width:55px ;" title="حیوانات و دامپزشک">
-                    <img src="https://irpsc.com/img-icon/animal.png"  alt="حیوانات و دامپزشک">
-                </a>
-                <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
-                    <img src="https://irpsc.com/img-icon/irpsc.png"  alt="رسانه ملی">
-                </a>
-                <a href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
-                    <img src="https://irpsc.com/img-icon/meta.png"  alt="اخبار متا">
-                </a>
-                <a href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
-                    <img src="https://irpsc.com/img-icon/uni.png"  alt="دانشگاه متاورس">
-                </a>
-                <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
-                    title="استخدام | دانش محور">
-                    <img src="https://irpsc.com/img-icon/knowledge.png"  alt="استخدام | دانش محور">
-                </a>
-                <a href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
-                    <img src="https://irpsc.com/img-icon/sale.png"  alt="فروشگاه مجازی حم">
-                </a>
-                <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
-                    <img src="https://irpsc.com/img-icon/ad.png"  alt="تبلیغات ملی">
-                </a>
-                <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
-                    <img src="https://irpsc.com/img-icon/nft.png" >
-                </a>
-                <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
-                    <img src="https://irpsc.com/img-icon/rgb.png"  alt="متاورس رنگ">
-                </a>
-                <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
-                    <img src="https://irpsc.com/img-icon/3d.png"  alt="سه بعدی متا">
-                </a>
-                <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
-                    <img src="{{asset('images/logo/accounts.gif')}}"  alt="تونل زمان">
-                </a>
-                <a title="خانه" style="width:55px ;">
-                    <img src="https://irpsc.com/img-icon/home-soon.png" >
-                </a>
+                    <img src="https://irpsc.com/img-icon/supply.png" alt="تولید کنندگان">
+                    <a href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
+                        <img src="https://irpsc.com/img-icon/crm.png" alt="مدیریت بر مدیران">
+                    </a>
+                    <a href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
+                        <img src="https://irpsc.com/img-icon/target.png" alt="نگرش ملی">
+                    </a>
+                    <a href="https://animal.irpsc.com" target="_blank " style="width:55px ;"
+                        title="حیوانات و دامپزشک">
+                        <img src="https://irpsc.com/img-icon/animal.png" alt="حیوانات و دامپزشک">
+                    </a>
+                    <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
+                        <img src="https://irpsc.com/img-icon/irpsc.png" alt="رسانه ملی">
+                    </a>
+                    <a href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
+                        <img src="https://irpsc.com/img-icon/meta.png" alt="اخبار متا">
+                    </a>
+                    <a href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
+                        <img src="https://irpsc.com/img-icon/uni.png" alt="دانشگاه متاورس">
+                    </a>
+                    <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
+                        title="استخدام | دانش محور">
+                        <img src="https://irpsc.com/img-icon/knowledge.png" alt="استخدام | دانش محور">
+                    </a>
+                    <a href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
+                        <img src="https://irpsc.com/img-icon/sale.png" alt="فروشگاه مجازی حم">
+                    </a>
+                    <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
+                        <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
+                    </a>
+                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
+                        <img src="https://irpsc.com/img-icon/nft.png">
+                    </a>
+                    <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
+                        <img src="https://irpsc.com/img-icon/rgb.png" alt="متاورس رنگ">
+                    </a>
+                    <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
+                        <img src="https://irpsc.com/img-icon/3d.png" alt="سه بعدی متا">
+                    </a>
+                    <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
+                        <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
+                    </a>
+                    <a title="خانه" style="width:55px ;">
+                        <img src="https://irpsc.com/img-icon/home-soon.png">
+                    </a>
             </div>
             <div
                 class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between mb-5">
                 <div class="flex flex-col gap-10 w-full lg:w-[60%]">
                     <div class="flex gap-2">
-                        <img src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان" class="w-[71px] h-[71px] aspect-square ">
-                        <div class="text-[#4C4C4C] dark:text-[#FFFFFF] text-xl md:text-2xl flex flex-col justify-between">
+                        <img src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"
+                            class="w-[71px] h-[71px] aspect-square ">
+                        <div
+                            class="text-[#4C4C4C] dark:text-[#FFFFFF] text-xl md:text-2xl flex flex-col justify-between">
                             <p>
                                 متاورس ملی
                             </p>
@@ -771,7 +778,11 @@
                     </div>
                     <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl text-justify leading-10">
                         <p>
-                            سامانه "تونل زمان" توسط هلدینگ تعاونی‌های زنجیره تامین بهشت بهشت طراحی شده است. این سامانه با هدف یکپارچه‌سازی دسترسی کاربران به تمامی سامانه‌های تحت مدیریت این زنجیره توسعه یافته است. با استفاده از "تونل زمان"، کاربران می‌توانند به راحتی ثبت‌نام یا وارد شوند و پس از ورود، به تمامی سامانه‌های مرتبط دسترسی پیدا کنند. این یکپارچه‌سازی به کاربران امکان می‌دهد تا به صورت متمرکز و آسان از خدمات مختلف تعاونی‌ها بهره‌مند شوند.
+                            سامانه "تونل زمان" توسط هلدینگ تعاونی‌های زنجیره تامین بهشت بهشت طراحی شده است. این سامانه
+                            با هدف یکپارچه‌سازی دسترسی کاربران به تمامی سامانه‌های تحت مدیریت این زنجیره توسعه یافته
+                            است. با استفاده از "تونل زمان"، کاربران می‌توانند به راحتی ثبت‌نام یا وارد شوند و پس از
+                            ورود، به تمامی سامانه‌های مرتبط دسترسی پیدا کنند. این یکپارچه‌سازی به کاربران امکان می‌دهد
+                            تا به صورت متمرکز و آسان از خدمات مختلف تعاونی‌ها بهره‌مند شوند.
 
                         </p>
                     </div>
@@ -829,7 +840,8 @@
                                 </svg>
 
                             </a>
-                            <a href="https://ir.linkedin.com/in/%D8%AD%D8%B3%DB%8C%D9%86-%D9%82%D8%AF%DB%8C%D8%B1%DB%8C-89161a189?original_referer=https%3A%2F%2Frgb.irpsc.com%2F">
+                            <a
+                                href="https://ir.linkedin.com/in/%D8%AD%D8%B3%DB%8C%D9%86-%D9%82%D8%AF%DB%8C%D8%B1%DB%8C-89161a189?original_referer=https%3A%2F%2Frgb.irpsc.com%2F">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
