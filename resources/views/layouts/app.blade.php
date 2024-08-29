@@ -10,7 +10,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'تونل زمان') }}</title>
+    <title>سامانه تونل زمان </title>
     <meta property="og:type" content="@yield('og:type', 'website')">
     <meta name="description" content="@yield('description', 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
     <meta name="keywords" content="@yield('keywords', '3d,3dmeta,3drgb,سبعدی,سه بعدی,محصولات سه بعدی,فایل سه بعدی,خرید فایل سبعدی,icon,آیکون,آیکون سه بعدی,خرید آیکون سه بعدی,انیمیشن')">
@@ -696,7 +696,7 @@
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
                 <a href="https://irpsc.com" style="width:55px ;" target="_blank "
                     title="وزارت تعاون کار و رفاه اجتماعی">
-                    <img src="https://irpsc.com/img-icon/vezarat.png">
+                    <img src="https://irpsc.com/img-icon/vezarat.png" alt="وزارت تعاون کار و رفاه اجتماعی">
                 </a>
                 <a class="active" href="#" target="_blank " style="width:55px ;"
                     title="نماد اعتماد الکترونیک">
@@ -746,8 +746,8 @@
                     <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
                         <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
                     </a>
-                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
-                        <img src="https://irpsc.com/img-icon/nft.png">
+                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT" >
+                        <img src="https://irpsc.com/img-icon/nft.png" alt="nft">
                     </a>
                     <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
                         <img src="https://irpsc.com/img-icon/rgb.png" alt="متاورس رنگ">
@@ -758,8 +758,8 @@
                     <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
                         <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
                     </a>
-                    <a title="خانه" style="width:55px ;">
-                        <img src="https://irpsc.com/img-icon/home-soon.png">
+                    <a title="خانه"   href="#" style="width:55px ;">
+                        <img src="https://irpsc.com/img-icon/home-soon.png"  alt="خانه">
                     </a>
             </div>
             <div
@@ -1185,6 +1185,16 @@
             document.getElementById("open-nav-btn").style.display = 'flex';
         };
     </script>
+                <script>
+                    const passwordInput = document.getElementById('password-input');
+                    const togglePasswordButton = document.getElementById('toggle-password');
+      
+                    togglePasswordButton.addEventListener('click', function () {
+                      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                      passwordInput.setAttribute('type', type);
+      
+                    });
+                  </script>
     <!-- Import jquery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
