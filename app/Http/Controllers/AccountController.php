@@ -20,7 +20,7 @@ class AccountController extends Controller
 
     /**
      * Show the account edit form.
-     * 
+     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function edit()
@@ -30,7 +30,7 @@ class AccountController extends Controller
 
     /**
      * Update the account.
-     * 
+     *
      * @param \App\Http\Requests\UpdateAccountRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
