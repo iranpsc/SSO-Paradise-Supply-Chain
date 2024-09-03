@@ -11,6 +11,11 @@ class PersonalInfo extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'first_name',
         'last_name',
@@ -29,6 +34,11 @@ class PersonalInfo extends Model implements HasMedia
         'is_company'
     ];
 
+    /**
+     * Get the user that owns the personal info.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

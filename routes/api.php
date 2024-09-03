@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,10 +22,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->get('/auth/check', function (Request $request) {
-    return response()->json([
-        'user' => $request->user()->only(['id', 'name', 'email', 'code']),
-    ], 200);
+Route::get('/users/{user}', function (Request $request, User $user) {
+    $user->load('personalInfo');
+
+    return new UserResource($user);
 });
 
 Route::post('/users/get', function (Request $request) {

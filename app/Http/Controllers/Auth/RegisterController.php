@@ -63,6 +63,7 @@ class RegisterController extends Controller
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
             'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
+            'back_url' => 'required|url',
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
     }
@@ -92,6 +93,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $request->session()->put('redirect_uri', $request->input('redirect_uri'));
+        $request->session()->put('back_url', $request->input('back_url'));
 
         $user->personalInfo()->create();
 

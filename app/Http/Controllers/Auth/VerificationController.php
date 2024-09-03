@@ -48,7 +48,9 @@ class VerificationController extends Controller
             'code' => $this->generateCode(),
         ]);
 
+        $backUrl = $request->session()->pull('back_url');
         $url = $request->session()->pull('redirect_uri', $this->redirectPath());
+        $url .= '?back_url=' . $backUrl;
 
         return redirect()->to($url);
     }
