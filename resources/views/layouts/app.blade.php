@@ -833,9 +833,9 @@
                         <div
                             class="text-[#4C4C4C] dark:text-[#FFFFFF] text-xl md:text-2xl flex flex-col justify-between">
                             <p>
-                                متاورس ملی
+                                تونل زمان
                             </p>
-                            <p>رهبری جهانی در دنیایی موازی </p>
+                            <p>سامانه احراز هویت مرکزی</p>
                         </div>
                     </div>
                     <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl text-justify leading-10">
