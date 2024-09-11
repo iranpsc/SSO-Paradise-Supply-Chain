@@ -63,7 +63,7 @@ class RegisterController extends Controller
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
             'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
-            'back_url' => 'required|url',
+            'back_url' => 'nullable|url',
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
     }
