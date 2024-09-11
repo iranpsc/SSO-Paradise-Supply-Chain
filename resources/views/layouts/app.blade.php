@@ -432,7 +432,7 @@
                                         <div id="zaban"
                                             class="flex flex-col text-sm text-[#000BEE] font-bold gap-5 p-3 pr-[20PX] dark:text-[#868B90]">
                                             <a href="#">فارسی</a>
-                                            <a href="#"> انگیلیسی</a>
+                                            <a href="#"> انگلیسی</a>
                                         </div>
                                     </ul>
                                 </li>
@@ -441,22 +441,53 @@
                     </div>
                     <div
                         class="space-y-6  lg:absolute bottom-0 lg:h-[150px]  w-full h-auto  bg-white  dark:bg-[#0F0F0E] pb-10 lg:pb-1 pt-5">
-                        <div
-                            class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
-                            <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path class="stroke-white dark:stroke-black"
-                                    d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
-                                    stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path class="stroke-white dark:stroke-black"
-                                    d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
-                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <a href="#" class="font-bold">ورود</a>
-                        </div>
+                        @guest
+                            <div
+                                class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
+                                <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <a href="#" class="font-bold">ورود</a>
+                            </div>
+                        @endguest
+                        @auth
+                            <div
+                                class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-red-600 rounded-[10px] ">
+                                <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path class="stroke-white dark:stroke-black"
+                                        d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                       document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </div>
+                        @endauth
                         <div class="pt-5 border-t-2 border-[#EFEFEF]   dark:border-[#868B90] ">
                             <div class=" flex rounded-full w-full p-[6px] bg-[#F4F4F4] dark:bg-[#090909] ">
                                 <button
@@ -579,25 +610,56 @@
                         </div>
                     </div>
                     <div class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
-                        <div class="w-10 mx-auto  flex justify-center items-center">
-                            <a href="#"
-                                class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
+                        @guest
+                            <div class="w-10 mx-auto  flex justify-center items-center">
+                                <a href="#"
+                                    class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
 
-                                <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path class="stroke-white dark:stroke-black"
-                                        d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
-                                        stroke="black" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
-                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path class="stroke-white dark:stroke-black"
-                                        d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
-                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+                                    <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path class="stroke-white dark:stroke-black"
+                                            d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path class="stroke-white dark:stroke-black"
+                                            d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
 
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endguest
+                        @auth
+                            <div class="w-10 mx-auto  flex justify-center items-center">
+                                <a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"
+                                    class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-red-600 rounded-[10px] ">
+
+                                    <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path class="stroke-white dark:stroke-black"
+                                            d="M7.90039 6.07C8.21039 2.47 10.0604 1 14.1104 1H14.2404C18.7104 1 20.5004 2.79 20.5004 7.26V13.78C20.5004 18.25 18.7104 20.04 14.2404 20.04H14.1104C10.0904 20.04 8.24039 18.59 7.91039 15.05"
+                                            stroke="black" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path class="stroke-white dark:stroke-black" d="M1 10.5078H13.88" stroke="black"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path class="stroke-white dark:stroke-black"
+                                            d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                    </form>
+                                </a>
+                            </div>
+                        @endauth
+
                         <div
                             class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   border-[#00000017] dark:border-[#3F3F3F]">
                             <div class=" flex rounded-full w-max p-[6px] bg-[#F4F4F4] dark:bg-[#090909]">
@@ -746,7 +808,7 @@
                     <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
                         <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
                     </a>
-                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT" >
+                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
                         <img src="https://irpsc.com/img-icon/nft.png" alt="nft">
                     </a>
                     <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
@@ -758,8 +820,8 @@
                     <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
                         <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
                     </a>
-                    <a title="خانه"   href="#" style="width:55px ;">
-                        <img src="https://irpsc.com/img-icon/home-soon.png"  alt="خانه">
+                    <a title="خانه" href="#" style="width:55px ;">
+                        <img src="https://irpsc.com/img-icon/home-soon.png" alt="خانه">
                     </a>
             </div>
             <div
@@ -771,9 +833,9 @@
                         <div
                             class="text-[#4C4C4C] dark:text-[#FFFFFF] text-xl md:text-2xl flex flex-col justify-between">
                             <p>
-                                متاورس ملی
+                                تونل زمان
                             </p>
-                            <p>رهبری جهانی در دنیایی موازی </p>
+                            <p>سامانه احراز هویت مرکزی</p>
                         </div>
                     </div>
                     <div class="text-[#4C4C4C] dark:text-[#D4D4D4] font-normal text-xl text-justify leading-10">
@@ -1185,16 +1247,16 @@
             document.getElementById("open-nav-btn").style.display = 'flex';
         };
     </script>
-                <script>
-                    const passwordInput = document.getElementById('password-input');
-                    const togglePasswordButton = document.getElementById('toggle-password');
-      
-                    togglePasswordButton.addEventListener('click', function () {
-                      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                      passwordInput.setAttribute('type', type);
-      
-                    });
-                  </script>
+    <script>
+        const passwordInput = document.getElementById('password-input');
+        const togglePasswordButton = document.getElementById('toggle-password');
+
+        togglePasswordButton.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+        });
+    </script>
     <!-- Import jquery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
