@@ -23,37 +23,7 @@
     <meta property="og:site_name" content="تونل زمان ">
     <meta property="og:locale" content="fa_IR">
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "تونل زمان",
-      "url": "https://accounts.irpsc.com/",
-      "logo": "https://accounts.irpsc.com/images/logo/accounts.png",
-      "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+98-28-33696489",
-        "contactType": "Customer Service",
-        "availableLanguage": "Persian"
-      },
-      "email": "Cq@irpsc.com",
 
-      {{-- "foundingDate": "2020-01-01",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "خیابان مثال، پلاک 1",
-        "addressLocality": "شهر مثال",
-        "postalCode": "12345",
-        "addressCountry": "IR"
-      }, --}}
-      "potentialAction": {
-        "@type": "LoginAction",
-        "target": "https://accounts.irpsc.com/login",
-        "query-input": "required name=username"
-      }
-    }
-    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
