@@ -1,61 +1,62 @@
-name: Run Tests Every Hour
+name: Run Laravel Tests
 
-# تنظیم اجرای هر یک ساعت
 on:
-  schedule:
-    - cron: '0 * * * *'  # اجرای هر ساعت
-  workflow_dispatch:  # امکان اجرای دستی
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-tests:
+  laravel-tests:
     runs-on: ubuntu-latest
-
     services:
       mysql:
-        image: mysql:5.7  # استفاده از نسخه پایدار MySQL 5.7
+        image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: sso
           MYSQL_USER: root
-          MYSQL_PASSWORD: password
-        ports:
-          - 3306:3306
+          MYSQL_PASSWORD: root
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
+        ports:
+          - 3306:3306
+        volumes:
+          - /tmp/mysql:/var/lib/mysql
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # استفاده از PHP 8.1
-          extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, json, bcmath, tokenizer
+          ini-values: post_max_size=256M, upload_max_filesize=256M, max_execution_time=300
+          coverage: none
 
-      - name: Install dependencies
-        run: composer install
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Copy .env file
-        run: cp .env.example .env  # کپی کردن فایل env
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
 
-      - name: Wait for MySQL to be ready
-        run: sleep 15  # 15 ثانیه صبر قبل از اجرای migration‌ها
-
-      - name: Configure database
+      - name: Update .env with database config
         run: |
-          php artisan key:generate
-          php artisan migrate --force  # اجرای migration برای ساخت جدول‌ها
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_DATABASE=homestead/DB_DATABASE=sso/' .env
+          sed -i 's/DB_USERNAME=homestead/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=root/' .env
 
-      - name: Run tests
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run the tests
         run: php artisan test
-
-      - name: Upload Test Results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: storage/logs
