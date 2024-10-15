@@ -1,4 +1,4 @@
-name: Run Laravel Tests
+name: Run every hour tests
 
 on:
   # اجرای تست‌ها به صورت خودکار هر یک ساعت
