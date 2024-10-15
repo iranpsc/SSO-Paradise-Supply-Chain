@@ -1,64 +1,32 @@
-name: Run Tests Every Hour
+name: Run Laravel Tests
 
 on:
-  schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-tests:
+  laravel-tests:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mariadb:10.5
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: sso
-          MYSQL_USER: root
-          MYSQL_PASSWORD: password
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping -u root -ppassword"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
-          extensions: mbstring, dom, gd, pdo_mysql
+          php-version: '8.1' # نسخه PHP مورد نظر خود را وارد کنید
+          extensions: mbstring, xml, ctype, json, bcmath, tokenizer
+          ini-values: post_max_size=256M, upload_max_filesize=256M, max_execution_time=300
+          coverage: none
 
-      - name: Install dependencies
-        run: composer install
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Copy .env file
-        run: cp .env.example .env
+      - name: Generate application key
+        run: php artisan key:generate
 
-      - name: Wait for MariaDB to be ready
-        run: sleep 60
-
-      - name: Configure database
-        run: |
-          php artisan key:generate
-          php artisan migrate --force
-
-      - name: Run tests
+      - name: Run the tests
         run: php artisan test
-
-      - name: MySQL Logs
-        if: failure()
-        run: docker logs $(docker ps -q --filter "name=mariadb")
-
-      - name: Upload Test Results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: storage/logs
