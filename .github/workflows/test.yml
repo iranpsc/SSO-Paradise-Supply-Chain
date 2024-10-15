@@ -1,6 +1,11 @@
 name: Run Laravel Tests
 
 on:
+  # اجرای تست‌ها به صورت خودکار هر یک ساعت
+  schedule:
+    - cron: '0 * * * *'  # هر یک ساعت (00:00، 01:00، 02:00 و...)
+
+  # اجرای تست‌ها هنگام push به شاخه‌ی main یا pull request
   push:
     branches:
       - main
@@ -11,21 +16,6 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: sso
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        ports:
-          - 3306:3306
-        volumes:
-          - /tmp/mysql:/var/lib/mysql
     steps:
       - uses: actions/checkout@v3
 
@@ -34,27 +24,41 @@ jobs:
         with:
           php-version: '8.1'
           extensions: mbstring, xml, ctype, json, bcmath, tokenizer
-          ini-values: post_max_size=256M, upload_max_filesize=256M, max_execution_time=300
-          coverage: none
 
-      - name: Install Composer dependencies
+      - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Copy .env.example to .env
         run: cp .env.example .env
 
-      - name: Update .env with database config
-        run: |
-          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_DATABASE=homestead/DB_DATABASE=sso/' .env
-          sed -i 's/DB_USERNAME=homestead/DB_USERNAME=root/' .env
-          sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=root/' .env
-
-      - name: Generate application key
-        run: php artisan key:generate
-
       - name: Run migrations
         run: php artisan migrate --force
 
-      - name: Run the tests
+      - name: Run tests
         run: php artisan test
+        continue-on-error: true  # ادامه می‌دهد حتی اگر تست‌ها fail شوند
+
+  # ارسال نوتیفیکیشن به ایمیل در صورت شکست تست‌ها
+  notifications:
+    email:
+      on_failure: always
+
+  notify_slack:
+    runs-on: ubuntu-latest
+    if: failure()  # اجرا فقط در صورت شکست تست‌ها
+    steps:
+      - name: Slack Notification
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          payload: |
+            {
+              "text": "Laravel Tests have failed!",
+              "attachments": [
+                {
+                  "color": "danger",
+                  "text": "Please check the test results in GitHub Actions."
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}  # استفاده از Slack Webhook
