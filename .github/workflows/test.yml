@@ -1,0 +1,40 @@
+name: Run Tests Every Hour
+
+# تنظیم اجرای هر یک ساعت
+on:
+  schedule:
+    - cron: '0 * * * *'  # این کرون جاب هر ساعت در دقیقه صفر اجرا می‌شود
+  workflow_dispatch:  # همچنین امکان اجرای دستی این اکشن را فراهم می‌کند
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3  # این مرحله مخزن شما را کلون می‌کند
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'  # یا نسخه‌ای که پروژه شما استفاده می‌کند
+          extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز پروژه شما
+
+      - name: Install dependencies
+        run: composer install  # نصب وابستگی‌ها از composer.json
+
+      - name: Copy .env file
+        run: cp .env.example .env  # اگر فایل env دارید، کپی می‌شود
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run tests
+        run: php artisan test  # اجرای تست‌ها
+
+      - name: Upload Test Results
+        if: failure()  # در صورت شکست تست‌ها، گزارش‌ها آپلود می‌شود
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: storage/logs  # مسیر ذخیره لاگ‌ها
