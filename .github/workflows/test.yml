@@ -38,16 +38,11 @@ jobs:
         run: php artisan test
         continue-on-error: true  # ادامه می‌دهد حتی اگر تست‌ها fail شوند
 
-  # ارسال نوتیفیکیشن به ایمیل در صورت شکست تست‌ها
-  notifications:
-    email:
-      on_failure: always
-
   notify_slack:
     runs-on: ubuntu-latest
     if: failure()  # اجرا فقط در صورت شکست تست‌ها
     steps:
-      - name: Slack Notification
+      - name: Send Slack Notification
         uses: slackapi/slack-github-action@v1.18.0
         with:
           payload: |
