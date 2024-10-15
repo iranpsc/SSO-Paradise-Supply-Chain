@@ -12,10 +12,10 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0  # اجرای MySQL نسخه 8.0
+        image: mysql:5.7  # استفاده از نسخه پایدار MySQL 5.7
         env:
-          MYSQL_ROOT_PASSWORD: password  # رمز عبور ریشه MySQL
-          MYSQL_DATABASE: sso  # نام پایگاه داده برای تست
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: sso
           MYSQL_USER: root
           MYSQL_PASSWORD: password
         ports:
@@ -41,6 +41,9 @@ jobs:
 
       - name: Copy .env file
         run: cp .env.example .env  # کپی کردن فایل env
+
+      - name: Wait for MySQL to be ready
+        run: sleep 15  # 15 ثانیه صبر قبل از اجرای migration‌ها
 
       - name: Configure database
         run: |
