@@ -17,7 +17,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'  # یا نسخه‌ای که پروژه شما استفاده می‌کند
+          php-version: '8.1'  # تنظیم PHP 8.1 به عنوان نسخه مورد نیاز
           extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز پروژه شما
 
       - name: Install dependencies
