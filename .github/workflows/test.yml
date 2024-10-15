@@ -1,10 +1,9 @@
 name: Run Tests Every Hour
 
-# تنظیم اجرای هر یک ساعت
 on:
   schedule:
-    - cron: '0 * * * *'  # اجرای هر ساعت
-  workflow_dispatch:  # امکان اجرای دستی
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-tests:
@@ -12,7 +11,7 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:10.5  # استفاده از MariaDB 10.5
+        image: mariadb:10.5
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: sso
@@ -24,7 +23,7 @@ jobs:
           --health-cmd="mysqladmin ping -u root -ppassword"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=10  # تعداد بیشتری تلاش برای بررسی سلامت سرویس
+          --health-retries=10
 
     steps:
       - name: Check out repository
@@ -33,29 +32,29 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # استفاده از PHP 8.1
-          extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز
+          php-version: '8.1'
+          extensions: mbstring, dom, gd, pdo_mysql
 
       - name: Install dependencies
         run: composer install
 
       - name: Copy .env file
-        run: cp .env.example .env  # کپی کردن فایل env
+        run: cp .env.example .env
 
       - name: Wait for MariaDB to be ready
-        run: sleep 60  # 60 ثانیه صبر کنید تا MariaDB کامل راه‌اندازی شود
+        run: sleep 60
 
       - name: Configure database
         run: |
           php artisan key:generate
-          php artisan migrate --force  # اجرای migration برای ساخت جدول‌ها
+          php artisan migrate --force
 
       - name: Run tests
         run: php artisan test
 
       - name: MySQL Logs
-        if: failure()  # در صورت بروز خطا، لاگ‌های MySQL چاپ می‌شود
-        run: docker logs $(docker ps -q --filter name=github_network_c45cc3d0885f47979bf062a30d64fa86)
+        if: failure()
+        run: docker logs $(docker ps -q --filter "name=mariadb")
 
       - name: Upload Test Results
         if: failure()
