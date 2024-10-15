@@ -12,7 +12,7 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:10.5  # استفاده از MariaDB 10.5 به جای MySQL
+        image: mariadb:10.5  # استفاده از MariaDB 10.5
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: sso
@@ -21,10 +21,10 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping -u root -ppassword"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10  # تعداد بیشتری تلاش برای بررسی سلامت سرویس
 
     steps:
       - name: Check out repository
@@ -43,7 +43,7 @@ jobs:
         run: cp .env.example .env  # کپی کردن فایل env
 
       - name: Wait for MariaDB to be ready
-        run: sleep 30  # 30 ثانیه صبر کنید تا MariaDB یا MySQL کامل راه‌اندازی شود
+        run: sleep 60  # 60 ثانیه صبر کنید تا MariaDB کامل راه‌اندازی شود
 
       - name: Configure database
         run: |
@@ -55,7 +55,7 @@ jobs:
 
       - name: MySQL Logs
         if: failure()  # در صورت بروز خطا، لاگ‌های MySQL چاپ می‌شود
-        run: docker logs $(docker ps -q --filter name=mysql)
+        run: docker logs $(docker ps -q --filter name=github_network_c45cc3d0885f47979bf062a30d64fa86)
 
       - name: Upload Test Results
         if: failure()
