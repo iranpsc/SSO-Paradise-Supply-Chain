@@ -3,38 +3,56 @@ name: Run Tests Every Hour
 # تنظیم اجرای هر یک ساعت
 on:
   schedule:
-    - cron: '0 * * * *'  # این کرون جاب هر ساعت در دقیقه صفر اجرا می‌شود
-  workflow_dispatch:  # همچنین امکان اجرای دستی این اکشن را فراهم می‌کند
+    - cron: '0 * * * *'  # اجرای هر ساعت
+  workflow_dispatch:  # امکان اجرای دستی
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0  # اجرای MySQL نسخه 8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password  # رمز عبور ریشه MySQL
+          MYSQL_DATABASE: sso  # نام پایگاه داده برای تست
+          MYSQL_USER: root
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Check out repository
-        uses: actions/checkout@v3  # این مرحله مخزن شما را کلون می‌کند
+        uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # تنظیم PHP 8.1 به عنوان نسخه مورد نیاز
-          extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز پروژه شما
+          php-version: '8.1'  # استفاده از PHP 8.1
+          extensions: mbstring, dom, gd, pdo_mysql  # اکستنشن‌های مورد نیاز
 
       - name: Install dependencies
-        run: composer install  # نصب وابستگی‌ها از composer.json
+        run: composer install
 
       - name: Copy .env file
-        run: cp .env.example .env  # اگر فایل env دارید، کپی می‌شود
+        run: cp .env.example .env  # کپی کردن فایل env
 
-      - name: Generate application key
-        run: php artisan key:generate
+      - name: Configure database
+        run: |
+          php artisan key:generate
+          php artisan migrate --force  # اجرای migration برای ساخت جدول‌ها
 
       - name: Run tests
-        run: php artisan test  # اجرای تست‌ها
+        run: php artisan test
 
       - name: Upload Test Results
-        if: failure()  # در صورت شکست تست‌ها، گزارش‌ها آپلود می‌شود
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: storage/logs  # مسیر ذخیره لاگ‌ها
+          path: storage/logs
