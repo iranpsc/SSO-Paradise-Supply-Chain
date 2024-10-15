@@ -12,7 +12,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7  # استفاده از نسخه پایدار MySQL 5.7
+        image: mariadb:10.5  # استفاده از MariaDB 10.5 به جای MySQL
         env:
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: sso
@@ -24,7 +24,7 @@ jobs:
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5
 
     steps:
       - name: Check out repository
@@ -42,8 +42,8 @@ jobs:
       - name: Copy .env file
         run: cp .env.example .env  # کپی کردن فایل env
 
-      - name: Wait for MySQL to be ready
-        run: sleep 15  # 15 ثانیه صبر قبل از اجرای migration‌ها
+      - name: Wait for MariaDB to be ready
+        run: sleep 30  # 30 ثانیه صبر کنید تا MariaDB یا MySQL کامل راه‌اندازی شود
 
       - name: Configure database
         run: |
@@ -52,6 +52,10 @@ jobs:
 
       - name: Run tests
         run: php artisan test
+
+      - name: MySQL Logs
+        if: failure()  # در صورت بروز خطا، لاگ‌های MySQL چاپ می‌شود
+        run: docker logs $(docker ps -q --filter name=mysql)
 
       - name: Upload Test Results
         if: failure()
