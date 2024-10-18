@@ -148,5 +148,105 @@ class RegisterTest extends TestCase
         $response->assertSessionHasErrors(['email']);
         dump('Duplicate email validation failed as expected.');
     }
-}
 
+    /** @test */
+    public function it_disallows_names_starting_with_hm_prefix()
+    {
+        // Invalid name data (name starting with HM-)
+        $userData = [
+            'name' => 'HM-InvalidName',
+            'email' => 'testuser@example.com',
+            'password' => 'SecurePass!2024',
+            'password_confirmation' => 'SecurePass!2024',
+            'referral' => null,
+            'client_id' => null,
+            'redirect_uri' => null,
+            'back_url' => null,
+        ];
+
+        // Send registration request with invalid name
+        $response = $this->post('/register', $userData);
+
+        // Check for name validation error
+        $response->assertSessionHasErrors(['name']);
+        dump('Name validation failed as expected due to forbidden HM- prefix.');
+    }
+    /** @test */
+    public function it_allows_persian_name()
+    {
+        // Persian name data
+        $userData = [
+            'name' => 'کاربر تستی',
+            'email' => 'testuser@example.com',
+            'password' => 'SecurePass!2024',
+            'password_confirmation' => 'SecurePass!2024',
+            'referral' => null,
+            'client_id' => null,
+            'redirect_uri' => null,
+            'back_url' => null,
+        ];
+
+        // Send registration request with Persian name
+        $response = $this->post('/register', $userData);
+
+        // Check for successful registration and redirection to home
+        $response->assertRedirect('/home');
+        dump('Registration successful with Persian name.');
+
+        // Check that user with Persian name is stored in the database
+        $this->assertDatabaseHas('users', [
+            'name' => 'کاربر تستی',
+            'email' => 'testuser@example.com',
+        ]);
+        dump('User with Persian name stored in the database.');
+    }
+    /** @test */
+
+    /** @test */
+    public function it_allows_name_with_max_50_characters()
+    {
+        // Name with exactly 50 characters
+        $userData = [
+            'name' => str_repeat('a', 50),  // 50 characters
+            'email' => 'testuser@example.com',
+            'password' => 'SecurePass!2024',
+            'password_confirmation' => 'SecurePass!2024',
+            'referral' => null,
+            'client_id' => null,
+            'redirect_uri' => null,
+            'back_url' => null,
+        ];
+
+        // Send registration request with valid 50-character name
+        $response = $this->post('/register', $userData);
+
+        // Check for successful registration and redirection to home
+        $response->assertRedirect('/home');
+        dump('Registration successful with a 50-character name.');
+    }
+    /** @test */
+    public function it_disallows_name_longer_than_50_characters()
+    {
+        // Name with more than 50 characters
+        $userData = [
+            'name' => str_repeat('a', 51),  // 51 characters (1 more than allowed)
+            'email' => 'testuser@example.com',
+            'password' => 'SecurePass!2024',
+            'password_confirmation' => 'SecurePass!2024',
+            'referral' => null,
+            'client_id' => null,
+            'redirect_uri' => null,
+            'back_url' => null,
+        ];
+
+        // Send registration request with too long name
+        $response = $this->post('/register', $userData);
+
+        // Check for name length validation error
+        $response->assertSessionHasErrors(['name']);
+        dump('Name validation failed as expected because name is longer than 50 characters.');
+    }
+
+
+
+}
