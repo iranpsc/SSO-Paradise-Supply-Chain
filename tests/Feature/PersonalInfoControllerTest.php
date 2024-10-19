@@ -80,12 +80,12 @@ class PersonalInfoControllerTest extends TestCase
             'last_name' => 'UpdatedLastName',
             'mobile' => '09121234568',
             'is_company' => 0,
-            'telephone' => '02112345678',  // Correct phone number format
-            'national_code' => '1234567890',  // Valid national code
+            'telephone' => '02833674554',
+            'national_code' => '1234567891',
             'address' => 'New Address',
-            'melli_card_scan' => UploadedFile::fake()->image('melli_card_scan.jpg'),  // File
-            'certificate_scan' => UploadedFile::fake()->image('certificate_scan.jpg'),  // File
-            'bank_card_scan' => UploadedFile::fake()->image('bank_card_scan.jpg'),  // File
+            'melli_card_scan' => UploadedFile::fake()->image('melli_card_scan.jpg'),
+            'certificate_scan' => UploadedFile::fake()->image('certificate_scan.jpg'),
+            'bank_card_scan' => UploadedFile::fake()->image('bank_card_scan.jpg'),
         ];
 
         // Send request to update personal info
@@ -106,46 +106,83 @@ class PersonalInfoControllerTest extends TestCase
         dump('Personal info updated successfully for the authenticated user.');
     }
 
+/** @test */
+public function it_uploads_and_stores_files_for_authenticated_user()
+{
+    // ساخت کاربر و اطلاعات شخصی مربوط به آن
+    $user = User::factory()->create();
+    $personalInfo = $user->personalInfo()->create([
+        'first_name' => 'Ahmad',
+        'last_name' => 'Bahramieh',
+    ]);
+
+    // احراز هویت کاربر
+    $this->actingAs($user);
+
+    // شبیه‌سازی آپلود فایل
+    Storage::fake('local');
+    
+    // تعریف فایل‌های شبیه‌سازی شده
+    $melliCardFile = UploadedFile::fake()->image('melli_card_scan.jpg');
+    $certificateFile = UploadedFile::fake()->image('certificate_scan.jpg');
+    $bankCardFile = UploadedFile::fake()->image('bank_card_scan.jpg');
+
+    // آماده‌سازی داده‌های به‌روزرسانی همراه با فایل‌ها
+    $updatedData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'UpdatedLastName',
+        'mobile' => '09121234568',
+        'is_company' => 0,
+        'telephone' => '02833674554',
+        'national_code' => '1234567891',
+        'address' => 'New Address',
+        'melli_card_scan' => $melliCardFile,  // فایل اجباری melli_card_scan
+        'certificate_scan' => $certificateFile,
+        'bank_card_scan' => $bankCardFile,
+    ];
+
+    // ارسال درخواست برای به‌روزرسانی اطلاعات شخصی همراه با فایل‌ها
+    $response = $this->put('/personal-info', $updatedData);
+
+    // بررسی ریدایرکت و پیام موفقیت
+    $response->assertRedirect('/personal-info');
+    $response->assertSessionHas('success', __('Your personal information has been updated successfully.'));
+
+    // بررسی وجود فایل‌ها در مجموعه مدیا
+    $this->assertTrue($user->personalInfo->fresh()->hasMedia('melli_card_scan'));
+    $this->assertTrue($user->personalInfo->fresh()->hasMedia('certificate_scan'));
+    $this->assertTrue($user->personalInfo->fresh()->hasMedia('bank_card_scan'));
+
+    // بررسی دستی فایل‌ها در فضای ذخیره‌سازی
+    Storage::disk('local')->assertExists('melli_card_scan/' . $melliCardFile->hashName());
+    Storage::disk('local')->assertExists('certificate_scan/' . $certificateFile->hashName());
+    Storage::disk('local')->assertExists('bank_card_scan/' . $bankCardFile->hashName());
+
+    dump('Files uploaded and stored successfully.');
+}
+
     /** @test */
-    public function it_uploads_and_stores_melli_card_scan_for_authenticated_user()
+    public function it_returns_validation_error_if_data_is_invalid()
     {
-        // Create a user and personal info for that user
+        // Create a user
         $user = User::factory()->create();
-        $personalInfo = $user->personalInfo()->create([
-            'first_name' => 'Ahmad',
-            'last_name' => 'Bahramieh',
-        ]);
 
         // Authenticate the user
         $this->actingAs($user);
 
-        // Mock file upload
-        Storage::fake('local');
-        $file = UploadedFile::fake()->image('melli_card_scan.jpg');
-
-        // Prepare data with valid values
-        $updatedData = [
-            'first_name' => 'UpdatedName',
-            'last_name' => 'UpdatedLastName',
-            'mobile' => '09121234568',
-            'is_company' => 0,
-            'telephone' => '02112345678',  // Correct phone number format
-            'national_code' => '1234567890',  // Valid national code
-            'address' => 'New Address',
-            'melli_card_scan' => $file,
-            'certificate_scan' => UploadedFile::fake()->image('certificate_scan.jpg'),
-            'bank_card_scan' => UploadedFile::fake()->image('bank_card_scan.jpg'),
+        // Prepare invalid data (e.g. invalid mobile number and missing required fields)
+        $invalidData = [
+            'first_name' => '',
+            'last_name' => '',
+            'mobile' => 'invalid_mobile',
         ];
 
-        // Send request to update personal info with file
-        $response = $this->put('/personal-info', $updatedData);
+        // Send request to update personal info with invalid data
+        $response = $this->put('/personal-info', $invalidData);
 
-        // Assert redirection and success message
-        $response->assertRedirect('/personal-info');
-        $response->assertSessionHas('success', __('Your personal information has been updated successfully.'));
+        // Assert that validation errors are returned
+        $response->assertSessionHasErrors(['first_name', 'last_name', 'mobile']);
 
-        // Check if the file was stored
-        $this->assertTrue($user->personalInfo->hasMedia('melli_card_scan'));
-        dump('Melli card scan uploaded and stored successfully.');
+        dump('Validation errors returned as expected for invalid data.');
     }
 }

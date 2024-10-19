@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 
-class AccountControllerTest extends TestCase
+class AccountManagementTest extends TestCase
 {
     use RefreshDatabase;
 
