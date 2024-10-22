@@ -69,4 +69,40 @@ class EmailVerificationTest extends TestCase
         $this->assertNotNull($user->fresh()->email_verified_at);
         dump('Email verified successfully in the database.');
     }
+
+    /** @test */
+    public function a_user_is_redirected_to_back_url_after_verification()
+    {
+        // Create a user with unverified email
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        dump('User created with unverified email.');
+
+        // Fake notifications
+        Notification::fake();
+
+        // Set 'back_url' in the session
+        session(['back_url' => 'https://rgb.irpsc.com/fa']);
+        dump('Back URL set to https://rgb.irpsc.com/fa.');
+
+        // Generate a temporary signed URL for email verification
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+        dump('Temporary signed URL for email verification generated.');
+
+        // Act as the user and send email verification request
+        $response = $this->actingAs($user)->get($verificationUrl);
+
+        // Assert the user was redirected to back_url after email verification
+        $response->assertRedirect('http://localhost/home?back_url=https://rgb.irpsc.com/fa');
+        dump('User redirected to http://localhost/home with back_url after email verification.');
+
+        // Assert the user's email is now verified in the database
+        $this->assertNotNull($user->fresh()->email_verified_at);
+        dump('Email verified successfully in the database.');
+    }
 }
