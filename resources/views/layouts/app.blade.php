@@ -10,13 +10,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>سامانه تونل زمان </title>
+    <title> تونل زمان </title>
     <meta property="og:type" content="@yield('og:type', 'website')">
     <meta name="description" content="@yield('description', 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
     <meta name="keywords" content="@yield('keywords', '3d,3dmeta,3drgb,سبعدی,سه بعدی,محصولات سه بعدی,فایل سه بعدی,خرید فایل سبعدی,icon,آیکون,آیکون سه بعدی,خرید آیکون سه بعدی,انیمیشن')">
     <meta name="language" content="fa">
     <meta name="author" content="تونل زمان ">
-    <meta property="og:title" content="@yield('og:title', 'سامانه تونل زمان')">
+    <meta property="og:title" content="@yield('og:title', ' تونل زمان')">
     <meta property="og:description" content="@yield('og:description', 'سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.')">
     <meta property="og:image" content="@yield('og:image', asset('images/logo/accounts.png'))">
     <meta property="og:url" content="{{ url()->current() }}">
@@ -692,29 +692,31 @@
                         </p>
                     </div>
                     <div class="space-y-10">
-                        <div
-                            class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
-                            @guest
-                                @if (Route::has('login'))
-                                    <div
-                                        class=" p-5 px-10 w-max  {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
-                                        <a class=" {{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}   "
-                                            style="font-family: rokh;" href="{{ route('login') }}">{{ __('Login') }}
-                                        </a>
-                                    </div>
-                                @endif
-
-                                @if (Route::has('register'))
-                                    <div
-                                        class=" p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
-                                        <a style="font-family: rokh;"
-                                            class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
-                                            href="{{ route('register') }}">{{ __('Register') }}</a>
-                                    </div>
-                                @endif
-
-                            @endguest
+                        <div class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
+                            @unless (Route::is('password.request')) <!-- اگر روت password.request نباشد -->
+                                @guest
+                                    @if (Route::has('login'))
+                                        <div class="p-5 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            <a class="{{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}" style="font-family: rokh;" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        </div>
+                                    @endif
+                        
+                                    @if (Route::has('register'))
+                                        <div class="p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            <a style="font-family: rokh;" class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                        </div>
+                                    @endif
+                                @endguest
+                            @endunless
+                        
+                            @if (Route::is('password.request'))
+                            <div class="p-5 px-10 w-max border-primery-blue dark:border-dark-yellow border-b-2">
+                                <p class="text-primery-blue dark:text-dark-yellow">بازیابی رمز عبور</p>
+                            </div>
+                            @endif
                         </div>
+                        
+                        
 
                         <main class="py-4">
                             @yield('content')
