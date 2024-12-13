@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.app>
     <div class="flex justify-center">
         <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto md:text-xl  dark:text-[#FFFFFF]">
             <div class="card-header">{{ __('Account Info') }}</div>
@@ -23,4 +23,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.app>
