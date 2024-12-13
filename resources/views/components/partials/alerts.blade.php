@@ -1,6 +1,6 @@
-
 @session('success')
-    <div class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-[-40px]">
+    <div
+        class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-[-40px]">
         <div class="flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col p-5">
             <div class="text-green-600 m-5 text-center">
                 {{ session('success') }}

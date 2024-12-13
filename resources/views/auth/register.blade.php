@@ -1,5 +1,5 @@
-@extends('layouts.app')
-<script type="application/ld+json">
+<x-layouts.app>
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -30,10 +30,10 @@
       }
     }
     </script>
-@section('content')
-    <div class="space-y-10" >
+    <div class="space-y-10">
         <div class="text-center">
-            <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">برای ثبت نام ایمیل / نام کاربری و رمز مورد نظر خودرا وارد کنید. </p>
+            <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">برای ثبت نام ایمیل / نام کاربری و رمز مورد نظر
+                خودرا وارد کنید. </p>
         </div>
         <div class="flex flex-col gap-10">
             @if ($errors->any(['client_id', 'redirect_uri', 'refferal']))
@@ -61,17 +61,17 @@
                     <x-form.text :label="__('Password')" for="password" name="password" type="password" required
                         autocomplete="new-password" />
 
-                    <x-form.text :label="__('Confirm Password')" for="password_confirmation" name="password_confirmation" type="password"
-                        required />
+                    <x-form.text :label="__('Confirm Password')" for="password_confirmation" name="password_confirmation"
+                        type="password" required />
 
-                        <div class="flex items-center justify-center">
-                            <button type="submit"
-                                class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
-                                {{ __('Register') }}
-                            </button>
-                        </div>
+                    <div class="flex items-center justify-center">
+                        <button type="submit"
+                            class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
+                            {{ __('Register') }}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-@endsection
+</x-layouts.app>

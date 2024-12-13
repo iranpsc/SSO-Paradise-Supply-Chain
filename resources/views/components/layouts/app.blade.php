@@ -692,34 +692,41 @@
                         </p>
                     </div>
                     <div class="space-y-10">
-                        <div class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
+                        <div
+                            class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
                             @unless (Route::is('password.request')) <!-- اگر روت password.request نباشد -->
                                 @guest
                                     @if (Route::has('login'))
-                                        <div class="p-5 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
-                                            <a class="{{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}" style="font-family: rokh;" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        <div
+                                            class="p-5 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            <a class="{{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
+                                                style="font-family: rokh;"
+                                                href="{{ route('login') }}">{{ __('Login') }}</a>
                                         </div>
                                     @endif
-                        
+
                                     @if (Route::has('register'))
-                                        <div class="p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
-                                            <a style="font-family: rokh;" class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                        <div
+                                            class="p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            <a style="font-family: rokh;"
+                                                class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
+                                                href="{{ route('register') }}">{{ __('Register') }}</a>
                                         </div>
                                     @endif
                                 @endguest
                             @endunless
-                        
+
                             @if (Route::is('password.request'))
-                            <div class="p-5 px-10 w-max border-primery-blue dark:border-dark-yellow border-b-2">
-                                <p class="text-primery-blue dark:text-dark-yellow">بازیابی رمز عبور</p>
-                            </div>
+                                <div class="p-5 px-10 w-max border-primery-blue dark:border-dark-yellow border-b-2">
+                                    <p class="text-primery-blue dark:text-dark-yellow">بازیابی رمز عبور</p>
+                                </div>
                             @endif
                         </div>
-                        
-                        
+
+
 
                         <main class="py-4">
-                            @yield('content')
+                            {{ $slot }}
                         </main>
                     </div>
                 </div>
