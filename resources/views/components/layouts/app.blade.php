@@ -694,7 +694,7 @@
                     <div class="space-y-10">
                         <div
                             class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
-                            @unless (Route::is('password.request')) <!-- اگر روت password.request نباشد -->
+                            @unless (Route::is('password.request') || (Route::is('password.reset'))) <!-- اگر روت password.request نباشد -->
                                 @guest
                                     @if (Route::has('login'))
                                         <div
@@ -716,7 +716,7 @@
                                 @endguest
                             @endunless
 
-                            @if (Route::is('password.request'))
+                            @if  (Route::is('password.reset') || Route::is('password.request'))
                                 <div class="p-5 px-10 w-max border-primery-blue dark:border-dark-yellow border-b-2">
                                     <p class="text-primery-blue dark:text-dark-yellow">بازیابی رمز عبور</p>
                                 </div>

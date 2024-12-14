@@ -2,13 +2,13 @@
     <div class="space-y-10">
         <form method="POST" action="{{ route('password.update') }}">
             <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
-                <div class="text-2xl my-5">{{ __('Reset Password') }}</div>
+                <div class="text-2xl mb-5 dark:text-white">{{ __('Reset Password') }}</div>
                 @csrf
 
                 <input type="hidden" name="token" value="{{ $token }}">
 
                 <div class="row mb-3">
-                    <label for="email" class="my-2">{{ __('Email Address') }}</label>
+                    <label for="email" class="my-2 mb-5 dark:text-white">{{ __('Email Address') }}</label>
 
                     <div class="col-md-6">
                         <input id="email" type="email"
@@ -29,13 +29,12 @@
                 <x-form.text :label="__('Confirm Password')" for="password_confirmation" name="password_confirmation" type="password"
                     required />
 
-                <div class="row mb-0">
-                    <div class="col-md-6 offset-md-4">
-                        <button type="submit" class="btn btn-primary">
+                    <div>
+                        <button type="submit" class=" text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
                             {{ __('Reset Password') }}
                         </button>
                     </div>
-                </div>
+                
             </div>
         </form>
     </div>
