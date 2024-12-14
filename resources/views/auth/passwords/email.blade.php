@@ -17,7 +17,7 @@
                     <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">برای بازیابی رمز عبور حساب خود لطفا ایمیل ارسال شده را تایید کنید.</span>
                 </div>
                 <div class="flex justify-between w-full text-xs md:text-sm gap-3">
-                    <a class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black" href="https://mail.google.com/">
+                    <a class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black" href="#">
                         <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M1.79013 16.0031H5.18328V7.76264L2.96139 3.88281L0.335938 4.12713V14.5489C0.335938 15.3523 0.986699 16.0031 1.79013 16.0031Z"
@@ -69,4 +69,28 @@
             </form>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const emailInput = document.querySelector('input[name="email"]'); // تغییر بر اساس نام ورودی
+        const viewEmailButton = document.querySelector('.view-email-button'); // اضافه کردن کلاس به دکمه
+
+        emailInput.addEventListener('input', () => {
+            const email = emailInput.value;
+            const domain = email.split('@')[1];
+
+            let emailLink;
+            if (domain === 'gmail.com') {
+                emailLink = 'https://mail.google.com/';
+            } else if (domain === 'yahoo.com') {
+                emailLink = 'https://mail.yahoo.com/';
+            } else if (domain === 'outlook.com') {
+                emailLink = 'https://outlook.live.com/';
+            } else {
+                emailLink = '#'; // پیش‌فرض
+            }
+
+            viewEmailButton.setAttribute('href', emailLink);
+        });
+    });
+</script>
 </x-layouts.app>
