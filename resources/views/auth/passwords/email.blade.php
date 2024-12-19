@@ -19,13 +19,13 @@
                     </div>
                 </div>
                 {{ session('status') }}
-                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span id="timer">60</span> صبر کنید</span>
+                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه صبر کنید   </span>
                 <div class="text-center">
                     <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">برای بازیابی رمز عبور حساب خود لطفا
                         ایمیل ارسال شده را تایید کنید.</span>
                 </div>
                 <div class="flex justify-between w-full text-xs md:text-sm gap-3">
-                    <a class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
+                    <a target="_blank" class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
                         href="https://mail.google.com/">
                         <svg width="22" height="16" viewBox="0 0 22 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
