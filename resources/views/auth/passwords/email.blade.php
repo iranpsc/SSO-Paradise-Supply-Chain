@@ -1,9 +1,15 @@
 <x-layouts.app>
     @session('status')
-        <div
+        <div id="alert-modal"
             class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
             <div
-                class="flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
+                class="relative flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
+
+                <button onclick="document.getElementById('alert-modal').style.display = 'none';" class="w-max absolute right-5 top-5 cruiser-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                </button>
                 <div>
                     <div class="flex w-full justify-center">
                         <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,8 +31,8 @@
                         ایمیل ارسال شده را تایید کنید.</span>
                 </div>
                 <div class="flex justify-between w-full text-xs md:text-sm gap-3">
-                    <a target="_blank" class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
-                        href="https://mail.google.com/">
+                    <a target="_blank" id="email-view-button" class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
+                        href="#">
                         <svg width="22" height="16" viewBox="0 0 22 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -91,20 +97,36 @@
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.querySelector('input[name="email"]');
             const resendEmailInput = document.querySelector('#resend-email');
+            const emailViewButton = document.querySelector('#email-view-button');
 
             // Save email in localStorage when the main form is submitted
-            emailInput?.form.addEventListener('submit', function(event) {
-                console.log('Form submitted with email:', emailInput.value);
+            emailInput?.form.addEventListener('submit', function() {
                 if (emailInput?.value) {
                     localStorage.setItem('email', emailInput.value);
                 }
             });
 
-            // Retrieve and set email in the resend form
+            // Retrieve saved email and update the link dynamically
             const savedEmail = localStorage.getItem('email');
-            console.log('Saved email retrieved:', savedEmail);
             if (resendEmailInput && savedEmail) {
                 resendEmailInput.value = savedEmail;
+
+                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
+                let emailLink;
+
+                if (emailDomain.includes('gmail')) {
+                    emailLink = 'https://mail.google.com/';
+                } else if (emailDomain.includes('yahoo')) {
+                    emailLink = 'https://mail.yahoo.com/';
+                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                    emailLink = 'https://outlook.live.com/';
+                } else {
+                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                }
+
+                if (emailViewButton) {
+                    emailViewButton.href = emailLink; // Update button link
+                }
             }
         });
     </script>
@@ -130,5 +152,4 @@
             }, 1000);
         });
     </script>
-
 </x-layouts.app>

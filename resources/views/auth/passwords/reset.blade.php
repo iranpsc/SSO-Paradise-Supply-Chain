@@ -7,7 +7,7 @@
 
                 <input type="hidden" name="token" value="{{ $token }}">
 
-                <div class="row mb-3">
+                <div class="flex flex-col gap-3 hidden">
                     <label for="email" class="my-2 mb-5 dark:text-white">{{ __('Email Address') }}</label>
 
                     <div class="col-md-6">
@@ -30,7 +30,7 @@
                     required />
 
                     <div>
-                        <button type="submit" class=" text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
+                        <button type="submit" class=" text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
                             {{ __('Reset Password') }}
                         </button>
                     </div>
