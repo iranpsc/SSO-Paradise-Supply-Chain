@@ -430,7 +430,9 @@
                             </div>
                         @endguest
                         @auth
-                            <div
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();"
                                 class=" w-full flex justify-between items-center px-6 p-[10px] font-bold text-white dark:text-black bg-red-600 rounded-[10px] ">
                                 <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -444,19 +446,16 @@
                                         d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
                                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <div>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                       document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
 
+
+                                <div class="text-left flex justify-end">
+                                    {{ __('Logout') }}
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                         class="d-none">
                                         @csrf
                                     </form>
                                 </div>
-                            </div>
+                            </a>
                         @endauth
                         <div class="pt-5 border-t-2 border-[#EFEFEF]   dark:border-[#868B90] ">
                             <div class=" flex rounded-full w-full p-[6px] bg-[#F4F4F4] dark:bg-[#090909] ">
@@ -694,7 +693,7 @@
                     <div class="space-y-10">
                         <div
                             class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
-                            @unless (Route::is('password.request') || (Route::is('password.reset'))) <!-- اگر روت password.request نباشد -->
+                            @unless (Route::is('password.request') || Route::is('password.reset')) <!-- اگر روت password.request نباشد -->
                                 @guest
                                     @if (Route::has('login'))
                                         <div
@@ -716,7 +715,7 @@
                                 @endguest
                             @endunless
 
-                            @if  (Route::is('password.reset') || Route::is('password.request'))
+                            @if (Route::is('password.reset') || Route::is('password.request'))
                                 <div class="p-5 px-10 w-max border-primery-blue dark:border-dark-yellow border-b-2">
                                     <p class="text-primery-blue dark:text-dark-yellow">بازیابی رمز عبور</p>
                                 </div>
