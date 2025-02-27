@@ -49,10 +49,9 @@ class VerificationController extends Controller
         ]);
 
         $backUrl = $request->session()->pull('back_url');
-        $url = $request->session()->pull('redirect_uri', $this->redirectPath());
-        $url .= '?back_url=' . $backUrl;
+        $backUrl .= '?registered=1&verified=1';
 
-        return redirect()->to($url);
+        return redirect()->to($backUrl);
     }
 
     /**

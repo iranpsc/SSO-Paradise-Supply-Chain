@@ -92,7 +92,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        $request->session()->put('redirect_uri', $request->input('redirect_uri'));
         $request->session()->put('back_url', $request->input('back_url'));
 
         $user->personalInfo()->create();
