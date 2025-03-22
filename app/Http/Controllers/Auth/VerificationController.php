@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class VerificationController extends Controller
 {
@@ -48,7 +49,7 @@ class VerificationController extends Controller
             'code' => $this->generateCode(),
         ]);
 
-        $backUrl = $request->session()->pull('back_url');
+        $backUrl = Cache::pull('back_url_' . $request->user()->id);
         $backUrl .= '?registered=1&verified=1';
 
         return redirect()->to($backUrl);

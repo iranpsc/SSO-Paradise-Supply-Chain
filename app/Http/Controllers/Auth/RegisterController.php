@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Cache;
 
 class RegisterController extends Controller
 {
@@ -92,7 +93,7 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        $request->session()->put('back_url', $request->input('back_url'));
+        Cache::put('back_url_' . $user->id, $request->input('back_url'), now()->addMinutes(10));
 
         $user->personalInfo()->create();
 
