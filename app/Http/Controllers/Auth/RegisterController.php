@@ -64,7 +64,7 @@ class RegisterController extends Controller
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
             'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
-            'back_url' => 'nullable|url',
+            'back_url' => ['nullable', 'url'],
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
     }
@@ -93,7 +93,7 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, $user)
     {
-        Cache::put('back_url_' . $user->id, $request->input('back_url'), now()->addMinutes(10));
+        Cache::put('back_url_' . $user->id, $request->input('back_url'), now()->addHour());
 
         $user->personalInfo()->create();
 

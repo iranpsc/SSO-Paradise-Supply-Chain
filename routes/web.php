@@ -34,8 +34,6 @@ Route::middleware(['auth' , 'verified' ])->group(function() {
 
 Auth::routes();
 
-Route::view('/logout', 'auth.logout')->middleware('auth');
-
 Route::controller(VerificationController::class)->prefix('email')->as('verification.')->group(function () {
     Route::get('/verify', 'show')->name('notice');
     Route::post('/verification-notification', 'resend')->name('resend');

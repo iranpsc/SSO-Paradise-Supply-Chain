@@ -50,8 +50,6 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if (!$user->hasVerifiedEmail()) {
-            $this->guard()->logout();
-
             return redirect()->route('verification.notice');
         }
 

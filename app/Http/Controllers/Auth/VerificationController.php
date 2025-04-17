@@ -50,9 +50,9 @@ class VerificationController extends Controller
         ]);
 
         $backUrl = Cache::pull('back_url_' . $request->user()->id);
-        $backUrl .= '?registered=1&verified=1';
+        $backUrl .= $backUrl ? '?verified=1' : '';
 
-        return redirect()->away($backUrl);
+        return $backUrl ? redirect()->away($backUrl) : redirect()->route('home');
     }
 
     /**

@@ -53,6 +53,7 @@
                     <input type="hidden" name="client_id" value="{{ request()->query('client_id') }}">
                     <input type="hidden" name="redirect_uri" value="{{ request()->query('redirect_uri') }}">
                     <input type="hidden" name="referral" value="{{ request()->query('referral') }}">
+                    <input type="hidden" name="back_url" value="{{ request()->query('back_url') }}">
 
                     <x-form.text :label="__('Name')" for="name" name="name" required autofocus />
 

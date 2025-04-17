@@ -12,36 +12,39 @@
                     </div>
                 @endsession
 
-                
-
-               
                 <div id="alert-modal"
                     class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
                     <div
                         class="relative flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
-        
+
 
                         <div>
                             <div class="flex w-full justify-center">
-                                <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="58" height="58" viewBox="0 0 58 58" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
                                     <path class="dark:stroke-dark-yellow"
                                         d="M41.084 49.5443H16.9173C9.66732 49.5443 4.83398 45.9193 4.83398 37.4609V20.5443C4.83398 12.0859 9.66732 8.46094 16.9173 8.46094H41.084C48.334 8.46094 53.1673 12.0859 53.1673 20.5443V37.4609C53.1673 45.9193 48.334 49.5443 41.084 49.5443Z"
-                                        stroke="#0066FF" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
+                                        stroke="#0066FF" stroke-width="1.5" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                     <path class="dark:stroke-dark-yellow"
                                         d="M41.0827 21.75L33.5185 27.7917C31.0293 29.7733 26.9452 29.7733 24.456 27.7917L16.916 21.75"
-                                        stroke="#0066FF" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
-                                        stroke-linejoin="round" />
+                                        stroke="#0066FF" stroke-width="1.5" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
                         </div>
+
                         {{ session('status') }}
-                        <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه صبر کنید   </span>
+
+                        <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه
+                            صبر کنید </span>
                         <div class="text-center">
-                            <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center"> {{ __('Before proceeding, please check your email for a verification link.') }}</span>
+                            <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">
+                                {{ __('Before proceeding, please check your email for a verification link.') }}</span>
                         </div>
                         <div class="flex justify-between w-full text-xs md:text-sm gap-3">
-                            <a target="_blank" id="email-view-button" class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
+                            <a target="_blank" id="email-view-button"
+                                class="flex w-1/2 items-center justify-center gap-2 bg-primery-blue dark:bg-dark-yellow border-primery-blue dark:border-dark-yellow border py-[10px] px-4 rounded-[10px] text-white dark:text-black"
                                 href="#">
                                 <svg width="22" height="16" viewBox="0 0 22 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +66,7 @@
                                 </svg>
                                 مشاهده ایمیل
                             </a>
-        
+
                             <form method="POST" action="{{ route('verification.resend') }}" class="w-1/2">
                                 @csrf
                                 <button id="resend-button" type="submit"
@@ -71,7 +74,7 @@
                                     disabled>
                                     ارسال مجدد
                                 </button>
-                                <input class="hidden" type="email" name="email" id="resend-email" required>
+                                <input class="hidden" type="email" name="email" value="{{ Auth::user()->email }}" id="resend-email" required>
                             </form>
                         </div>
                     </div>
@@ -84,22 +87,22 @@
                 const emailInput = document.querySelector('input[name="email"]');
                 const resendEmailInput = document.querySelector('#resend-email');
                 const emailViewButton = document.querySelector('#email-view-button');
-    
+
                 // Save email in localStorage when the main form is submitted
                 emailInput?.form.addEventListener('submit', function() {
                     if (emailInput?.value) {
                         localStorage.setItem('email', emailInput.value);
                     }
                 });
-    
+
                 // Retrieve saved email and update the link dynamically
                 const savedEmail = localStorage.getItem('email');
                 if (resendEmailInput && savedEmail) {
                     resendEmailInput.value = savedEmail;
-    
+
                     const emailDomain = savedEmail.split('@')[1]; // Get domain from email
                     let emailLink;
-    
+
                     if (emailDomain.includes('gmail')) {
                         emailLink = 'https://mail.google.com/';
                     } else if (emailDomain.includes('yahoo')) {
@@ -109,23 +112,23 @@
                     } else {
                         emailLink = 'https://mail.' + emailDomain; // Generic mail link
                     }
-    
+
                     if (emailViewButton) {
                         emailViewButton.href = emailLink; // Update button link
                     }
                 }
             });
         </script>
-    
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const resendButton = document.getElementById('resend-button');
                 const timerSpan = document.getElementById('timer');
                 let timeLeft = 60; // Time in seconds
                 const timerMessage = timerSpan.parentNode; // Get the parent element of the timer span to hide it
-    
+
                 resendButton.disabled = true; // Disable the button initially
-    
+
                 // Countdown function
                 const countdown = setInterval(function() {
                     timeLeft--;
