@@ -198,7 +198,7 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <div class="logo">{{ config('app.name') }}</div>
+            <div class="logo">{{ __(config('app.name')) }}</div>
             <div class="subtitle">{{ $emailType ?? 'Account Security' }}</div>
         </div>
 
