@@ -1,4 +1,4 @@
-{{ __('Password Reset Request') }} - {{ config('app.name') }}
+{{ __('Password Reset Request') }} - {{ __(config('app.name')) }}
 
 {{ __('Hello :name!', ['name' => $user->name ?? 'User']) }}
 

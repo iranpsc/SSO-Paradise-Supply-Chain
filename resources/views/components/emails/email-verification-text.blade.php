@@ -1,8 +1,8 @@
-{{ __('Welcome to :app_name - Email Verification', ['app_name' => config('app.name')]) }}
+{{ __('Welcome to :app_name - Email Verification', ['app_name' => __(config('app.name'))]) }}
 
 {{ __('Hello :name!', ['name' => $user->name ?? 'User']) }}
 
-{{ __('Thank you for registering with :app_name. To complete your registration and secure your account, please verify your email address.', ['app_name' => config('app.name')]) }}
+{{ __('Thank you for registering with :app_name. To complete your registration and secure your account, please verify your email address.', ['app_name' => __(config('app.name'))]) }}
 
 {{ __('WHY VERIFY YOUR EMAIL?') }}
 • {{ __('Ensure account security and prevent unauthorized access') }}
