@@ -65,6 +65,18 @@
                     <x-form.text :label="__('Confirm Password')" for="password_confirmation" name="password_confirmation"
                         type="password" required />
 
+                    @if(config('recaptcha.enabled'))
+                        <div class="flex justify-center">
+                            <div class="cf-turnstile"
+                                 data-sitekey="{{ config('recaptcha.site_key') }}"
+                                 data-callback="onTurnstileSuccess"
+                                 data-expired-callback="onTurnstileExpired">
+                            </div>
+                        </div>
+                    @endif
+
+                    <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
+
                     <div class="flex items-center justify-center">
                         <button type="submit"
                             class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
@@ -75,4 +87,25 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // reCAPTCHA functions
+        function onTurnstileSuccess(token) {
+            document.getElementById('cf-turnstile-response').value = token;
+        }
+
+        function onTurnstileExpired() {
+            document.getElementById('cf-turnstile-response').value = '';
+            if (typeof turnstile !== 'undefined') {
+                turnstile.reset();
+            }
+        }
+
+        // Reset on form errors
+        @if($errors->any())
+            if (typeof turnstile !== 'undefined') {
+                turnstile.reset();
+            }
+        @endif
+    </script>
 </x-layouts.app>

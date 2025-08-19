@@ -87,6 +87,10 @@ return [
     ],
     "mimes"            => ":attribute باید یکی از فرمت های :values باشد.",
     'mimetypes'        => ':attribute باید تایپ ان از نوع: :values باشد.',
+    'cf-turnstile-response' => [
+        'required' => 'لطفاً تأیید reCAPTCHA را تکمیل کنید.',
+        'recaptcha' => 'تأیید reCAPTCHA ناموفق بود. لطفاً دوباره تلاش کنید.',
+    ],
     "min"              => [
         "numeric" => ":attribute نباید کوچکتر از :min باشد.",
         "file"    => ":attribute نباید کوچکتر از :min کیلوبایت باشد.",

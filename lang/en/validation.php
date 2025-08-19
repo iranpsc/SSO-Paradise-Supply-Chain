@@ -98,6 +98,10 @@ return [
     ],
     'max_digits' => 'The :attribute field must not have more than :max digits.',
     'mimes' => 'The :attribute field must be a file of type: :values.',
+    'cf-turnstile-response' => [
+        'required' => 'Please complete the reCAPTCHA verification.',
+        'recaptcha' => 'reCAPTCHA verification failed. Please try again.',
+    ],
     'mimetypes' => 'The :attribute field must be a file of type: :values.',
     'min' => [
         'array' => 'The :attribute field must have at least :min items.',

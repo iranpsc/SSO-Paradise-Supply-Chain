@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -38,6 +39,26 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
+    protected function validateLogin(Request $request)
+    {
+        $rules = [
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ];
+
+        if (config('recaptcha.enabled')) {
+            $rules['cf-turnstile-response'] = ['required', new RecaptchaRule];
+        }
+
+        $request->validate($rules);
     }
 
     /**
