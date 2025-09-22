@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2025-09-22)
+
+
+### Features
+
+* **recaptcha:** enhance user experience with button state management and visual feedback during reCAPTCHA verification ([ab829e8](https://github.com/iranpsc/sso/commit/ab829e8c378b48694c06e2d755531f24d8184620))
+
 ### 1.1.11 (2025-08-19)
 
 ### 1.1.10 (2025-08-05)
