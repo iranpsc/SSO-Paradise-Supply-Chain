@@ -78,8 +78,9 @@
                     <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
 
                     <div class="flex items-center justify-center">
-                        <button type="submit"
-                            class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
+                        <button type="submit" id="register-button"
+                            class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px] disabled:opacity-50 disabled:cursor-not-allowed"
+                            @if(config('recaptcha.enabled')) disabled @endif>
                             {{ __('Register') }}
                         </button>
                     </div>
@@ -92,10 +93,22 @@
         // reCAPTCHA functions
         function onTurnstileSuccess(token) {
             document.getElementById('cf-turnstile-response').value = token;
+            // Enable register button after successful reCAPTCHA verification
+            const registerButton = document.getElementById('register-button');
+            if (registerButton) {
+                registerButton.disabled = false;
+                registerButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
+            }
         }
 
         function onTurnstileExpired() {
             document.getElementById('cf-turnstile-response').value = '';
+            // Disable register button when reCAPTCHA expires
+            const registerButton = document.getElementById('register-button');
+            if (registerButton) {
+                registerButton.disabled = true;
+                registerButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+            }
             if (typeof turnstile !== 'undefined') {
                 turnstile.reset();
             }
@@ -105,6 +118,12 @@
         @if($errors->any())
             if (typeof turnstile !== 'undefined') {
                 turnstile.reset();
+            }
+            // Disable register button on form errors
+            const registerButton = document.getElementById('register-button');
+            if (registerButton) {
+                registerButton.disabled = true;
+                registerButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
             }
         @endif
     </script>

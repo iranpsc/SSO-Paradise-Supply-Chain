@@ -80,8 +80,9 @@
                 <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
 
                 <div class="flex items-center justify-center">
-                    <button type="submit"
-                        class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
+                    <button type="submit" id="login-button"
+                        class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px] disabled:opacity-50 disabled:cursor-not-allowed"
+                        @if(config('recaptcha.enabled')) disabled @endif>
                         {{ __('Login') }}
                     </button>
                 </div>
@@ -100,10 +101,22 @@
             // reCAPTCHA functions
             function onTurnstileSuccess(token) {
                 document.getElementById('cf-turnstile-response').value = token;
+                // Enable login button after successful reCAPTCHA verification
+                const loginButton = document.getElementById('login-button');
+                if (loginButton) {
+                    loginButton.disabled = false;
+                    loginButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                }
             }
 
             function onTurnstileExpired() {
                 document.getElementById('cf-turnstile-response').value = '';
+                // Disable login button when reCAPTCHA expires
+                const loginButton = document.getElementById('login-button');
+                if (loginButton) {
+                    loginButton.disabled = true;
+                    loginButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                }
                 if (typeof turnstile !== 'undefined') {
                     turnstile.reset();
                 }
@@ -113,6 +126,12 @@
             @if($errors->any())
                 if (typeof turnstile !== 'undefined') {
                     turnstile.reset();
+                }
+                // Disable login button on form errors
+                const loginButton = document.getElementById('login-button');
+                if (loginButton) {
+                    loginButton.disabled = true;
+                    loginButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
                 }
             @endif
         </script>

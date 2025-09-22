@@ -93,8 +93,9 @@
                     <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
 
                     <div class="flex items-center justify-center gap-7 md:gap-10 w-full text-xs md:text-base">
-                        <button type="submit"
-                            class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
+                        <button type="submit" id="reset-button"
+                            class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border disabled:opacity-50 disabled:cursor-not-allowed"
+                            @if(config('recaptcha.enabled')) disabled @endif>
                             {{ __('Send Password Reset Link') }}
                         </button>
                         <a href="{{ route('register') }}"
@@ -167,10 +168,22 @@
         // reCAPTCHA functions
         function onTurnstileSuccess(token) {
             document.getElementById('cf-turnstile-response').value = token;
+            // Enable reset button after successful reCAPTCHA verification
+            const resetButton = document.getElementById('reset-button');
+            if (resetButton) {
+                resetButton.disabled = false;
+                resetButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
+            }
         }
 
         function onTurnstileExpired() {
             document.getElementById('cf-turnstile-response').value = '';
+            // Disable reset button when reCAPTCHA expires
+            const resetButton = document.getElementById('reset-button');
+            if (resetButton) {
+                resetButton.disabled = true;
+                resetButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+            }
             if (typeof turnstile !== 'undefined') {
                 turnstile.reset();
             }
@@ -180,6 +193,12 @@
         @if($errors->any())
             if (typeof turnstile !== 'undefined') {
                 turnstile.reset();
+            }
+            // Disable reset button on form errors
+            const resetButton = document.getElementById('reset-button');
+            if (resetButton) {
+                resetButton.disabled = true;
+                resetButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
             }
         @endif
     </script>

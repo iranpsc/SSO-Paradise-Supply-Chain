@@ -20,12 +20,15 @@ class CustomResetPasswordNotification extends ResetPassword
 
         return (new MailMessage)
             ->subject(__('Reset Your Password - Secure Account Access'))
-            ->view('components.emails.password-reset', [
+            // Consolidated inline-styled Gmail-friendly template
+            ->view('emails.password-reset-inline', [
                 'user' => $notifiable,
                 'resetUrl' => $url,
                 'expireTime' => $expireTime,
+                'emailType' => __('Password Reset'),
+                'title' => __('Reset Your Password'),
             ])
-            ->text('components.emails.password-reset-text', [
+            ->text('emails.password-reset-inline-text', [
                 'user' => $notifiable,
                 'resetUrl' => $url,
                 'expireTime' => $expireTime,

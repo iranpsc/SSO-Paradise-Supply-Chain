@@ -123,4 +123,47 @@ class RecaptchaTest extends TestCase
 
         $response->assertSessionHasErrors('cf-turnstile-response');
     }
+
+    public function test_login_button_disabled_when_recaptcha_enabled()
+    {
+        config(['recaptcha.enabled' => true]);
+
+        $response = $this->get('/login');
+
+        $response->assertSee('disabled', false);
+        $response->assertSee('id="login-button"', false);
+    }
+
+    public function test_register_button_disabled_when_recaptcha_enabled()
+    {
+        config(['recaptcha.enabled' => true]);
+
+        $response = $this->get('/register');
+
+        $response->assertSee('disabled', false);
+        $response->assertSee('id="register-button"', false);
+    }
+
+    public function test_password_reset_button_disabled_when_recaptcha_enabled()
+    {
+        config(['recaptcha.enabled' => true]);
+
+        $response = $this->get('/password/reset');
+
+        $response->assertSee('disabled', false);
+        $response->assertSee('id="reset-button"', false);
+    }
+
+    public function test_buttons_enabled_when_recaptcha_disabled()
+    {
+        config(['recaptcha.enabled' => false]);
+
+        $loginResponse = $this->get('/login');
+        $registerResponse = $this->get('/register');
+        $resetResponse = $this->get('/password/reset');
+
+        $loginResponse->assertDontSee('disabled', false);
+        $registerResponse->assertDontSee('disabled', false);
+        $resetResponse->assertDontSee('disabled', false);
+    }
 }
