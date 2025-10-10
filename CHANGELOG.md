@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.3.0 (2025-10-10)
+
+
+### Features
+
+* Add Cloudflare reCAPTCHA (Turnstile) with form submission protection ([cd91995](https://github.com/iranpsc/sso/commit/cd91995a1eb3fe7a1fb55cfe86b00e9932982235))
+
 ## 1.2.0 (2025-09-22)
 
 
