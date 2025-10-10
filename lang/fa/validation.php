@@ -91,6 +91,7 @@ return [
         'required' => 'لطفاً تأیید reCAPTCHA را تکمیل کنید.',
         'recaptcha' => 'تأیید reCAPTCHA ناموفق بود. لطفاً دوباره تلاش کنید.',
     ],
+    'recaptcha_required' => 'لطفاً تأیید reCAPTCHA را تکمیل کنید.',
     "min"              => [
         "numeric" => ":attribute نباید کوچکتر از :min باشد.",
         "file"    => ":attribute نباید کوچکتر از :min کیلوبایت باشد.",

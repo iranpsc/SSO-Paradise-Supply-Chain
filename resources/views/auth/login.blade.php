@@ -36,7 +36,7 @@
             <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">برای ورود ابتدا ایمیل / نام کاربری و رمزی که
                 با ان ثبت نام کردید را وارد کنید </p>
         </div>
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}" id="login-form">
             <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
                 @csrf
                 <x-form.text for="email" name="email" type="email" required autofocus />
@@ -98,9 +98,13 @@
                 passwordInput.setAttribute('type', type);
             });
 
+            // reCAPTCHA verification state
+            let recaptchaVerified = {{ config('recaptcha.enabled') ? 'false' : 'true' }};
+
             // reCAPTCHA functions
             function onTurnstileSuccess(token) {
                 document.getElementById('cf-turnstile-response').value = token;
+                recaptchaVerified = true;
                 // Enable login button after successful reCAPTCHA verification
                 const loginButton = document.getElementById('login-button');
                 if (loginButton) {
@@ -111,6 +115,7 @@
 
             function onTurnstileExpired() {
                 document.getElementById('cf-turnstile-response').value = '';
+                recaptchaVerified = false;
                 // Disable login button when reCAPTCHA expires
                 const loginButton = document.getElementById('login-button');
                 if (loginButton) {
@@ -122,8 +127,27 @@
                 }
             }
 
+            // Prevent form submission if reCAPTCHA is not verified
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                @if(config('recaptcha.enabled'))
+                    if (!recaptchaVerified) {
+                        e.preventDefault();
+                        alert('{{ __('Please complete the reCAPTCHA verification.') }}');
+                        return false;
+                    }
+
+                    const token = document.getElementById('cf-turnstile-response').value;
+                    if (!token || token.trim() === '') {
+                        e.preventDefault();
+                        alert('{{ __('Please complete the reCAPTCHA verification.') }}');
+                        return false;
+                    }
+                @endif
+            });
+
             // Reset on form errors
             @if($errors->any())
+                recaptchaVerified = false;
                 if (typeof turnstile !== 'undefined') {
                     turnstile.reset();
                 }

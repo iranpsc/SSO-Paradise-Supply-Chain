@@ -75,7 +75,7 @@
         </div>
 
         <div class="flex flex-col gap-10">
-            <form method="POST" action="{{ route('password.email') }}">
+            <form method="POST" action="{{ route('password.email') }}" id="reset-form">
                 <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
                     @csrf
                     <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
@@ -165,9 +165,13 @@
             }, 1000);
         });
 
+        // reCAPTCHA verification state
+        let recaptchaVerified = {{ config('recaptcha.enabled') ? 'false' : 'true' }};
+
         // reCAPTCHA functions
         function onTurnstileSuccess(token) {
             document.getElementById('cf-turnstile-response').value = token;
+            recaptchaVerified = true;
             // Enable reset button after successful reCAPTCHA verification
             const resetButton = document.getElementById('reset-button');
             if (resetButton) {
@@ -178,6 +182,7 @@
 
         function onTurnstileExpired() {
             document.getElementById('cf-turnstile-response').value = '';
+            recaptchaVerified = false;
             // Disable reset button when reCAPTCHA expires
             const resetButton = document.getElementById('reset-button');
             if (resetButton) {
@@ -189,8 +194,27 @@
             }
         }
 
+        // Prevent form submission if reCAPTCHA is not verified
+        document.getElementById('reset-form').addEventListener('submit', function(e) {
+            @if(config('recaptcha.enabled'))
+                if (!recaptchaVerified) {
+                    e.preventDefault();
+                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
+                    return false;
+                }
+
+                const token = document.getElementById('cf-turnstile-response').value;
+                if (!token || token.trim() === '') {
+                    e.preventDefault();
+                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
+                    return false;
+                }
+            @endif
+        });
+
         // Reset on form errors
         @if($errors->any())
+            recaptchaVerified = false;
             if (typeof turnstile !== 'undefined') {
                 turnstile.reset();
             }

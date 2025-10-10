@@ -102,6 +102,7 @@ return [
         'required' => 'Please complete the reCAPTCHA verification.',
         'recaptcha' => 'reCAPTCHA verification failed. Please try again.',
     ],
+    'recaptcha_required' => 'Please complete the reCAPTCHA verification.',
     'mimetypes' => 'The :attribute field must be a file of type: :values.',
     'min' => [
         'array' => 'The :attribute field must have at least :min items.',

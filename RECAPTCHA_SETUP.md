@@ -78,12 +78,15 @@ php artisan test tests/Feature/RecaptchaTest.php
 2. **Verification failing**: Verify your Cloudflare Turnstile keys
 3. **JavaScript errors**: Ensure Cloudflare Turnstile script is loading
 4. **Mobile issues**: Cloudflare Turnstile is mobile-responsive by default
+5. **419 CSRF Token Error on Mobile**: This has been fixed with form submission prevention. Forms won't submit until reCAPTCHA is verified, preventing race conditions on auto-fill.
 
 ## User Experience Features
 
 - **Button State Management**: Submit buttons are disabled until reCAPTCHA verification succeeds
 - **Visual Feedback**: Disabled buttons have reduced opacity and show "not-allowed" cursor
 - **Automatic Reset**: Buttons are re-disabled when reCAPTCHA expires or on form errors
+- **Form Submission Protection**: JavaScript prevents form submission if reCAPTCHA is not verified, preventing 419 CSRF errors
+- **Auto-fill Protection**: Prevents race conditions when browser auto-fills credentials and submits quickly
 - **Seamless Integration**: Works with existing form validation and error handling
 
 ## Notes
