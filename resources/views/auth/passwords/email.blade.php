@@ -80,22 +80,9 @@
                     @csrf
                     <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
 
-                    @if(config('recaptcha.enabled'))
-                        <div class="flex justify-center">
-                            <div class="cf-turnstile"
-                                 data-sitekey="{{ config('recaptcha.site_key') }}"
-                                 data-callback="onTurnstileSuccess"
-                                 data-expired-callback="onTurnstileExpired">
-                            </div>
-                        </div>
-                    @endif
-
-                    <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
-
                     <div class="flex items-center justify-center gap-7 md:gap-10 w-full text-xs md:text-base">
                         <button type="submit" id="reset-button"
-                            class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border disabled:opacity-50 disabled:cursor-not-allowed"
-                            @if(config('recaptcha.enabled')) disabled @endif>
+                            class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
                             {{ __('Send Password Reset Link') }}
                         </button>
                         <a href="{{ route('register') }}"
@@ -164,66 +151,5 @@
                 }
             }, 1000);
         });
-
-        // reCAPTCHA verification state
-        let recaptchaVerified = {{ config('recaptcha.enabled') ? 'false' : 'true' }};
-
-        // reCAPTCHA functions
-        function onTurnstileSuccess(token) {
-            document.getElementById('cf-turnstile-response').value = token;
-            recaptchaVerified = true;
-            // Enable reset button after successful reCAPTCHA verification
-            const resetButton = document.getElementById('reset-button');
-            if (resetButton) {
-                resetButton.disabled = false;
-                resetButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-        }
-
-        function onTurnstileExpired() {
-            document.getElementById('cf-turnstile-response').value = '';
-            recaptchaVerified = false;
-            // Disable reset button when reCAPTCHA expires
-            const resetButton = document.getElementById('reset-button');
-            if (resetButton) {
-                resetButton.disabled = true;
-                resetButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-            if (typeof turnstile !== 'undefined') {
-                turnstile.reset();
-            }
-        }
-
-        // Prevent form submission if reCAPTCHA is not verified
-        document.getElementById('reset-form').addEventListener('submit', function(e) {
-            @if(config('recaptcha.enabled'))
-                if (!recaptchaVerified) {
-                    e.preventDefault();
-                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                    return false;
-                }
-
-                const token = document.getElementById('cf-turnstile-response').value;
-                if (!token || token.trim() === '') {
-                    e.preventDefault();
-                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                    return false;
-                }
-            @endif
-        });
-
-        // Reset on form errors
-        @if($errors->any())
-            recaptchaVerified = false;
-            if (typeof turnstile !== 'undefined') {
-                turnstile.reset();
-            }
-            // Disable reset button on form errors
-            const resetButton = document.getElementById('reset-button');
-            if (resetButton) {
-                resetButton.disabled = true;
-                resetButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-        @endif
     </script>
 </x-layouts.app>

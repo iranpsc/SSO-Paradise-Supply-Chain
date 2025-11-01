@@ -65,22 +65,9 @@
                     <x-form.text :label="__('Confirm Password')" for="password_confirmation" name="password_confirmation"
                         type="password" required />
 
-                    @if(config('recaptcha.enabled'))
-                        <div class="flex justify-center">
-                            <div class="cf-turnstile"
-                                 data-sitekey="{{ config('recaptcha.site_key') }}"
-                                 data-callback="onTurnstileSuccess"
-                                 data-expired-callback="onTurnstileExpired">
-                            </div>
-                        </div>
-                    @endif
-
-                    <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
-
                     <div class="flex items-center justify-center">
                         <button type="submit" id="register-button"
-                            class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px] disabled:opacity-50 disabled:cursor-not-allowed"
-                            @if(config('recaptcha.enabled')) disabled @endif>
+                            class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
                             {{ __('Register') }}
                         </button>
                     </div>
@@ -89,66 +76,4 @@
         </div>
     </div>
 
-    <script>
-        // reCAPTCHA verification state
-        let recaptchaVerified = {{ config('recaptcha.enabled') ? 'false' : 'true' }};
-
-        // reCAPTCHA functions
-        function onTurnstileSuccess(token) {
-            document.getElementById('cf-turnstile-response').value = token;
-            recaptchaVerified = true;
-            // Enable register button after successful reCAPTCHA verification
-            const registerButton = document.getElementById('register-button');
-            if (registerButton) {
-                registerButton.disabled = false;
-                registerButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-        }
-
-        function onTurnstileExpired() {
-            document.getElementById('cf-turnstile-response').value = '';
-            recaptchaVerified = false;
-            // Disable register button when reCAPTCHA expires
-            const registerButton = document.getElementById('register-button');
-            if (registerButton) {
-                registerButton.disabled = true;
-                registerButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-            if (typeof turnstile !== 'undefined') {
-                turnstile.reset();
-            }
-        }
-
-        // Prevent form submission if reCAPTCHA is not verified
-        document.getElementById('register-form').addEventListener('submit', function(e) {
-            @if(config('recaptcha.enabled'))
-                if (!recaptchaVerified) {
-                    e.preventDefault();
-                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                    return false;
-                }
-
-                const token = document.getElementById('cf-turnstile-response').value;
-                if (!token || token.trim() === '') {
-                    e.preventDefault();
-                    alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                    return false;
-                }
-            @endif
-        });
-
-        // Reset on form errors
-        @if($errors->any())
-            recaptchaVerified = false;
-            if (typeof turnstile !== 'undefined') {
-                turnstile.reset();
-            }
-            // Disable register button on form errors
-            const registerButton = document.getElementById('register-button');
-            if (registerButton) {
-                registerButton.disabled = true;
-                registerButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-            }
-        @endif
-    </script>
 </x-layouts.app>

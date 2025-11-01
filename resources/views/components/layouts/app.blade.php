@@ -78,11 +78,6 @@
     </script>
 
     @vite('resources/css/app.css')
-
-    <!-- Cloudflare Turnstile Script -->
-    @if(config('recaptcha.enabled'))
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    @endif
 </head>
 
 <body class="bg-[#f8f8f8] dark:bg-black w-full font-azarMehr font-bold">

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -49,16 +48,10 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        $rules = [
+        $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
-        ];
-
-        if (config('recaptcha.enabled')) {
-            $rules['cf-turnstile-response'] = ['required', new RecaptchaRule];
-        }
-
-        $request->validate($rules);
+        ]);
     }
 
     /**

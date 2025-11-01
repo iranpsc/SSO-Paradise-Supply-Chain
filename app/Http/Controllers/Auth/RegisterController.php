@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Passport\Client;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
-use App\Rules\RecaptchaRule;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -54,7 +53,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $rules = [
+        return Validator::make($data, [
             'name' => ['required', 'string', 'max:50', 'not_regex:/^(HM-|hm-|Hm-|hM-).*$/'],
             'email' => ['required', 'string', 'email:filter', 'max:255', 'unique:users'],
             'password' => [
@@ -67,13 +66,7 @@ class RegisterController extends Controller
             'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
             'back_url' => ['nullable', 'url'],
             'referral' => ['nullable', 'string', 'exists:users,code'],
-        ];
-
-        if (config('recaptcha.enabled')) {
-            $rules['cf-turnstile-response'] = ['required', new RecaptchaRule];
-        }
-
-        return Validator::make($data, $rules);
+        ]);
     }
 
     /**

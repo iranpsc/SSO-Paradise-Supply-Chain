@@ -67,20 +67,9 @@
                         </a>
                     @endif
                 </div>
-                @if (config('recaptcha.enabled'))
-                    <div class="flex justify-center">
-                        <div class="cf-turnstile" data-sitekey="{{ config('recaptcha.site_key') }}"
-                            data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired">
-                        </div>
-                    </div>
-                @endif
-
-                <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
-
                 <div class="flex items-center justify-center">
                     <button type="submit" id="login-button"
-                        class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px] disabled:opacity-50 disabled:cursor-not-allowed"
-                        @if (config('recaptcha.enabled')) disabled @endif>
+                        class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-[179px]">
                         {{ __('Login') }}
                     </button>
                 </div>
@@ -100,76 +89,6 @@
                         passwordInput.setAttribute('type', type);
                     });
                 }
-
-                // reCAPTCHA verification state
-                let recaptchaVerified = {{ config('recaptcha.enabled') ? 'false' : 'true' }};
-
-                // reCAPTCHA functions
-                window.onTurnstileSuccess = function(token) {
-                    const responseInput = document.getElementById('cf-turnstile-response');
-                    if (responseInput) {
-                        responseInput.value = token;
-                    }
-                    recaptchaVerified = true;
-                    // Enable login button after successful reCAPTCHA verification
-                    const loginButton = document.getElementById('login-button');
-                    if (loginButton) {
-                        loginButton.disabled = false;
-                        loginButton.classList.remove('disabled:opacity-50', 'disabled:cursor-not-allowed');
-                    }
-                };
-
-                window.onTurnstileExpired = function() {
-                    const responseInput = document.getElementById('cf-turnstile-response');
-                    if (responseInput) {
-                        responseInput.value = '';
-                    }
-                    recaptchaVerified = false;
-                    // Disable login button when reCAPTCHA expires
-                    const loginButton = document.getElementById('login-button');
-                    if (loginButton) {
-                        loginButton.disabled = true;
-                        loginButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-                    }
-                    if (typeof turnstile !== 'undefined') {
-                        turnstile.reset();
-                    }
-                };
-
-                // Prevent form submission if reCAPTCHA is not verified
-                const loginForm = document.getElementById('login-form');
-                if (loginForm) {
-                    loginForm.addEventListener('submit', function(e) {
-                        @if (config('recaptcha.enabled'))
-                            if (!recaptchaVerified) {
-                                e.preventDefault();
-                                alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                                return false;
-                            }
-
-                            const token = document.getElementById('cf-turnstile-response').value;
-                            if (!token || token.trim() === '') {
-                                e.preventDefault();
-                                alert('{{ __('Please complete the reCAPTCHA verification.') }}');
-                                return false;
-                            }
-                        @endif
-                    });
-                }
-
-                // Reset on form errors
-                @if ($errors->any())
-                    recaptchaVerified = false;
-                    if (typeof turnstile !== 'undefined') {
-                        turnstile.reset();
-                    }
-                    // Disable login button on form errors
-                    const loginButton = document.getElementById('login-button');
-                    if (loginButton) {
-                        loginButton.disabled = true;
-                        loginButton.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
-                    }
-                @endif
             });
         </script>
     </div>
