@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <div class="space-y-10">
+    <div class="space-y-5 lg:space-y-8">
         <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto dark:text-gray-300">
             <div class="card-header">{{ __('Verify Your Email Address') }}</div>
             <div class="flex flex-col gap-5">

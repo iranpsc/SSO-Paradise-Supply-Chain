@@ -23,8 +23,6 @@
     <meta property="og:site_name" content="تونل زمان ">
     <meta property="og:locale" content="fa_IR">
 
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var referrer = document.referrer;
@@ -125,7 +123,7 @@
         <div id="main-nav" class="sidenav  !z-[5000]">
             <!-- start opened nav -->
             <div id="open00" dir="ltr"
-                class="hidden bg-white  dark:bg-[#0F0F0E]  p-4  relative  pr-0 h-full !overflow-y-scroll scrollbar !z-[5000]">
+                class="hidden bg-white  dark:bg-[#0F0F0E]  p-4  relative  pr-0 h-full overflow-y-scroll scrollbar  !z-[5000]">
                 <nav dir="rtl" class="w-full   space-y-6  relative lg:overflow-hidden">
 
                     <div class="  lg:h-full lg:pb-[220px] overflow-y-scroll scrollbar  space-y-1 relative">
@@ -496,10 +494,10 @@
             <!-- start closed nav -->
             <div dir="ltr" id="close00" class=" h-full">
                 <nav dir="rtl"
-                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative ">
+                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative  ">
 
                     <div
-                        class="flex  items-center flex-col gap-11 h-auto pr-5 lg:h-full lg:pb-[180px] !overflow-y-scroll scrollbar relative">
+                        class="flex  items-center flex-col gap-11 h-auto ml-[-10px] pr-[10px] lg:h-full lg:pb-[180px]  relative overflow-y-scroll scrollbar  ">
                         <div
                             class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
                             <!-- start open btn nav -->
@@ -583,7 +581,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
+                    <div class="w- space-y-6  ml-[-4px] px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
                         @guest
                             <div class="w-10 mx-auto  flex justify-center items-center">
                                 <a href="#"
@@ -670,7 +668,7 @@
         <!-- End nsvigation -->
     </header>
     <main class="w-full main-content-smallNav">
-        <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-32 lg:mt-7">
+        <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-[75px] lg:mt-0 ">
             <div class="hidden text-xl gap-2   items-center" id="ttw">
                 <div class="text-primery-blue" id="referrer"></div>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
@@ -683,26 +681,26 @@
                 <span class="text-[#1A1A18] dark:text-[#FFFFFF]">تونل زمان</span>
             </div>
         </div>
-        <div class="flex justify-center">
-            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-7">
+        <div class="flex justify-center px-3 lg:px-0">
+            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-7 lg:py-14 ">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
-                        <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk">
+                        <p class="lg:text-2xl dark:text-[#FFFFFF] font-rohk">
                             زیرساخت های فعال زنجیره تامین بهشت
                         </p>
-                        <p class="text-[#868B90] text-xs md:text-2xl">
+                        <p class="text-[#868B90] text-xs md:text-sm lg:text-xl font-normal">
                             با ثبت نام در این صفحه شما میتوانید به تمامی سامانه های تحت پوشش هلدینگ زنجیره تامین بهداشت
                             دسترسی مستقیم داشته باشید.
                         </p>
                     </div>
-                    <div class="space-y-10">
+                    <div class="space-y-1">
                         <div
-                            class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
+                            class="flex justify-center items-center gap-8 text-base md:text-lg lg:text-[22px] mt-1 lg:mt-5 dark:text-[#FFFFFF]">
                             @unless (Route::is('password.request') || Route::is('password.reset')) <!-- اگر روت password.request نباشد -->
                                 @guest
                                     @if (Route::has('login'))
                                         <div
-                                            class="p-5 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            class="py-3 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
                                             <a class="{{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
                                                 style="font-family: rokh;"
                                                 href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -711,7 +709,7 @@
 
                                     @if (Route::has('register'))
                                         <div
-                                            class="p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            class="py-3 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
                                             <a style="font-family: rokh;"
                                                 class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
                                                 href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -727,8 +725,6 @@
                             @endif
                         </div>
 
-
-
                         <main class="py-4">
                             {{ $slot }}
                         </main>
@@ -736,7 +732,7 @@
                 </div>
             </div>
         </div>
-        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-16 ">
+        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-5 ">
             <div
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
                 <a href="https://irpsc.com" style="width:55px ;" target="_blank "

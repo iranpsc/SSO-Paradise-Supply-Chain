@@ -30,9 +30,9 @@
       }
     }
     </script>
-    <div class="space-y-10">
+    <div class="space-y-5 lg:space-y-8">
         <div class="text-center">
-            <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">برای ثبت نام ایمیل / نام کاربری و رمز مورد نظر
+            <p class="text-xs md:text-sm lg:text-base font-normal dark:text-[#FFFFFF]">برای ثبت نام ایمیل / نام کاربری و رمز مورد نظر
                 خودرا وارد کنید. </p>
         </div>
         <div class="flex flex-col gap-10">
