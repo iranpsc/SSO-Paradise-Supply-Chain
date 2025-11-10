@@ -669,7 +669,7 @@
     </header>
     <main class="w-full main-content-smallNav">
         <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-[75px] lg:mt-0 ">
-            <div class="hidden text-xl gap-2   items-center" id="ttw">
+            <div class="hidden text-[15px] lg:text-lg gap-2   items-center" id="ttw">
                 <div class="text-primery-blue" id="referrer"></div>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
