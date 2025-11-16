@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\SecureImage;
 
 class UpdateAccountRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UpdateAccountRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'not_regex:/^(HM-|hm-|Hm-|hM-).*$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
-            'avatar' => ['nullable', 'image', 'max:1024'],
+            'avatar' => ['nullable', 'file', new SecureImage(['image/jpeg', 'image/png', 'image/webp']), 'max:1024'],
         ];
     }
 }
