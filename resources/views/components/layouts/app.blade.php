@@ -23,8 +23,6 @@
     <meta property="og:site_name" content="تونل زمان ">
     <meta property="og:locale" content="fa_IR">
 
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var referrer = document.referrer;
@@ -84,13 +82,13 @@
     <header>
         <!-- start head mobile nav -->
         <nav class=" w-full m-0 p-0 fixed top-0 z-[1000]  lg:hidden">
-            <div class="w-full  items-center flex justify-between p-4 bg-white  dark:bg-[#0F0F0E] ">
+            <div class="w-full  items-center flex justify-between p-4 py-0 bg-white  dark:bg-[#0F0F0E] ">
                 <div
-                    class="flex justify-between items-center w-full fixed right-0 top-0 lg:relative  bg-white dark:bg-[#0F0F0E] lg:bg-transparent lg:p-0 px-5 py-4">
+                    class="flex justify-between items-center w-full fixed right-0 top-0 lg:relative  bg-white dark:bg-[#0F0F0E] lg:bg-transparent lg:p-0 px-5 py-[10px]">
                     <!-- start open btn nav -->
                     <div class="flex items-center justify-between gap-5 w-full">
-                        <div class="w-max  p-3 rounded-full cursor-pointer flex" onclick="openNav2()">
-                            <svg class="lg:hidden dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
+                        <div class="w-max  p-2 rounded-full cursor-pointer flex" onclick="openNav2()">
+                            <svg class="lg:hidden dark:fill-white" width="20" height="20" viewBox="0 0 30 22"
                                 fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path class="dark:fill-white" fill-rule="evenodd" clip-rule="evenodd"
                                     d="M0 1.375C0 0.615608 0.6296 0 1.40625 0H28.5938C29.3704 0 30 0.615608 30 1.375C30 2.13439 29.3704 2.75 28.5938 2.75H1.40625C0.6296 2.75 0 2.13439 0 1.375ZM0 11C0 10.2406 0.6296 9.625 1.40625 9.625H28.5938C29.3704 9.625 30 10.2406 30 11C30 11.7594 29.3704 12.375 28.5938 12.375H1.40625C0.6296 12.375 0 11.7594 0 11ZM0 20.625C0 19.8656 0.6296 19.25 1.40625 19.25H28.5938C29.3704 19.25 30 19.8656 30 20.625C30 21.3844 29.3704 22 28.5938 22H1.40625C0.6296 22 0 21.3844 0 20.625Z"
@@ -99,10 +97,10 @@
                         </div>
                         <!-- end open btn nav -->
                         <div class="flex items-center gap-2">
-                            <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
+                            <a class="w-[35px] h-[35px]" href="#"><img class="w-full h-full"
                                     src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
                             <div class="flex flex-col justify-between ">
-                                <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-sm">تونل زمان</span>
+                                <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-[13px]">تونل زمان</span>
                                 <span class="text-[#939393] text-xs">ورود / ثبت نام مرکزی</span>
                             </div>
                         </div>
@@ -120,7 +118,7 @@
         <div id="main-nav" class="sidenav  !z-[5000]">
             <!-- start opened nav -->
             <div id="open00" dir="ltr"
-                class="hidden bg-white  dark:bg-[#0F0F0E]  p-4  relative  pr-0 h-full !overflow-y-scroll scrollbar !z-[5000]">
+                class="hidden bg-white  dark:bg-[#0F0F0E]  p-4  relative  pr-0 h-full overflow-y-scroll scrollbar  !z-[5000]">
                 <nav dir="rtl" class="w-full   space-y-6  relative lg:overflow-hidden">
 
                     <div class="  lg:h-full lg:pb-[220px] overflow-y-scroll scrollbar  space-y-1 relative">
@@ -491,10 +489,10 @@
             <!-- start closed nav -->
             <div dir="ltr" id="close00" class=" h-full">
                 <nav dir="rtl"
-                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative ">
+                    class="bg-[#FCFCFC] dark:bg-[#0F0F0E]  pr-0 space-y-9 flex justify-start items-center flex-col py-6 h-full relative  ">
 
                     <div
-                        class="flex  items-center flex-col gap-11 h-auto pr-5 lg:h-full lg:pb-[180px] !overflow-y-scroll scrollbar relative">
+                        class="flex  items-center flex-col gap-11 h-auto ml-[-10px] pr-[10px] lg:h-full lg:pb-[180px]  relative overflow-y-scroll scrollbar  ">
                         <div
                             class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
                             <!-- start open btn nav -->
@@ -578,7 +576,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="w-full space-y-6 px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
+                    <div class="w- space-y-6  ml-[-4px] px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
                         @guest
                             <div class="w-10 mx-auto  flex justify-center items-center">
                                 <a href="#"
@@ -665,8 +663,8 @@
         <!-- End nsvigation -->
     </header>
     <main class="w-full main-content-smallNav">
-        <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-32 lg:mt-7">
-            <div class="hidden text-xl gap-2   items-center" id="ttw">
+        <div class="w-full md:w-[95%] 3xl:w-[85%] p-5 3xl:px-0 mx-auto mt-[75px] lg:mt-0 ">
+            <div class="hidden text-[15px] lg:text-lg gap-2   items-center" id="ttw">
                 <div class="text-primery-blue" id="referrer"></div>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -678,26 +676,26 @@
                 <span class="text-[#1A1A18] dark:text-[#FFFFFF]">تونل زمان</span>
             </div>
         </div>
-        <div class="flex justify-center">
-            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-16 mt-7">
+        <div class="flex justify-center px-3 lg:px-0">
+            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-7 lg:py-14 ">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
-                        <p class="md:text-[32px] dark:text-[#FFFFFF] font-rohk">
+                        <p class="lg:text-2xl dark:text-[#FFFFFF] font-rohk">
                             زیرساخت های فعال زنجیره تامین بهشت
                         </p>
-                        <p class="text-[#868B90] text-xs md:text-2xl">
+                        <p class="text-[#868B90] text-xs md:text-sm lg:text-xl font-normal">
                             با ثبت نام در این صفحه شما میتوانید به تمامی سامانه های تحت پوشش هلدینگ زنجیره تامین بهداشت
                             دسترسی مستقیم داشته باشید.
                         </p>
                     </div>
-                    <div class="space-y-10">
+                    <div class="space-y-1">
                         <div
-                            class="flex justify-center items-center gap-10 text-base md:text-2xl mt-16 dark:text-[#FFFFFF]">
+                            class="flex justify-center items-center gap-8 text-base md:text-lg lg:text-[22px] mt-1 lg:mt-5 dark:text-[#FFFFFF]">
                             @unless (Route::is('password.request') || Route::is('password.reset')) <!-- اگر روت password.request نباشد -->
                                 @guest
                                     @if (Route::has('login'))
                                         <div
-                                            class="p-5 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            class="py-3 px-10 w-max {{ Request::is('login') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
                                             <a class="{{ Request::is('login') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
                                                 style="font-family: rokh;"
                                                 href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -706,7 +704,7 @@
 
                                     @if (Route::has('register'))
                                         <div
-                                            class="p-5 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
+                                            class="py-3 px-10 w-max {{ Request::is('register') ? 'border-primery-blue dark:border-dark-yellow border-b-2' : '' }}">
                                             <a style="font-family: rokh;"
                                                 class="{{ Request::is('register') ? 'text-primery-blue dark:text-dark-yellow' : '' }}"
                                                 href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -722,8 +720,6 @@
                             @endif
                         </div>
 
-
-
                         <main class="py-4">
                             {{ $slot }}
                         </main>
@@ -731,7 +727,7 @@
                 </div>
             </div>
         </div>
-        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-16 ">
+        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-5 ">
             <div
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
                 <a href="https://irpsc.com" style="width:55px ;" target="_blank "

@@ -1,7 +1,7 @@
 <x-layouts.app>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
+        <div>
+            <div>
                 <div class="text-center">
                     <div class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">
                         @if (session('status'))

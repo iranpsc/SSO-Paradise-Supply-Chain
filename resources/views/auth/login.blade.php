@@ -30,14 +30,14 @@
       }
     }
     </script>
-    <div class="space-y-10">
+    <div class="space-y-5 lg:space-y-8">
 
         <div class="text-center">
-            <p class="text-xs md:text-xl font-normal dark:text-[#FFFFFF]">برای ورود ابتدا ایمیل / نام کاربری و رمزی که
+            <p class="text-xs md:text-sm lg:text-base font-normal dark:text-[#FFFFFF]">برای ورود ابتدا ایمیل / نام کاربری و رمزی که
                 با ان ثبت نام کردید را وارد کنید </p>
         </div>
         <form method="POST" action="{{ route('login') }}" id="login-form">
-            <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
+            <div class="flex flex-col gap-5 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
                 @csrf
                 <x-form.text for="email" name="email" type="email" required autofocus />
                 <div class="w-full relative">
@@ -57,7 +57,7 @@
                         </svg>
                     </a>
                 </div>
-                <div class="flex flex-col  gap-2 px-1">
+                <div class="flex flex-col  px-1">
                     <x-form.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember"
                         :checked="old('remember')" />
                     @if (Route::has('password.request'))
