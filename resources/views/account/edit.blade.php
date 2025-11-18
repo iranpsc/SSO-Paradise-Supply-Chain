@@ -27,13 +27,72 @@
                 </div>
 
                 {{-- Upload avatar --}}
-                <div class="flex  gap-5 flex-row items-center ">
-                    <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
-                    <input id="avatar" type="file" class=" @error('avatar') is-invalid @enderror" name="avatar">
-                    @error('avatar')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                <div class="flex flex-col gap-5 md:flex-row items-center justify-between">
+                    <label for="avatar" class="form-label">{{ __('Profile Image') }}</label>
+                    <div class="flex flex-col gap-4 w-full md:w-[70%]">
+                        {{-- Current avatar preview --}}
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <img id="current-avatar"
+                                    src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('images/logo/accounts.png') }}"
+                                    alt="{{ __('Current Avatar') }}"
+                                    class="w-20 h-20 rounded-full object-cover border-2 border-[#DEDEE9] dark:border-[#1A1A18]">
+                            </div>
+                            <div class="flex flex-col gap-2 flex-1">
+                                <label for="avatar" class="cursor-pointer">
+                                    <span class="text-white bg-primery-blue dark:bg-dark-yellow py-2 px-4 rounded-xl inline-block text-sm hover:opacity-90 transition-opacity">
+                                        {{ __('Choose Image') }}
+                                    </span>
+                                </label>
+                                <input id="avatar"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    class="hidden @error('avatar') is-invalid @enderror"
+                                    name="avatar"
+                                    onchange="previewImage(this)">
+                                <p class="text-sm text-[#868B90] dark:text-[#868B90]">
+                                    {{ __('Allowed formats: JPEG, PNG, WebP. Max size: 1MB') }}
+                                </p>
+                            </div>
+                        </div>
+                        {{-- Preview selected image --}}
+                        <div id="image-preview-container" class="hidden">
+                            <img id="image-preview"
+                                src=""
+                                alt="{{ __('Preview') }}"
+                                class="w-32 h-32 rounded-full object-cover border-2 border-[#84858F] dark:border-[#84858F] mx-auto">
+                            <p class="text-center text-sm text-[#868B90] dark:text-[#868B90] mt-2">
+                                {{ __('New image preview') }}
+                            </p>
+                        </div>
+                        @error('avatar')
+                            <div class="invalid-feedback text-red-500 text-sm mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
+
+                <script>
+                    function previewImage(input) {
+                        const previewContainer = document.getElementById('image-preview-container');
+                        const previewImg = document.getElementById('image-preview');
+                        const currentAvatar = document.getElementById('current-avatar');
+
+                        if (input.files && input.files[0]) {
+                            const reader = new FileReader();
+
+                            reader.onload = function(e) {
+                                previewImg.src = e.target.result;
+                                previewContainer.classList.remove('hidden');
+                                currentAvatar.style.opacity = '0.5';
+                            }
+
+                            reader.readAsDataURL(input.files[0]);
+                        } else {
+                            previewContainer.classList.add('hidden');
+                            currentAvatar.style.opacity = '1';
+                        }
+                    }
+                </script>
 
                 <div class="flex items-center justify-center">
                     <button type="submit"
