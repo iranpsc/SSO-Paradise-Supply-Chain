@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.4.0 (2025-11-18)
+
+
+### Features
+
+* Revamp avatar upload interface with image preview functionality ([5d909d6](https://github.com/iranpsc/sso/commit/5d909d6017874954d8e5c1a68a091ae5d5d026a1))
+
 ### 1.3.6 (2025-11-18)
 
 ### 1.3.5 (2025-11-18)
