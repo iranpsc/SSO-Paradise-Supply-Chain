@@ -82,64 +82,67 @@
 
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const emailInput = document.querySelector('input[name="email"]');
-                const resendEmailInput = document.querySelector('#resend-email');
-                const emailViewButton = document.querySelector('#email-view-button');
-
-                // Save email in localStorage when the main form is submitted
-                emailInput?.form.addEventListener('submit', function() {
-                    if (emailInput?.value) {
-                        localStorage.setItem('email', emailInput.value);
-                    }
-                });
-
-                // Retrieve saved email and update the link dynamically
-                const savedEmail = localStorage.getItem('email');
-                if (resendEmailInput && savedEmail) {
-                    resendEmailInput.value = savedEmail;
-
-                    const emailDomain = savedEmail.split('@')[1]; // Get domain from email
-                    let emailLink;
-
-                    if (emailDomain.includes('gmail')) {
-                        emailLink = 'https://mail.google.com/';
-                    } else if (emailDomain.includes('yahoo')) {
-                        emailLink = 'https://mail.yahoo.com/';
-                    } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
-                        emailLink = 'https://outlook.live.com/';
-                    } else {
-                        emailLink = 'https://mail.' + emailDomain; // Generic mail link
-                    }
-
-                    if (emailViewButton) {
-                        emailViewButton.href = emailLink; // Update button link
-                    }
-                }
-            });
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const resendButton = document.getElementById('resend-button');
-                const timerSpan = document.getElementById('timer');
-                let timeLeft = 60; // Time in seconds
-                const timerMessage = timerSpan.parentNode; // Get the parent element of the timer span to hide it
-
-                resendButton.disabled = true; // Disable the button initially
-
-                // Countdown function
-                const countdown = setInterval(function() {
-                    timeLeft--;
-                    timerSpan.textContent = timeLeft;
-                    if (timeLeft <= 0) {
-                        clearInterval(countdown);
-                        resendButton.disabled = false;
-                        timerMessage.style.display = 'none'; // Hide the timer message
-                    }
-                }, 1000);
-            });
-        </script>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="email"]');
+            const resendEmailInput = document.querySelector('#resend-email');
+            const emailViewButton = document.querySelector('#email-view-button');
+
+            // Save email in localStorage when the main form is submitted
+            emailInput?.form.addEventListener('submit', function() {
+                if (emailInput?.value) {
+                    localStorage.setItem('email', emailInput.value);
+                }
+            });
+
+            // Retrieve saved email and update the link dynamically
+            const savedEmail = localStorage.getItem('email');
+            if (resendEmailInput && savedEmail) {
+                resendEmailInput.value = savedEmail;
+
+                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
+                let emailLink;
+
+                if (emailDomain.includes('gmail')) {
+                    emailLink = 'https://mail.google.com/';
+                } else if (emailDomain.includes('yahoo')) {
+                    emailLink = 'https://mail.yahoo.com/';
+                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                    emailLink = 'https://outlook.live.com/';
+                } else {
+                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                }
+
+                if (emailViewButton) {
+                    emailViewButton.href = emailLink; // Update button link
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resendButton = document.getElementById('resend-button');
+            const timerSpan = document.getElementById('timer');
+            let timeLeft = 60; // Time in seconds
+            const timerMessage = timerSpan.parentNode; // Get the parent element of the timer span to hide it
+
+            resendButton.disabled = true; // Disable the button initially
+
+            // Countdown function
+            const countdown = setInterval(function() {
+                timeLeft--;
+                timerSpan.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    resendButton.disabled = false;
+                    timerMessage.style.display = 'none'; // Hide the timer message
+                }
+            }, 1000);
+        });
+    </script>
+@endpush

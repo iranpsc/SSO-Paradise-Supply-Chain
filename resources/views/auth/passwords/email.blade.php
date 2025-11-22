@@ -93,6 +93,9 @@
             </form>
         </div>
     </div>
+</x-layouts.app>
+
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const emailInput = document.querySelector('input[name="email"]');
@@ -152,4 +155,4 @@
             }, 1000);
         });
     </script>
-</x-layouts.app>
+@endpush

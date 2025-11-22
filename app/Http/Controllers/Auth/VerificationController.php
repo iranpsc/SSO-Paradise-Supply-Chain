@@ -52,6 +52,18 @@ class VerificationController extends Controller
         $backUrl = Cache::pull('back_url_' . $request->user()->id);
         $backUrl .= $backUrl ? '?verified=1' : '';
 
+        // Validate the back URL domain
+        if ($backUrl) {
+            $parsedUrl = parse_url($backUrl);
+            $domain = isset($parsedUrl['scheme']) && isset($parsedUrl['host'])
+                ? $parsedUrl['scheme'] . '://' . $parsedUrl['host']
+                : null;
+
+            if ($domain !== 'https://rgb.irpsc.com') {
+                return redirect()->route('home')->with('warning', 'Invalid redirect URL.');
+            }
+        }
+
         return $backUrl ? redirect()->away($backUrl) : redirect()->route('home');
     }
 

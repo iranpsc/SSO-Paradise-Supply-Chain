@@ -1,39 +1,8 @@
 <x-layouts.app>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "تونل زمان",
-      "url": "https://accounts.irpsc.com/login",
-      "logo": "https://accounts.irpsc.com/images/logo/accounts.png",
-      "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+98-28-33696489",
-        "contactType": "Customer Service",
-        "availableLanguage": "Persian"
-      },
-      "email": "Cq@irpsc.com",
-
-      {{-- "foundingDate": "2020-01-01",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "خیابان مثال، پلاک 1",
-        "addressLocality": "شهر مثال",
-        "postalCode": "12345",
-        "addressCountry": "IR"
-      }, --}}
-      "potentialAction": {
-        "@type": "LoginAction",
-        "target": "https://accounts.irpsc.com/login",
-        "query-input": "required name=username"
-      }
-    }
-    </script>
     <div class="space-y-5 lg:space-y-8">
-
         <div class="text-center">
-            <p class="text-xs md:text-sm lg:text-base font-normal dark:text-[#FFFFFF]">برای ورود ابتدا ایمیل / نام کاربری و رمزی که
+            <p class="text-xs md:text-sm lg:text-base font-normal dark:text-[#FFFFFF]">برای ورود ابتدا ایمیل / نام کاربری
+                و رمزی که
                 با ان ثبت نام کردید را وارد کنید </p>
         </div>
         <form method="POST" action="{{ route('login') }}" id="login-form">
@@ -41,8 +10,8 @@
                 @csrf
                 <x-form.text for="email" name="email" type="email" required autofocus />
                 <div class="w-full relative">
-                <x-form.text for="password" name="password" type="password" required
-                    autocomplete="current-password" />
+                    <x-form.text for="password" name="password" type="password" required
+                        autocomplete="current-password" />
 
                     <a href="javascript:void(0)" id="toggle-password"
                         class=" absolute left-[10px] top-[50%] translate-y-[-50%] cursor-pointer">
@@ -76,20 +45,54 @@
 
             </div>
         </form>
-        <script>
-            // Wait for DOM to be ready
-            document.addEventListener('DOMContentLoaded', function() {
-                // Password toggle functionality
-                const passwordInput = document.getElementById('password');
-                const togglePasswordButton = document.getElementById('toggle-password');
-
-                if (passwordInput && togglePasswordButton) {
-                    togglePasswordButton.addEventListener('click', function() {
-                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                        passwordInput.setAttribute('type', type);
-                    });
-                }
-            });
-        </script>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "تونل زمان",
+      "url": "https://accounts.irpsc.com/login",
+      "logo": "https://accounts.irpsc.com/images/logo/accounts.png",
+      "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+98-28-33696489",
+        "contactType": "Customer Service",
+        "availableLanguage": "Persian"
+      },
+      "email": "Cq@irpsc.com",
+
+      {{-- "foundingDate": "2020-01-01",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "خیابان مثال، پلاک 1",
+        "addressLocality": "شهر مثال",
+        "postalCode": "12345",
+        "addressCountry": "IR"
+      }, --}}
+      "potentialAction": {
+        "@type": "LoginAction",
+        "target": "https://accounts.irpsc.com/login",
+        "query-input": "required name=username"
+      }
+    }
+    </script>
+    <script>
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const passwordInput = document.getElementById('password');
+            const togglePasswordButton = document.getElementById('toggle-password');
+
+            if (passwordInput && togglePasswordButton) {
+                togglePasswordButton.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                });
+            }
+        });
+    </script>
+@endpush

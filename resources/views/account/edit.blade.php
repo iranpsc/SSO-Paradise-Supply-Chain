@@ -71,29 +71,6 @@
                     </div>
                 </div>
 
-                <script>
-                    function previewImage(input) {
-                        const previewContainer = document.getElementById('image-preview-container');
-                        const previewImg = document.getElementById('image-preview');
-                        const currentAvatar = document.getElementById('current-avatar');
-
-                        if (input.files && input.files[0]) {
-                            const reader = new FileReader();
-
-                            reader.onload = function(e) {
-                                previewImg.src = e.target.result;
-                                previewContainer.classList.remove('hidden');
-                                currentAvatar.style.opacity = '0.5';
-                            }
-
-                            reader.readAsDataURL(input.files[0]);
-                        } else {
-                            previewContainer.classList.add('hidden');
-                            currentAvatar.style.opacity = '1';
-                        }
-                    }
-                </script>
-
                 <div class="flex items-center justify-center">
                     <button type="submit"
                         class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-max">{{ __('Update Account') }}</button>
@@ -103,3 +80,28 @@
         </form>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        function previewImage(input) {
+            const previewContainer = document.getElementById('image-preview-container');
+            const previewImg = document.getElementById('image-preview');
+            const currentAvatar = document.getElementById('current-avatar');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                    currentAvatar.style.opacity = '0.5';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewContainer.classList.add('hidden');
+                currentAvatar.style.opacity = '1';
+            }
+        }
+    </script>
+@endpush
