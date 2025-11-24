@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.6 (2025-11-24)
+
+
+### Bug Fixes
+
+* Update middleware in ForgotPasswordController to allow unauthenticated access to the link request form ([f495654](https://github.com/iranpsc/sso/commit/f4956540161a62a78bcd5ae3f9f777384874adde))
+
 ### 1.4.5 (2025-11-24)
 
 ### 1.4.4 (2025-11-24)
