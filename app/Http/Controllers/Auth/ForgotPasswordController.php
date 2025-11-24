@@ -23,7 +23,7 @@ class ForgotPasswordController extends Controller
 
     public function __construct()
     {
-        $this->middleware('verified');
+        $this->middleware('verified')->except('sendResetLinkEmail');
     }
 
     /**
