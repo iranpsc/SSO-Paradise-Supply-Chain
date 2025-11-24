@@ -22,7 +22,7 @@ use App\Http\Controllers\UserController;
 
 Route::redirect('/', '/home');
 
-Route::middleware(['auth' , 'verified' ])->group(function() {
+Route::middleware(['auth' , 'verified', 'auth.session'])->group(function() {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::singleton('account', AccountController::class);
     Route::singleton('personal-info', PersonalInfoController::class);
