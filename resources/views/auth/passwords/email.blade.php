@@ -25,7 +25,6 @@
                     </div>
                 </div>
                 {{ session('status') }}
-                <span id="timer-message" class="text-gray-400 text-xs" style="display: inline;"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه صبر کنید   </span>
                 <div class="text-center">
                     <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">برای بازیابی رمز عبور حساب خود لطفا
                         ایمیل ارسال شده را تایید کنید.</span>
@@ -110,27 +109,51 @@
                 }
             });
 
-            // Retrieve saved email and update the link dynamically
-            const savedEmail = localStorage.getItem('email');
-            if (resendEmailInput && savedEmail) {
-                resendEmailInput.value = savedEmail;
-
-                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
-                let emailLink;
-
-                if (emailDomain.includes('gmail')) {
-                    emailLink = 'https://mail.google.com/';
-                } else if (emailDomain.includes('yahoo')) {
-                    emailLink = 'https://mail.yahoo.com/';
-                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
-                    emailLink = 'https://outlook.live.com/';
-                } else {
-                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+            // Function to populate email in resend form and update email view link
+            function populateResendEmail(email) {
+                if (!email) {
+                    email = localStorage.getItem('email') || emailInput?.value;
                 }
+                
+                if (resendEmailInput && email) {
+                    resendEmailInput.value = email;
+                    localStorage.setItem('email', email);
 
-                if (emailViewButton) {
-                    emailViewButton.href = emailLink; // Update button link
+                    // Safely extract email domain
+                    const emailParts = email.split('@');
+                    if (emailParts.length > 1) {
+                        const emailDomain = emailParts[1].toLowerCase();
+                        let emailLink;
+
+                        if (emailDomain.includes('gmail')) {
+                            emailLink = 'https://mail.google.com/';
+                        } else if (emailDomain.includes('yahoo')) {
+                            emailLink = 'https://mail.yahoo.com/';
+                        } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                            emailLink = 'https://outlook.live.com/';
+                        } else {
+                            emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                        }
+
+                        if (emailViewButton && emailLink) {
+                            emailViewButton.href = emailLink; // Update button link
+                        }
+                    }
                 }
+            }
+
+            // Retrieve saved email and update the link dynamically on page load
+            populateResendEmail();
+            
+            // Also populate when modal appears (for cases where page loads with status message)
+            const alertModal = document.getElementById('alert-modal');
+            if (alertModal) {
+                const observer = new MutationObserver(function(mutations) {
+                    if (alertModal.style.display !== 'none') {
+                        populateResendEmail();
+                    }
+                });
+                observer.observe(alertModal, { attributes: true, attributeFilter: ['style', 'class'] });
             }
         });
     </script>
@@ -141,102 +164,172 @@
             let countdownInterval = null;
 
             function startCountdown(initialTime) {
-                if (initialTime === undefined) {
+                if (initialTime === undefined || initialTime <= 0) {
                     initialTime = TIMER_DURATION;
                 }
 
-                const timerSpan = document.getElementById('timer');
-                const timerMessage = document.getElementById('timer-message');
                 const resendButton = document.getElementById('resend-button');
+                const resendText = document.getElementById('resend-text');
 
-                if (!timerSpan || !timerMessage) {
+                if (!resendButton || !resendText) {
+                    console.error('Resend button or text element missing when starting countdown');
                     return;
                 }
 
+                // Clear any existing interval
                 if (countdownInterval) {
                     clearInterval(countdownInterval);
                     countdownInterval = null;
                 }
 
-                let timeLeft = initialTime;
+                // Ensure timeLeft is an integer and positive
+                let timeLeft = Math.max(1, Math.floor(initialTime));
 
-                if (resendButton) {
-                    resendButton.disabled = true;
+                // Disable resend button during countdown
+                resendButton.disabled = true;
+
+                // Update button text to show timer
+                function updateButtonText(seconds) {
+                    const newText = `ارسال مجدد (${seconds} ثانیه)`;
+                    resendText.textContent = newText;
+                    console.log('Updated button text to:', newText);
                 }
 
-                // Show the timer message
-                timerMessage.style.display = 'inline';
-                timerSpan.textContent = timeLeft;
+                // Set initial button text
+                updateButtonText(timeLeft);
 
+                console.log('Countdown started:', timeLeft, 'seconds');
+                console.log('Resend button:', resendButton);
+                console.log('Resend text element:', resendText);
+                console.log('Current text content:', resendText.textContent);
+
+                // Start the countdown interval
                 countdownInterval = setInterval(function() {
                     timeLeft--;
-                    timerSpan.textContent = timeLeft;
+                    updateButtonText(timeLeft);
 
                     if (timeLeft <= 0) {
                         clearInterval(countdownInterval);
                         countdownInterval = null;
                         sessionStorage.removeItem('emailSentTime');
 
-                        if (resendButton) {
-                            resendButton.disabled = false;
-                        }
-
-                        timerMessage.style.display = 'none';
+                        // Restore original button text and enable button
+                        resendButton.disabled = false;
+                        resendText.textContent = 'ارسال مجدد';
+                        console.log('Countdown completed');
                     }
                 }, 1000);
             }
 
             function initTimer() {
-                const timerSpan = document.getElementById('timer');
-                const timerMessage = document.getElementById('timer-message');
                 const resendButton = document.getElementById('resend-button');
+                const resendText = document.getElementById('resend-text');
 
-                if (!timerSpan || !timerMessage) {
+                if (!resendButton || !resendText) {
+                    console.warn('Resend button or text element not found in initTimer');
                     return;
                 }
 
                 const hasStatusMessage = @json(session()->has('status'));
+                console.log('Has status message:', hasStatusMessage);
+                
+                // If there's a status message and no timer started yet, initialize it
                 if (hasStatusMessage && !sessionStorage.getItem('emailSentTime')) {
                     sessionStorage.setItem('emailSentTime', Date.now());
+                    console.log('Timer initialized for new password reset email at', Date.now());
                 }
 
                 const emailSentTime = sessionStorage.getItem('emailSentTime');
+                console.log('Email sent time from storage:', emailSentTime);
 
                 if (emailSentTime) {
                     const timeSinceSent = Math.floor((Date.now() - parseInt(emailSentTime, 10)) / 1000);
                     const remainingTime = TIMER_DURATION - timeSinceSent;
+                    console.log('Time since sent:', timeSinceSent, 'seconds, remaining:', remainingTime, 'seconds');
 
                     if (remainingTime > 0) {
+                        console.log('Starting countdown with remaining time:', remainingTime, 'seconds');
                         startCountdown(remainingTime);
                         return;
+                    } else {
+                        // Timer has expired, clean up
+                        console.log('Timer expired, cleaning up');
+                        sessionStorage.removeItem('emailSentTime');
                     }
-
-                    sessionStorage.removeItem('emailSentTime');
+                } 
+                
+                // If there's a status message (modal is visible), always start the timer
+                if (hasStatusMessage) {
+                    // Check if we need to start a fresh timer
+                    if (!emailSentTime) {
+                        console.log('Status message exists but no timer, starting fresh countdown');
+                        sessionStorage.setItem('emailSentTime', Date.now());
+                        startCountdown(TIMER_DURATION);
+                        return;
+                    } else {
+                        // Timer expired but status message still exists - start fresh
+                        console.log('Timer expired but status exists, starting fresh countdown');
+                        sessionStorage.setItem('emailSentTime', Date.now());
+                        startCountdown(TIMER_DURATION);
+                        return;
+                    }
                 }
 
                 // No pending countdown -> make sure UI is reset
-                if (resendButton) {
-                    resendButton.disabled = false;
-                }
-                timerMessage.style.display = 'none';
+                resendButton.disabled = false;
+                resendText.textContent = 'ارسال مجدد';
             }
 
             function checkAndStartTimer() {
-                const timerSpan = document.getElementById('timer');
-                if (timerSpan) {
+                const resendButton = document.getElementById('resend-button');
+                const resendText = document.getElementById('resend-text');
+                const alertModal = document.getElementById('alert-modal');
+                
+                // If modal exists, it means status message is present
+                if (alertModal && resendButton && resendText) {
+                    console.log('Modal and button elements found, initializing timer...');
                     initTimer();
-                } else {
-                    setTimeout(checkAndStartTimer, 100);
+                    return true;
                 }
+                
+                return false;
             }
 
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(checkAndStartTimer, 100);
-                });
-            } else {
-                setTimeout(checkAndStartTimer, 100);
+            // Initialize timer when DOM is ready
+            function initializeTimerOnReady() {
+                // Wait for DOM to be ready
+                function tryInit(retries = 0) {
+                    const maxRetries = 50; // Try for up to 5 seconds
+                    if (retries > maxRetries) {
+                        console.error('Timer initialization failed after max retries');
+                        return;
+                    }
+                    
+                    if (checkAndStartTimer()) {
+                        console.log('Timer initialized successfully');
+                        return;
+                    }
+                    // Retry after a short delay
+                    setTimeout(() => tryInit(retries + 1), 100);
+                }
+                
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        setTimeout(() => tryInit(), 100);
+                    });
+                } else {
+                    // DOM already loaded
+                    setTimeout(() => tryInit(), 100);
+                }
             }
+            
+            // Start initialization immediately
+            initializeTimerOnReady();
+            
+            // Also try when window loads (in case DOMContentLoaded already fired)
+            window.addEventListener('load', function() {
+                setTimeout(checkAndStartTimer, 200);
+            });
 
             document.addEventListener('DOMContentLoaded', function() {
                 const resetForm = document.getElementById('reset-form');
