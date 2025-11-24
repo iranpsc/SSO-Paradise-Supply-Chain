@@ -75,22 +75,26 @@
         </div>
 
         <div class="flex flex-col gap-10">
-            <form method="POST" action="{{ route('password.email') }}" id="reset-form">
-                <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto">
-                    @csrf
-                    <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
+            <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
+                <div class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+                    <form method="POST" action="{{ route('password.email') }}" id="reset-form">
+                        <div class="flex flex-col gap-7">
+                            @csrf
+                            <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
 
-                    <div class="flex items-center justify-center gap-7 md:gap-10 w-full text-xs md:text-base">
-                        <button type="submit" id="reset-button"
-                            class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
-                            {{ __('Send Password Reset Link') }}
-                        </button>
-                        <a href="{{ route('register') }}"
-                            class="text-primery-blue dark:text-dark-yellow border border-primery-blue dark:border-dark-yellow py-[14px] px-6 md:px-[40px] rounded-xl  md:w-max">بازگشت
-                            به ثبت نام</a>
-                    </div>
+                            <div class="flex items-center justify-center gap-7 md:gap-10 w-full text-xs md:text-base">
+                                <button type="submit" id="reset-button"
+                                    class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
+                                    {{ __('Send Password Reset Link') }}
+                                </button>
+                                <a href="{{ route('login') }}"
+                                    class="text-primery-blue dark:text-dark-yellow border border-primery-blue dark:border-dark-yellow py-[14px] px-6 md:px-[40px] rounded-xl  md:w-max">بازگشت
+                                    به ورود</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </x-layouts.app>

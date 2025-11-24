@@ -65,6 +65,7 @@
     "Login Success": "ورود با موفقیت انجام شد",
     "Login Failed": "ورود ناموفق",
     "Register Failed": "ثبت نام ناموفق",
+    "Reset Password": "بازنشانی رمز عبور",
     "Logout": "خروج",
     "Logout Success": "خروج با موفقیت انجام شد",
     "Email Address": "آدرس ایمیل",

@@ -75,7 +75,7 @@
         });
     </script>
 
-    @vite('resources/css/app.css')
+    @vite('resources/css/app.css', 'resources/js/app.js')
 </head>
 
 <body class="bg-[#f8f8f8] dark:bg-black w-full font-azarMehr font-bold">

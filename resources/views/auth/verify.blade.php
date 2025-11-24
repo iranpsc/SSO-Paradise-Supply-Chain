@@ -1,8 +1,10 @@
 <x-layouts.app>
     <div class="space-y-5 lg:space-y-8">
-        <div class="flex flex-col gap-7 w-full xl:w-1/2 2xl:w-[40%] mx-auto dark:text-gray-300">
-            <div class="card-header">{{ __('Verify Your Email Address') }}</div>
-            <div class="flex flex-col gap-5">
+        <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
+            <div class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+                <div class="flex flex-col gap-7 dark:text-gray-300">
+                    <div class="text-2xl mb-2 dark:text-white">{{ __('Verify Your Email Address') }}</div>
+                    <div class="flex flex-col gap-5">
 
                 <x-partials.alerts />
 
@@ -79,7 +81,8 @@
                         </div>
                     </div>
                 </div>
-
+                    </div>
+                </div>
             </div>
         </div>
     </div>
