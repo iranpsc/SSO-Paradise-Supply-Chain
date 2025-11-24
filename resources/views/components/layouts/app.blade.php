@@ -1225,11 +1225,12 @@
         const passwordInput = document.getElementById('password-input');
         const togglePasswordButton = document.getElementById('toggle-password');
 
-        togglePasswordButton.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-
-        });
+        if (passwordInput && togglePasswordButton) {
+            togglePasswordButton.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+            });
+        }
     </script>
     <!-- Import jquery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"

@@ -27,10 +27,9 @@
                                 type="password" required />
 
                             <div>
-                                <button type="submit" id="register-button"
-                                    class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] rounded-xl w-full">
+                                <x-form.button id="register-button" spinner-id="register-spinner" text-id="register-text" full-width>
                                     {{ __('Register') }}
-                                </button>
+                                </x-form.button>
                             </div>
                         </div>
                     </form>
@@ -71,5 +70,22 @@
         "query-input": "required name=username"
       }
     }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading state for register form
+            const registerForm = document.getElementById('register-form');
+            const registerButton = document.getElementById('register-button');
+            const registerSpinner = document.getElementById('register-spinner');
+            const registerText = document.getElementById('register-text');
+
+            if (registerForm && registerButton) {
+                registerForm.addEventListener('submit', function() {
+                    registerButton.disabled = true;
+                    if (registerSpinner) registerSpinner.classList.remove('hidden');
+                    if (registerText) registerText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+        });
     </script>
 @endpush

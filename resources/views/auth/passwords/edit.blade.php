@@ -22,10 +22,9 @@
 
 
                         <div class="flex items-center justify-center">
-                            <button type="submit"
-                                class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-max">
+                            <x-form.button id="change-password-button" spinner-id="change-password-spinner" text-id="change-password-text" class="mx-auto">
                                 {{ __('Change Password') }}
-                            </button>
+                            </x-form.button>
                         </div>
                     </div>
                 </form>
@@ -33,3 +32,23 @@
         </div>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading state for change password form
+            const changePasswordForm = document.querySelector('form[action="{{ route('password.new') }}"]');
+            const changePasswordButton = document.getElementById('change-password-button');
+            const changePasswordSpinner = document.getElementById('change-password-spinner');
+            const changePasswordText = document.getElementById('change-password-text');
+
+            if (changePasswordForm && changePasswordButton) {
+                changePasswordForm.addEventListener('submit', function() {
+                    changePasswordButton.disabled = true;
+                    if (changePasswordSpinner) changePasswordSpinner.classList.remove('hidden');
+                    if (changePasswordText) changePasswordText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+        });
+    </script>
+@endpush

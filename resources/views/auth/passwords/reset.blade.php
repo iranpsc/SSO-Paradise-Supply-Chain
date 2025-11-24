@@ -32,9 +32,9 @@
                             required />
 
                         <div>
-                            <button type="submit" class=" text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
+                            <x-form.button id="reset-password-button" spinner-id="reset-password-spinner" text-id="reset-password-text">
                                 {{ __('Reset Password') }}
-                            </button>
+                            </x-form.button>
                         </div>
 
                     </div>
@@ -43,3 +43,23 @@
         </div>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading state for password reset form
+            const resetPasswordForm = document.querySelector('form[action="{{ route('password.update') }}"]');
+            const resetPasswordButton = document.getElementById('reset-password-button');
+            const resetPasswordSpinner = document.getElementById('reset-password-spinner');
+            const resetPasswordText = document.getElementById('reset-password-text');
+
+            if (resetPasswordForm && resetPasswordButton) {
+                resetPasswordForm.addEventListener('submit', function() {
+                    resetPasswordButton.disabled = true;
+                    if (resetPasswordSpinner) resetPasswordSpinner.classList.remove('hidden');
+                    if (resetPasswordText) resetPasswordText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+        });
+    </script>
+@endpush

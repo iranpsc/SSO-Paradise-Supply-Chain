@@ -39,10 +39,9 @@
                             @endif
                         </div>
                         <div>
-                            <button type="submit" id="login-button"
-                                class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] rounded-xl w-full">
+                            <x-form.button id="login-button" spinner-id="login-spinner" text-id="login-text" full-width>
                                 {{ __('Login') }}
-                            </button>
+                            </x-form.button>
                         </div>
 
                     </div>
@@ -95,6 +94,20 @@
                 togglePasswordButton.addEventListener('click', function() {
                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     passwordInput.setAttribute('type', type);
+                });
+            }
+
+            // Loading state for login form
+            const loginForm = document.getElementById('login-form');
+            const loginButton = document.getElementById('login-button');
+            const loginSpinner = document.getElementById('login-spinner');
+            const loginText = document.getElementById('login-text');
+
+            if (loginForm && loginButton) {
+                loginForm.addEventListener('submit', function() {
+                    loginButton.disabled = true;
+                    if (loginSpinner) loginSpinner.classList.remove('hidden');
+                    if (loginText) loginText.textContent = '{{ __('Loading...') }}';
                 });
             }
         });

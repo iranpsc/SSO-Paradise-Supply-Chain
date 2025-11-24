@@ -72,8 +72,9 @@
                 </div>
 
                 <div class="flex items-center justify-center">
-                    <button type="submit"
-                        class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-max">{{ __('Update Account') }}</button>
+                    <x-form.button id="update-account-button" spinner-id="update-account-spinner" text-id="update-account-text" class="mx-auto">
+                        {{ __('Update Account') }}
+                    </x-form.button>
                 </div>
             </div>
 
@@ -103,5 +104,21 @@
                 currentAvatar.style.opacity = '1';
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading state for update account form
+            const updateAccountForm = document.querySelector('form[action="{{ route('account.update') }}"]');
+            const updateAccountButton = document.getElementById('update-account-button');
+            const updateAccountSpinner = document.getElementById('update-account-spinner');
+            const updateAccountText = document.getElementById('update-account-text');
+
+            if (updateAccountForm && updateAccountButton) {
+                updateAccountForm.addEventListener('submit', function() {
+                    updateAccountButton.disabled = true;
+                    if (updateAccountSpinner) updateAccountSpinner.classList.remove('hidden');
+                    if (updateAccountText) updateAccountText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+        });
     </script>
 @endpush

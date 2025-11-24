@@ -69,13 +69,11 @@
                                 مشاهده ایمیل
                             </a>
 
-                            <form method="POST" action="{{ route('verification.resend') }}" class="w-1/2">
+                            <form method="POST" action="{{ route('verification.resend') }}" class="w-1/2" id="resend-form">
                                 @csrf
-                                <button id="resend-button" type="submit"
-                                    class="disabled:cursor-not-allowed text-primery-blue dark:text-dark-yellow  py-[14px] px-6 md:px-[40px] rounded-xl md:w-max border-primery-blue dark:border-dark-yellow border"
-                                    disabled>
+                                <x-form.button id="resend-button" spinner-id="resend-spinner" text-id="resend-text" variant="secondary" :disabled="true">
                                     ارسال مجدد
-                                </button>
+                                </x-form.button>
                                 <input class="hidden" type="email" name="email" value="{{ Auth::user()->email }}" id="resend-email" required>
                             </form>
                         </div>
@@ -130,22 +128,38 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const resendButton = document.getElementById('resend-button');
+            const resendForm = document.getElementById('resend-form');
+            const resendSpinner = document.getElementById('resend-spinner');
+            const resendText = document.getElementById('resend-text');
             const timerSpan = document.getElementById('timer');
             let timeLeft = 60; // Time in seconds
-            const timerMessage = timerSpan.parentNode; // Get the parent element of the timer span to hide it
+            const timerMessage = timerSpan ? timerSpan.parentNode : null; // Get the parent element of the timer span to hide it
 
-            resendButton.disabled = true; // Disable the button initially
+            if (resendButton) {
+                resendButton.disabled = true; // Disable the button initially
+            }
+
+            // Loading state for resend form
+            if (resendForm && resendButton) {
+                resendForm.addEventListener('submit', function() {
+                    resendButton.disabled = true;
+                    if (resendSpinner) resendSpinner.classList.remove('hidden');
+                    if (resendText) resendText.textContent = '{{ __('Loading...') }}';
+                });
+            }
 
             // Countdown function
-            const countdown = setInterval(function() {
-                timeLeft--;
-                timerSpan.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    resendButton.disabled = false;
-                    timerMessage.style.display = 'none'; // Hide the timer message
-                }
-            }, 1000);
+            if (timerSpan) {
+                const countdown = setInterval(function() {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        if (resendButton) resendButton.disabled = false;
+                        if (timerMessage) timerMessage.style.display = 'none'; // Hide the timer message
+                    }
+                }, 1000);
+            }
         });
     </script>
 @endpush

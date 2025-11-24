@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 {{ session('status') }}
-                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه صبر کنید   </span>
+                <span id="timer-message" class="text-gray-400 text-xs" style="display: inline;"> برای ارسال مجدد ایمیل <span id="timer">60</span> ثانیه صبر کنید   </span>
                 <div class="text-center">
                     <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">برای بازیابی رمز عبور حساب خود لطفا
                         ایمیل ارسال شده را تایید کنید.</span>
@@ -54,19 +54,17 @@
                         مشاهده ایمیل
                     </a>
 
-                    <form method="POST" action="{{ route('password.email') }}" class="w-1/2">
+                    <form method="POST" action="{{ route('password.email') }}" class="w-1/2" id="resend-form">
                         @csrf
-                        <button id="resend-button" type="submit"
-                            class="disabled:cursor-not-allowed text-primery-blue dark:text-dark-yellow  py-[14px] px-6 md:px-[40px] rounded-xl md:w-max border-primery-blue dark:border-dark-yellow border"
-                            disabled>
+                        <x-form.button id="resend-button" spinner-id="resend-spinner" text-id="resend-text" variant="secondary" :disabled="true">
                             ارسال مجدد
-                        </button>
+                        </x-form.button>
                         <input class="hidden" type="email" name="email" id="resend-email" required>
                     </form>
                 </div>
             </div>
         </div>
-    @endSession
+    @endsession
 
     <div class="space-y-10">
         <div class="text-center">
@@ -83,10 +81,9 @@
                             <x-form.text :label="__('Email Address')" for="email" name="email" type="email" required autofocus />
 
                             <div class="flex items-center justify-center gap-7 md:gap-10 w-full text-xs md:text-base">
-                                <button type="submit" id="reset-button"
-                                    class="text-white dark:text-black bg-primery-blue dark:bg-dark-yellow py-[14px] px-6 md:px-[40px]  rounded-xl  md:w-max border-primery-blue dark:border-dark-yellow border">
+                                <x-form.button id="reset-button" spinner-id="reset-spinner" text-id="reset-text">
                                     {{ __('Send Password Reset Link') }}
-                                </button>
+                                </x-form.button>
                                 <a href="{{ route('login') }}"
                                     class="text-primery-blue dark:text-dark-yellow border border-primery-blue dark:border-dark-yellow py-[14px] px-6 md:px-[40px] rounded-xl  md:w-max">بازگشت
                                     به ورود</a>
@@ -139,24 +136,136 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const resendButton = document.getElementById('resend-button');
-            const timerSpan = document.getElementById('timer');
-            let timeLeft = 60; // Time in seconds
-            const timerMessage = timerSpan.parentNode; // Get the parent element of the timer span to hide it
+        (function() {
+            const TIMER_DURATION = 60;
+            let countdownInterval = null;
 
-            resendButton.disabled = true; // Disable the button initially
-
-            // Countdown function
-            const countdown = setInterval(function() {
-                timeLeft--;
-                timerSpan.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    resendButton.disabled = false;
-                    timerMessage.style.display = 'none'; // Hide the timer message
+            function startCountdown(initialTime) {
+                if (initialTime === undefined) {
+                    initialTime = TIMER_DURATION;
                 }
-            }, 1000);
-        });
+
+                const timerSpan = document.getElementById('timer');
+                const timerMessage = document.getElementById('timer-message');
+                const resendButton = document.getElementById('resend-button');
+
+                if (!timerSpan || !timerMessage) {
+                    return;
+                }
+
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+
+                let timeLeft = initialTime;
+
+                if (resendButton) {
+                    resendButton.disabled = true;
+                }
+
+                // Show the timer message
+                timerMessage.style.display = 'inline';
+                timerSpan.textContent = timeLeft;
+
+                countdownInterval = setInterval(function() {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                        sessionStorage.removeItem('emailSentTime');
+
+                        if (resendButton) {
+                            resendButton.disabled = false;
+                        }
+
+                        timerMessage.style.display = 'none';
+                    }
+                }, 1000);
+            }
+
+            function initTimer() {
+                const timerSpan = document.getElementById('timer');
+                const timerMessage = document.getElementById('timer-message');
+                const resendButton = document.getElementById('resend-button');
+
+                if (!timerSpan || !timerMessage) {
+                    return;
+                }
+
+                const hasStatusMessage = @json(session()->has('status'));
+                if (hasStatusMessage && !sessionStorage.getItem('emailSentTime')) {
+                    sessionStorage.setItem('emailSentTime', Date.now());
+                }
+
+                const emailSentTime = sessionStorage.getItem('emailSentTime');
+
+                if (emailSentTime) {
+                    const timeSinceSent = Math.floor((Date.now() - parseInt(emailSentTime, 10)) / 1000);
+                    const remainingTime = TIMER_DURATION - timeSinceSent;
+
+                    if (remainingTime > 0) {
+                        startCountdown(remainingTime);
+                        return;
+                    }
+
+                    sessionStorage.removeItem('emailSentTime');
+                }
+
+                // No pending countdown -> make sure UI is reset
+                if (resendButton) {
+                    resendButton.disabled = false;
+                }
+                timerMessage.style.display = 'none';
+            }
+
+            function checkAndStartTimer() {
+                const timerSpan = document.getElementById('timer');
+                if (timerSpan) {
+                    initTimer();
+                } else {
+                    setTimeout(checkAndStartTimer, 100);
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(checkAndStartTimer, 100);
+                });
+            } else {
+                setTimeout(checkAndStartTimer, 100);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const resetForm = document.getElementById('reset-form');
+                const resetButton = document.getElementById('reset-button');
+                const resetSpinner = document.getElementById('reset-spinner');
+                const resetText = document.getElementById('reset-text');
+                const resendButton = document.getElementById('resend-button');
+                const resendForm = document.getElementById('resend-form');
+                const resendSpinner = document.getElementById('resend-spinner');
+                const resendText = document.getElementById('resend-text');
+
+                if (resetForm && resetButton) {
+                    resetForm.addEventListener('submit', function() {
+                        sessionStorage.setItem('emailSentTime', Date.now());
+                        resetButton.disabled = true;
+                        if (resetSpinner) resetSpinner.classList.remove('hidden');
+                        if (resetText) resetText.textContent = '{{ __('Loading...') }}';
+                    });
+                }
+
+                if (resendForm && resendButton) {
+                    resendForm.addEventListener('submit', function() {
+                        sessionStorage.setItem('emailSentTime', Date.now());
+                        resendButton.disabled = true;
+                        if (resendSpinner) resendSpinner.classList.remove('hidden');
+                        if (resendText) resendText.textContent = '{{ __('Loading...') }}';
+                    });
+                }
+            });
+        })();
     </script>
 @endpush

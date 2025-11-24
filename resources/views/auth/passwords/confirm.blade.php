@@ -12,9 +12,9 @@
                         <x-form.text :label="__('Password')" for="password" name="password" type="password" required autocomplete="current-password" />
 
                         <div class="flex flex-col gap-3">
-                            <button type="submit" class="text-white bg-primery-blue dark:bg-dark-yellow py-[14px] px-[40px] mx-auto rounded-xl w-full md:w-max">
+                            <x-form.button id="confirm-password-button" spinner-id="confirm-password-spinner" text-id="confirm-password-text" class="mx-auto">
                                 {{ __('Confirm Password') }}
-                            </button>
+                            </x-form.button>
 
                             @if (Route::has('password.request'))
                                 <a class="text-xs text-primery-blue dark:text-dark-yellow text-center" href="{{ route('password.request') }}">
@@ -28,3 +28,23 @@
         </div>
     </div>
 </x-layouts.app>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading state for confirm password form
+            const confirmPasswordForm = document.querySelector('form[action="{{ route('password.confirm') }}"]');
+            const confirmPasswordButton = document.getElementById('confirm-password-button');
+            const confirmPasswordSpinner = document.getElementById('confirm-password-spinner');
+            const confirmPasswordText = document.getElementById('confirm-password-text');
+
+            if (confirmPasswordForm && confirmPasswordButton) {
+                confirmPasswordForm.addEventListener('submit', function() {
+                    confirmPasswordButton.disabled = true;
+                    if (confirmPasswordSpinner) confirmPasswordSpinner.classList.remove('hidden');
+                    if (confirmPasswordText) confirmPasswordText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+        });
+    </script>
+@endpush

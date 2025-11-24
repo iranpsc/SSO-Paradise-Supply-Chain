@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class ForgotPasswordController extends Controller
 {
@@ -21,11 +22,6 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
-    public function __construct()
-    {
-        $this->middleware('verified')->except('showLinkRequestForm');
-    }
-
     /**
      * Validate the email for the given request.
      *
@@ -35,7 +31,16 @@ class ForgotPasswordController extends Controller
     protected function validateEmail(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => [
+                'required',
+                'email',
+                function($attribute, $value, $fail) {
+                    $verified = User::where('email', $value)->first()?->hasVerifiedEmail();
+                    if (!$verified) {
+                        $fail('ایمیل وارد شده معتبر نیست.');
+                    }
+                },
+            ],
         ]);
     }
 }
