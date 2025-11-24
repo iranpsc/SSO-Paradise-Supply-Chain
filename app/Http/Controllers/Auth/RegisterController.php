@@ -60,7 +60,8 @@ class RegisterController extends Controller
                 'required',
                 'string',
                 'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
+                Password::min(8)->mixedCase()->numbers()->symbols(),
+                'max:40',
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
             'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
