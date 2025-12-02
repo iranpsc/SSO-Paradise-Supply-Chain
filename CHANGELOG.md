@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.5.0 (2025-12-02)
+
+
+### Features
+
+* Add custom error pages for 404, 500, and 503 errors ([7222769](https://github.com/iranpsc/sso/commit/7222769cb4560dff78cf60e8f937e85b0b99efc5))
+
 ### 1.4.9 (2025-11-24)
 
 ### 1.4.8 (2025-11-24)
