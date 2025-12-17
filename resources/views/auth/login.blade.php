@@ -6,27 +6,44 @@
                 با ان ثبت نام کردید را وارد کنید </p>
         </div>
         <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
-            <div class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+            <div
+                class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
                 <form method="POST" action="{{ route('login') }}" id="login-form">
                     <div class="flex flex-col gap-5">
                         @csrf
                         <x-form.text for="email" name="email" type="email" required autofocus />
                         <div class="w-full relative">
-                            <x-form.text for="password" name="password" type="password" required
+                            <x-form.text for="password" id="password" name="password" type="password" required
                                 autocomplete="current-password" />
 
                             <a href="javascript:void(0)" id="toggle-password"
-                                class=" absolute left-[10px] top-[50%] translate-y-[-50%] cursor-pointer">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                class="absolute left-[10px] top-1/2 -translate-y-1/2 cursor-pointer">
+
+                                <!-- eye open -->
+                                <svg id="eye-open" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path class="stroke-[#868B90]"
-                                        d="M12.9833 9.99896C12.9833 11.649 11.6499 12.9823 9.99993 12.9823C8.34993 12.9823 7.0166 11.649 7.0166 9.99896C7.0166 8.34896 8.34993 7.01562 9.99993 7.01562C11.6499 7.01562 12.9833 8.34896 12.9833 9.99896Z"
-                                        stroke="#868B90" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path class="stroke-[#868B90]"
-                                        d="M9.99987 16.8932C12.9415 16.8932 15.6832 15.1599 17.5915 12.1599C18.3415 10.9849 18.3415 9.0099 17.5915 7.8349C15.6832 4.8349 12.9415 3.10156 9.99987 3.10156C7.0582 3.10156 4.31654 4.8349 2.4082 7.8349C1.6582 9.0099 1.6582 10.9849 2.4082 12.1599C4.31654 15.1599 7.0582 16.8932 9.99987 16.8932Z"
-                                        stroke="#868B90" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path
+                                        d="M12.9833 9.999C12.9833 11.649 11.6499 12.9823 9.99993 12.9823C8.34993 12.9823 7.0166 11.649 7.0166 9.999C7.0166 8.349 8.34993 7.0156 9.99993 7.0156C11.6499 7.0156 12.9833 8.349 12.9833 9.999Z"
+                                        stroke="#868B90" stroke-width="1.5" />
+                                    <path
+                                        d="M9.99987 16.8932C12.9415 16.8932 15.6832 15.1599 17.5915 12.1599C18.3415 10.9849 18.3415 9.0099 17.5915 7.8349C15.6832 4.8349 12.9415 3.1016 9.99987 3.1016C7.0582 3.1016 4.31654 4.8349 2.4082 7.8349C1.6582 9.0099 1.6582 10.9849 2.4082 12.1599C4.31654 15.1599 7.0582 16.8932 9.99987 16.8932Z"
+                                        stroke="#868B90" stroke-width="1.5" />
                                 </svg>
+
+                                <!-- eye closed -->
+                               <svg id="eye-closed" class="hidden" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 3L17 17" stroke="#868B90" stroke-width="1.5" stroke-linecap="round" />
+                                    <path
+                                        d="M12.9833 9.999C12.9833 11.649 11.6499 12.9823 9.99993 12.9823C8.34993 12.9823 7.0166 11.649 7.0166 9.999C7.0166 8.349 8.34993 7.0156 9.99993 7.0156C11.6499 7.0156 12.9833 8.349 12.9833 9.999Z"
+                                        stroke="#868B90" stroke-width="1.5" />
+                                    <path
+                                        d="M9.99987 16.8932C12.9415 16.8932 15.6832 15.1599 17.5915 12.1599C18.3415 10.9849 18.3415 9.0099 17.5915 7.8349C15.6832 4.8349 12.9415 3.1016 9.99987 3.1016C7.0582 3.1016 4.31654 4.8349 2.4082 7.8349C1.6582 9.0099 1.6582 10.9849 2.4082 12.1599C4.31654 15.1599 7.0582 16.8932 9.99987 16.8932Z"
+                                        stroke="#868B90" stroke-width="1.5" />
+                                </svg>
+
                             </a>
+
                         </div>
                         <div class="flex flex-col  px-1">
                             <x-form.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember"
@@ -49,10 +66,8 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
-
-@push('scripts')
-    <script type="application/ld+json">
+    @push('scripts')
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -83,33 +98,31 @@
       }
     }
     </script>
-    <script>
-        // Wait for DOM to be ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Password toggle functionality
-            const passwordInput = document.getElementById('password');
-            const togglePasswordButton = document.getElementById('toggle-password');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleBtn = document.getElementById('toggle-password');
+                const eyeOpen = document.getElementById('eye-open');
+                const eyeClosed = document.getElementById('eye-closed');
 
-            if (passwordInput && togglePasswordButton) {
-                togglePasswordButton.addEventListener('click', function() {
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
+                if (!toggleBtn) return;
+
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const wrapper = toggleBtn.closest('.relative');
+                    const passwordInput = wrapper.querySelector('input');
+
+                    if (!passwordInput) return;
+
+                    const isPassword = passwordInput.type === 'password';
+
+                    passwordInput.type = isPassword ? 'text' : 'password';
+
+                    // تغییر آیکن
+                    eyeOpen.classList.toggle('hidden', isPassword);
+                    eyeClosed.classList.toggle('hidden', !isPassword);
                 });
-            }
-
-            // Loading state for login form
-            const loginForm = document.getElementById('login-form');
-            const loginButton = document.getElementById('login-button');
-            const loginSpinner = document.getElementById('login-spinner');
-            const loginText = document.getElementById('login-text');
-
-            if (loginForm && loginButton) {
-                loginForm.addEventListener('submit', function() {
-                    loginButton.disabled = true;
-                    if (loginSpinner) loginSpinner.classList.remove('hidden');
-                    if (loginText) loginText.textContent = '{{ __('Loading...') }}';
-                });
-            }
-        });
-    </script>
-@endpush
+            });
+        </script>
+    @endpush
+</x-layouts.app>
