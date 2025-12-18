@@ -128,8 +128,9 @@
                             <div
                                 class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
                                 <div class="flex items-center gap-2">
-                                    <a aria-label="logo" class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
-                                            src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
+                                    <a aria-label="logo" class="w-[38px] h-[38px]" href="#"><img
+                                            class="w-full h-full" src="{{ asset('images/logo/accounts.png') }}"
+                                            alt="تونل زمان"></a>
                                     <div class="flex flex-col justify-between ">
                                         <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
                                         <span class="text-[#939393] text-sm">ورود / ثبت نام مرکزی</span>
@@ -519,50 +520,50 @@
                         </div>
                         <div class=" w-6 h-6  ">
                             <a href="https://irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc" class="w-6 h-6">
+                                <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc"
+                                    class="w-6 h-6">
                             </a>
                         </div>
                         <div class=" w-6 h-6  ">
                             <a href="https://3d.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/3d.irpsc.png') }}" alt="3dmeta"  class="w-6 h-6">
+                                <img src="{{ asset('images/logo/3d.irpsc.png') }}" alt="3dmeta" class="w-6 h-6">
                             </a>
                         </div>
                         <div class=" w-6 h-6  ">
                             <a href="https://shop.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/shop.irpsc.png') }}" alt="shop"  class="w-6 h-6">
+                                <img src="{{ asset('images/logo/shop.irpsc.png') }}" alt="shop" class="w-6 h-6">
                             </a>
                         </div>
                         <div class=" w-6 h-6  ">
                             <a href="https://animal.irpsc.com/" class="w-full">
                                 <img src="{{ asset('images/logo/animal.irpsc.png') }}" alt="animal"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6">
                             <a href="https://ad.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/ad.irpsc.png') }}" alt="ad irpsc"  class="w-6 h-6">
+                                <img src="{{ asset('images/logo/ad.irpsc.png') }}" alt="ad irpsc" class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6 ">
                             <a href="https://art.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/art.irpsc.png') }}" alt="meta art"
-                                     class="w-6 h-6">
+                                <img src="{{ asset('images/logo/art.irpsc.png') }}" alt="meta art" class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6">
                             <a href="https://faq.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/faq.irpsc.png') }}" alt="faq"  class="w-6 h-6">
+                                <img src="{{ asset('images/logo/faq.irpsc.png') }}" alt="faq" class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6">
                             <a href="https://meta.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/meta.irpsc.png') }}" alt="meta"  class="w-6 h-6">
+                                <img src="{{ asset('images/logo/meta.irpsc.png') }}" alt="meta" class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6">
                             <a href="https://rgb.irpsc.com" class="w-full">
                                 <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="metargb"
-                                     class="w-6 h-6">
+                                    class="w-6 h-6">
                             </a>
                         </div>
                         <div class="w-6 h-6">
@@ -576,7 +577,8 @@
                             </a>
                         </div>
                     </div>
-                    <div class="w- space-y-6  ml-[-4px] px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
+                    <div
+                        class="w- space-y-6  ml-[-4px] px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
                         @guest
                             <div class="w-10 mx-auto  flex justify-center items-center">
                                 <a aria-label="login" href="#"
@@ -677,7 +679,8 @@
             </div>
         </div>
         <div class="flex justify-center px-3 lg:px-0">
-            <div class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-7 lg:py-14 ">
+            <div
+                class="bg-[#FFFFFF] dark:bg-[#080807] rounded-[20px] w-full md:w-[95%] 3xl:w-[85%] p-5 py-7 lg:py-14 ">
                 <div id="app" class="mx-auto">
                     <div class="text-center flex flex-col gap-4">
                         <p class="lg:text-2xl dark:text-[#FFFFFF] font-rohk">
@@ -739,59 +742,75 @@
                     <img src="https://irpsc.com/img-icon/enamad.png" alt="نماد اعتماد الکترونیک">
 
                 </a>
-                <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;" title="ثبت اسناد و املاک کشور">
+                <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;"
+                    title="ثبت اسناد و املاک کشور">
                     <img src="https://irpsc.com/img-icon/qazaii.png" alt="ثبت اسناد و املاک کشور">
                 </a>
-                <a aria-label="systems" href="https://video.irpsc.com" target="_blank " style="width:55px ;" title="مرکز آموزش ویدئویی">
+                <a aria-label="systems" href="https://video.irpsc.com" target="_blank " style="width:55px ;"
+                    title="مرکز آموزش ویدئویی">
                     <img src="https://irpsc.com/img-icon/video.png" alt="مرکز آموزش ویدئویی">
                 </a>
-                <a aria-label="systems" href="https://faq.irpsc.com" target="_blank " style="width:55px ;" title="انجمن پرسش و پاسخ">
+                <a aria-label="systems" href="https://faq.irpsc.com" target="_blank " style="width:55px ;"
+                    title="انجمن پرسش و پاسخ">
                     <img src="https://irpsc.com/img-icon/faq.png" alt="انجمن پرسش و پاسخ">
                 </a>
-                <a aria-label="systems" href="https://Shop.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه ملی">
+                <a aria-label="systems" href="https://Shop.irpsc.com" target="_blank " style="width:55px ;"
+                    title="فروشگاه ملی">
                     <img src="https://irpsc.com/img-icon/shop.png" alt="فروشگاه ملی">
                 </a>
-                <a aria-label="systems" href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
+                <a aria-label="systems" href="https://supply.irpsc.com" target="_blank " style="width:55px ;"
+                    title="تولید کنندگان">
                     <img src="https://irpsc.com/img-icon/supply.png" alt="تولید کنندگان">
-                    <a aria-label="systems" href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
+                    <a aria-label="systems" href="https://crm.irpsc.com" target="_blank " style="width:55px ;"
+                        title="مدیریت بر مدیران">
                         <img src="https://irpsc.com/img-icon/crm.png" alt="مدیریت بر مدیران">
                     </a>
-                    <a aria-label="systems" href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
+                    <a aria-label="systems" href="https://target.irpsc.com" target="_blank " style="width:55px ;"
+                        title="نگرش ملی">
                         <img src="https://irpsc.com/img-icon/target.png" alt="نگرش ملی">
                     </a>
                     <a aria-label="systems" href="https://animal.irpsc.com" target="_blank " style="width:55px ;"
                         title="حیوانات و دامپزشک">
                         <img src="https://irpsc.com/img-icon/animal.png" alt="حیوانات و دامپزشک">
                     </a>
-                    <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
+                    <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;"
+                        title="رسانه ملی">
                         <img src="https://irpsc.com/img-icon/irpsc.png" alt="رسانه ملی">
                     </a>
-                    <a aria-label="systems" href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
+                    <a aria-label="systems" href="https://meta.irpsc.com" target="_blank " style="width:55px ;"
+                        title="اخبار متا">
                         <img src="https://irpsc.com/img-icon/meta.png" alt="اخبار متا">
                     </a>
-                    <a aria-label="systems" href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
+                    <a aria-label="systems" href="https://uni.irpsc.com" target="_blank " style="width:55px ;"
+                        title="دانشگاه متاورس">
                         <img src="https://irpsc.com/img-icon/uni.png" alt="دانشگاه متاورس">
                     </a>
-                    <a aria-label="systems" href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
-                        title="استخدام | دانش محور">
+                    <a aria-label="systems" href="https://crm.irpsc.com/knowledgebase" target="_blank "
+                        style="width:55px ;" title="استخدام | دانش محور">
                         <img src="https://irpsc.com/img-icon/knowledge.png" alt="استخدام | دانش محور">
                     </a>
-                    <a aria-label="systems" href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
+                    <a aria-label="systems" href="https://sale.irpsc.com" target="_blank " style="width:55px ;"
+                        title="فروشگاه مجازی حم">
                         <img src="https://irpsc.com/img-icon/sale.png" alt="فروشگاه مجازی حم">
                     </a>
-                    <a aria-label="systems" href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
+                    <a aria-label="systems" href="https://ad.irpsc.com" target="_blank " style="width:55px ;"
+                        title="تبلیغات ملی">
                         <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
                     </a>
-                    <a aria-label="systems" href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
+                    <a aria-label="systems" href="https://nft.irpsc.com" target="_blank " style="width:55px ;"
+                        title="بازار NFT">
                         <img src="https://irpsc.com/img-icon/nft.png" alt="nft">
                     </a>
-                    <a aria-label="systems" href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
+                    <a aria-label="systems" href="https://rgb.irpsc.com" target="_blank " style="width:55px ;"
+                        title="متاورس رنگ">
                         <img src="https://irpsc.com/img-icon/rgb.png" alt="متاورس رنگ">
                     </a>
-                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
+                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;"
+                        title="سه بعدی متا">
                         <img src="https://irpsc.com/img-icon/3d.png" alt="سه بعدی متا">
                     </a>
-                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
+                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;"
+                        title="تونل زمان">
                         <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
                     </a>
                     <a aria-label="systems" title="خانه" href="#" style="width:55px ;">
@@ -1118,7 +1137,7 @@
                                 </svg>
 
                             </a>
-                            <a  aria-label="social"href="https://jabeh.com/c/1nk44b">
+                            <a aria-label="social"href="https://jabeh.com/c/1nk44b">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1135,7 +1154,7 @@
                                 </svg>
 
                             </a>
-                            <a  aria-label="social" href="#">
+                            <a aria-label="social" href="#">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1159,7 +1178,111 @@
 
         </footer>
     </main>
-@stack('scripts')
+    @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggle-password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
+
+            if (!toggleBtn) return;
+
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const wrapper = toggleBtn.closest('.relative');
+                const passwordInput = wrapper.querySelector('input');
+
+                if (!passwordInput) return;
+
+                const isPassword = passwordInput.type === 'password';
+
+                passwordInput.type = isPassword ? 'text' : 'password';
+
+                // تغییر آیکن
+                eyeOpen.classList.toggle('hidden', isPassword);
+                eyeClosed.classList.toggle('hidden', !isPassword);
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="email"]');
+            const resendEmailInput = document.querySelector('#resend-email');
+            const emailViewButton = document.querySelector('#email-view-button');
+
+            // Save email in localStorage when the main form is submitted
+            emailInput?.form.addEventListener('submit', function() {
+                if (emailInput?.value) {
+                    localStorage.setItem('email', emailInput.value);
+                }
+            });
+
+            // Retrieve saved email and update the link dynamically
+            const savedEmail = localStorage.getItem('email');
+            if (resendEmailInput && savedEmail) {
+                resendEmailInput.value = savedEmail;
+
+                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
+                let emailLink;
+
+                if (emailDomain.includes('gmail')) {
+                    emailLink = 'https://mail.google.com/';
+                } else if (emailDomain.includes('yahoo')) {
+                    emailLink = 'https://mail.yahoo.com/';
+                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                    emailLink = 'https://outlook.live.com/';
+                } else {
+                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                }
+
+                if (emailViewButton) {
+                    emailViewButton.href = emailLink; // Update button link
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resendButton = document.getElementById('resend-button');
+            const resendForm = document.getElementById('resend-form');
+            const resendSpinner = document.getElementById('resend-spinner');
+            const resendText = document.getElementById('resend-text');
+            const timerSpan = document.getElementById('timer');
+            let timeLeft = 60; // Time in seconds
+            const timerMessage = timerSpan ? timerSpan.parentNode :
+            null; // Get the parent element of the timer span to hide it
+
+            if (resendButton) {
+                resendButton.disabled = true; // Disable the button initially
+            }
+
+            // Loading state for resend form
+            if (resendForm && resendButton) {
+                resendForm.addEventListener('submit', function() {
+                    resendButton.disabled = true;
+                    if (resendSpinner) resendSpinner.classList.remove('hidden');
+                    if (resendText) resendText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+
+            // Countdown function
+            if (timerSpan) {
+                const countdown = setInterval(function() {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        if (resendButton) resendButton.disabled = false;
+                        if (timerMessage) timerMessage.style.display = 'none'; // Hide the timer message
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+
 
     <script>
         // dark mode

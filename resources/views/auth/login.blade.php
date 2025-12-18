@@ -6,8 +6,7 @@
                 با ان ثبت نام کردید را وارد کنید </p>
         </div>
         <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
-            <div
-                class=" rounded-xl p-6 md:p-8">
+            <div class=" rounded-xl p-6 md:p-8">
                 <form method="POST" action="{{ route('login') }}" id="login-form">
                     <div class="flex flex-col gap-5">
                         @csrf
@@ -20,8 +19,8 @@
                                 class="absolute left-[10px] top-1/2 -translate-y-1/2 cursor-pointer">
 
                                 <!-- eye open -->
-                                <svg id="eye-open" class="w-7 h-7 " width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                <svg id="eye-open" class="w-7 h-7 " width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M12.9833 9.999C12.9833 11.649 11.6499 12.9823 9.99993 12.9823C8.34993 12.9823 7.0166 11.649 7.0166 9.999C7.0166 8.349 8.34993 7.0156 9.99993 7.0156C11.6499 7.0156 12.9833 8.349 12.9833 9.999Z"
                                         stroke="#868B90" stroke-width="1.5" />
@@ -31,7 +30,8 @@
                                 </svg>
 
                                 <!-- eye closed -->
-                               <svg  aria-label="show btn" id="eye-closed" class="hidden w-7 h-7 " width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                <svg aria-label="show btn" id="eye-closed" class="hidden w-7 h-7 " width="20"
+                                    height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 3L17 17" stroke="#868B90" stroke-width="1.5" stroke-linecap="round" />
                                     <path
@@ -66,8 +66,10 @@
             </div>
         </div>
     </div>
-    @push('scripts')
-        <script type="application/ld+json">
+
+</x-layouts.app>
+@push('scripts')
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -98,31 +100,4 @@
       }
     }
     </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const toggleBtn = document.getElementById('toggle-password');
-                const eyeOpen = document.getElementById('eye-open');
-                const eyeClosed = document.getElementById('eye-closed');
-
-                if (!toggleBtn) return;
-
-                toggleBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const wrapper = toggleBtn.closest('.relative');
-                    const passwordInput = wrapper.querySelector('input');
-
-                    if (!passwordInput) return;
-
-                    const isPassword = passwordInput.type === 'password';
-
-                    passwordInput.type = isPassword ? 'text' : 'password';
-
-                    // تغییر آیکن
-                    eyeOpen.classList.toggle('hidden', isPassword);
-                    eyeClosed.classList.toggle('hidden', !isPassword);
-                });
-            });
-        </script>
-    @endpush
-</x-layouts.app>
+@endpush
