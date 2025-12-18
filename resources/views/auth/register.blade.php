@@ -6,7 +6,7 @@
         </div>
         <div class="flex flex-col gap-10">
             <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
-                <div class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+                <div class=" p-6 ">
                     <form method="POST" action="{{ route('register') }}" id="register-form">
                         <div class="flex flex-col gap-7">
                             @csrf

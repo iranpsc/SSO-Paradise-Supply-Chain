@@ -78,7 +78,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-[#f8f8f8] dark:bg-black w-full font-azarMehr font-bold">
+<body class="bg-[#f0f0f0] dark:bg-black w-full font-azarMehr font-bold">
     <header>
         <!-- start head mobile nav -->
         <nav class=" w-full m-0 p-0 fixed top-0 z-[1000]  lg:hidden">
@@ -97,7 +97,7 @@
                         </div>
                         <!-- end open btn nav -->
                         <div class="flex items-center gap-2">
-                            <a class="w-[35px] h-[35px]" href="#"><img class="w-full h-full"
+                            <a aria-label="logo" class="w-[35px] h-[35px]" href="#"><img class="w-full h-full"
                                     src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
                             <div class="flex flex-col justify-between ">
                                 <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-[13px]">تونل زمان</span>
@@ -128,7 +128,7 @@
                             <div
                                 class=" gap-5  my-2 w-full  items-center flex justify-between pr-5  bg-white  dark:bg-[#0F0F0E] ">
                                 <div class="flex items-center gap-2">
-                                    <a class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
+                                    <a aria-label="logo" class="w-[38px] h-[38px]" href="#"><img class="w-full h-full"
                                             src="{{ asset('images/logo/accounts.png') }}" alt="تونل زمان"></a>
                                     <div class="flex flex-col justify-between ">
                                         <span class="text-[#1A1A18] dark:text-[#FFFFFF] text-lg">تونل زمان</span>
@@ -163,7 +163,7 @@
                                             <div class="flex w-full items-center justify-between gap-5">
                                                 <div class="flex items-center gap-4">
                                                     <img src="{{ Auth::user()->getFirstMediaUrl('avatars') }}"
-                                                        alt="{{ Auth::user()->name }}" class="w-7 h-7  rounded-full">
+                                                        alt="{{ Auth::user()->name }}" class="w-6 h-6  rounded-full">
                                                     <a href="#"> {{ Auth::user()->name }} </a>
                                                 </div>
                                                 <svg class="transition-[5s] duration-300" width="15" height="9"
@@ -306,7 +306,7 @@
                                     fill="#888888" />
                             </svg>
 
-                            <a href="./aboutus.html" class="text-[#868B90]"> درباره ما</a>
+                            <a aria-label="about" href="./aboutus.html" class="text-[#868B90]"> درباره ما</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
                             <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="زنجیره ایه تامین بهشت">
@@ -334,7 +334,7 @@
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
                             <img src="{{ asset('images/logo/faq.irpsc.png') }}" alt="انجمن حم">
-                            <a href="https://faq.irpsc.com/" class="text-[#868B90]">انجمن حم</a>
+                            <a href="https://faqhub.ir/" class="text-[#868B90]">انجمن حم</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
                             <img src="{{ asset('images/logo/meta.irpsc.png') }}" alt="اخبار متا">
@@ -424,7 +424,7 @@
                                         d="M11.6504 7.15625L15.0004 10.5063L11.6504 13.8563" stroke="black"
                                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <a href="#" class="font-bold">ورود</a>
+                                <a aria-label="login" href="#" class="font-bold">ورود</a>
                             </div>
                         @endguest
                         @auth
@@ -457,7 +457,7 @@
                         @endauth
                         <div class="pt-5 border-t-2 border-[#EFEFEF]   dark:border-[#868B90] ">
                             <div class=" flex rounded-full w-full p-[6px] bg-[#F4F4F4] dark:bg-[#090909] ">
-                                <button
+                                <button aria-label="theme"
                                     class="enable-dark-mode bg-transparent dark:bg-[#0F0F0E] flex justify-center p-1 rounded-full w-1/2  ">
                                     <div>
                                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -468,7 +468,7 @@
                                         </svg>
                                     </div>
                                 </button>
-                                <button
+                                <button aria-label="theme"
                                     class="disable-dark-mode  bg-[#FCFCFC] dark:bg-transparent flex justify-center p-1 rounded-full w-1/2 shadow-[0_0_6px_0_rgba(0,0,0,0.1)] dark:shadow-none">
                                     <div for="light-switch">
                                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -496,7 +496,7 @@
                         <div
                             class="w-full space-y-6 flex flex-col items-center justify-center  px-3  sticky top-0 pb-5 border-b-2 border-[#00000017] dark:border-[#3F3F3F] bg-[#FCFCFC] dark:bg-[#0F0F0E]">
                             <!-- start open btn nav -->
-                            <div id="open-nav-btn" class="items-center w-7 h-7" onclick="openNav2()">
+                            <div id="open-nav-btn" class="items-center w-6 h-6" onclick="openNav2()">
                                 <svg class=" dark:fill-white" width="30" height="22" viewBox="0 0 30 22"
                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path class="dark:fill-white" fill-rule="evenodd" clip-rule="evenodd"
@@ -505,8 +505,8 @@
                                 </svg>
                             </div>
                             <!-- end open btn nav -->
-                            <div class="w-7  flex items-center justify-center">
-                                <a href="./index.html" class="w-full">
+                            <div class="w-6  flex items-center justify-center">
+                                <a aria-label="logo" href="./index.html" class="w-full">
                                     <img src="{{ asset('images/logo/accounts.irpsc.png') }}" alt=""
                                         class="w-full">
                                 </a>
@@ -517,56 +517,56 @@
                             </a>
                         </div> --}}
                         </div>
-                        <div class=" w-7 h-7  ">
+                        <div class=" w-6 h-6  ">
                             <a href="https://irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc" class="w-full">
+                                <img src="{{ asset('images/logo/irpsc.irpsc.png') }}" alt="irpsc" class="w-6 h-6">
                             </a>
                         </div>
-                        <div class=" w-7 h-7  ">
+                        <div class=" w-6 h-6  ">
                             <a href="https://3d.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/3d.irpsc.png') }}" alt="3dmeta" class="w-full">
+                                <img src="{{ asset('images/logo/3d.irpsc.png') }}" alt="3dmeta"  class="w-6 h-6">
                             </a>
                         </div>
-                        <div class=" w-7 h-7  ">
+                        <div class=" w-6 h-6  ">
                             <a href="https://shop.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/shop.irpsc.png') }}" alt="shop" class="w-full">
+                                <img src="{{ asset('images/logo/shop.irpsc.png') }}" alt="shop"  class="w-6 h-6">
                             </a>
                         </div>
-                        <div class=" w-7 h-7  ">
+                        <div class=" w-6 h-6  ">
                             <a href="https://animal.irpsc.com/" class="w-full">
                                 <img src="{{ asset('images/logo/animal.irpsc.png') }}" alt="animal"
-                                    class="w-full">
+                                     class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7">
+                        <div class="w-6 h-6">
                             <a href="https://ad.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/ad.irpsc.png') }}" alt="ad irpsc" class="w-full">
+                                <img src="{{ asset('images/logo/ad.irpsc.png') }}" alt="ad irpsc"  class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7 ">
+                        <div class="w-6 h-6 ">
                             <a href="https://art.irpsc.com/" class="w-full">
                                 <img src="{{ asset('images/logo/art.irpsc.png') }}" alt="meta art"
-                                    class="w-full h-full">
+                                     class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7">
+                        <div class="w-6 h-6">
                             <a href="https://faq.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/faq.irpsc.png') }}" alt="faq" class="w-full">
+                                <img src="{{ asset('images/logo/faq.irpsc.png') }}" alt="faq"  class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7">
+                        <div class="w-6 h-6">
                             <a href="https://meta.irpsc.com/" class="w-full">
-                                <img src="{{ asset('images/logo/meta.irpsc.png') }}" alt="meta" class="w-full">
+                                <img src="{{ asset('images/logo/meta.irpsc.png') }}" alt="meta"  class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7">
+                        <div class="w-6 h-6">
                             <a href="https://rgb.irpsc.com" class="w-full">
                                 <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="metargb"
-                                    class="w-full">
+                                     class="w-6 h-6">
                             </a>
                         </div>
-                        <div class="w-7 h-7">
-                            <a href="#" class="w-full">
+                        <div class="w-6 h-6">
+                            <a aria-label="lang" href="#" class="w-full">
                                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -579,7 +579,7 @@
                     <div class="w- space-y-6  ml-[-4px] px-3 absolute bottom-0  h-auto  bg-white  dark:bg-[#0F0F0E] py-5">
                         @guest
                             <div class="w-10 mx-auto  flex justify-center items-center">
-                                <a href="#"
+                                <a aria-label="login" href="#"
                                     class=" flex w-full p-1 justify-center items-center  aspect-square font-bold text-white  bg-[#2667FF] dark:bg-[#FFC700] rounded-[10px] ">
 
                                     <svg width="22" height="21" viewBox="0 0 22 21" fill="none"
@@ -630,7 +630,7 @@
                         <div
                             class="pt-6 border-t-2 border-[#EFEFEF] flex justify-center   border-[#00000017] dark:border-[#3F3F3F]">
                             <div class=" flex rounded-full w-max p-[6px] bg-[#F4F4F4] dark:bg-[#090909]">
-                                <button
+                                <button aria-label="theme"
                                     class="enable-dark-mode2 dark:hidden bg-transparent dark:bg-[#0F0F0E] flex justify-center items-center p-1 rounded-full w-5 h-5  ">
                                     <div>
                                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -641,7 +641,7 @@
                                         </svg>
                                     </div>
                                 </button>
-                                <button
+                                <button aria-label="theme"
                                     class="disable-dark-mode2 hidden   bg-[#FCFCFC] dark:bg-transparent dark:flex justify-center items-center p-1 rounded-full w-5 h-5  shadow-[0_0_6px_0_rgba(0,0,0,0.1)] dark:shadow-none">
                                     <div for="light-switch">
                                         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -683,7 +683,7 @@
                         <p class="lg:text-2xl dark:text-[#FFFFFF] font-rohk">
                             زیرساخت های فعال زنجیره تامین بهشت
                         </p>
-                        <p class="text-[#868B90] text-xs md:text-sm lg:text-xl font-normal">
+                        <p class="text-gray-600 dark:text-[#868B90] text-xs md:text-sm lg:text-xl font-normal">
                             با ثبت نام در این صفحه شما میتوانید به تمامی سامانه های تحت پوشش هلدینگ زنجیره تامین بهداشت
                             دسترسی مستقیم داشته باشید.
                         </p>
@@ -730,71 +730,71 @@
         <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-5 ">
             <div
                 class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
-                <a href="https://irpsc.com" style="width:55px ;" target="_blank "
+                <a aria-label="systems" href="https://irpsc.com" style="width:55px ;" target="_blank "
                     title="وزارت تعاون کار و رفاه اجتماعی">
                     <img src="https://irpsc.com/img-icon/vezarat.png" alt="وزارت تعاون کار و رفاه اجتماعی">
                 </a>
-                <a class="active" href="#" target="_blank " style="width:55px ;"
+                <a aria-label="systems" class="active" href="#" target="_blank " style="width:55px ;"
                     title="نماد اعتماد الکترونیک">
                     <img src="https://irpsc.com/img-icon/enamad.png" alt="نماد اعتماد الکترونیک">
 
                 </a>
-                <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="ثبت اسناد و املاک کشور">
+                <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;" title="ثبت اسناد و املاک کشور">
                     <img src="https://irpsc.com/img-icon/qazaii.png" alt="ثبت اسناد و املاک کشور">
                 </a>
-                <a href="https://video.irpsc.com" target="_blank " style="width:55px ;" title="مرکز آموزش ویدئویی">
+                <a aria-label="systems" href="https://video.irpsc.com" target="_blank " style="width:55px ;" title="مرکز آموزش ویدئویی">
                     <img src="https://irpsc.com/img-icon/video.png" alt="مرکز آموزش ویدئویی">
                 </a>
-                <a href="https://faq.irpsc.com" target="_blank " style="width:55px ;" title="انجمن پرسش و پاسخ">
+                <a aria-label="systems" href="https://faq.irpsc.com" target="_blank " style="width:55px ;" title="انجمن پرسش و پاسخ">
                     <img src="https://irpsc.com/img-icon/faq.png" alt="انجمن پرسش و پاسخ">
                 </a>
-                <a href="https://Shop.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه ملی">
+                <a aria-label="systems" href="https://Shop.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه ملی">
                     <img src="https://irpsc.com/img-icon/shop.png" alt="فروشگاه ملی">
                 </a>
-                <a href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
+                <a aria-label="systems" href="https://supply.irpsc.com" target="_blank " style="width:55px ;" title="تولید کنندگان">
                     <img src="https://irpsc.com/img-icon/supply.png" alt="تولید کنندگان">
-                    <a href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
+                    <a aria-label="systems" href="https://crm.irpsc.com" target="_blank " style="width:55px ;" title="مدیریت بر مدیران">
                         <img src="https://irpsc.com/img-icon/crm.png" alt="مدیریت بر مدیران">
                     </a>
-                    <a href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
+                    <a aria-label="systems" href="https://target.irpsc.com" target="_blank " style="width:55px ;" title="نگرش ملی">
                         <img src="https://irpsc.com/img-icon/target.png" alt="نگرش ملی">
                     </a>
-                    <a href="https://animal.irpsc.com" target="_blank " style="width:55px ;"
+                    <a aria-label="systems" href="https://animal.irpsc.com" target="_blank " style="width:55px ;"
                         title="حیوانات و دامپزشک">
                         <img src="https://irpsc.com/img-icon/animal.png" alt="حیوانات و دامپزشک">
                     </a>
-                    <a href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
+                    <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;" title="رسانه ملی">
                         <img src="https://irpsc.com/img-icon/irpsc.png" alt="رسانه ملی">
                     </a>
-                    <a href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
+                    <a aria-label="systems" href="https://meta.irpsc.com" target="_blank " style="width:55px ;" title="اخبار متا">
                         <img src="https://irpsc.com/img-icon/meta.png" alt="اخبار متا">
                     </a>
-                    <a href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
+                    <a aria-label="systems" href="https://uni.irpsc.com" target="_blank " style="width:55px ;" title="دانشگاه متاورس">
                         <img src="https://irpsc.com/img-icon/uni.png" alt="دانشگاه متاورس">
                     </a>
-                    <a href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
+                    <a aria-label="systems" href="https://crm.irpsc.com/knowledgebase" target="_blank " style="width:55px ;"
                         title="استخدام | دانش محور">
                         <img src="https://irpsc.com/img-icon/knowledge.png" alt="استخدام | دانش محور">
                     </a>
-                    <a href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
+                    <a aria-label="systems" href="https://sale.irpsc.com" target="_blank " style="width:55px ;" title="فروشگاه مجازی حم">
                         <img src="https://irpsc.com/img-icon/sale.png" alt="فروشگاه مجازی حم">
                     </a>
-                    <a href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
+                    <a aria-label="systems" href="https://ad.irpsc.com" target="_blank " style="width:55px ;" title="تبلیغات ملی">
                         <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
                     </a>
-                    <a href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
+                    <a aria-label="systems" href="https://nft.irpsc.com" target="_blank " style="width:55px ;" title="بازار NFT">
                         <img src="https://irpsc.com/img-icon/nft.png" alt="nft">
                     </a>
-                    <a href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
+                    <a aria-label="systems" href="https://rgb.irpsc.com" target="_blank " style="width:55px ;" title="متاورس رنگ">
                         <img src="https://irpsc.com/img-icon/rgb.png" alt="متاورس رنگ">
                     </a>
-                    <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
+                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="سه بعدی متا">
                         <img src="https://irpsc.com/img-icon/3d.png" alt="سه بعدی متا">
                     </a>
-                    <a href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
+                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;" title="تونل زمان">
                         <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
                     </a>
-                    <a title="خانه" href="#" style="width:55px ;">
+                    <a aria-label="systems" title="خانه" href="#" style="width:55px ;">
                         <img src="https://irpsc.com/img-icon/home-soon.png" alt="خانه">
                     </a>
             </div>
@@ -827,7 +827,7 @@
                     <div class="flex flex-col items-center justify-center gap-8">
                         <p class="text-2xl text-[#4C4C4C] dark:text-[#D4D4D4]">به شبکه های ما ملحق شوید.</p>
                         <div class="grid grid-cols-5  gap-3 md:gap-4">
-                            <a href="https://rgb.irpsc.com/[lang]/undefined">
+                            <a aria-label="social" href="https://rgb.irpsc.com/[lang]/undefined">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_611_7340)" />
@@ -842,7 +842,7 @@
                                     </defs>
                                 </svg>
                             </a>
-                            <a href="#">
+                            <a href="#" aria-label="social">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -859,7 +859,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.instagram.com/rgb.irpsc/">
+                            <a aria-label="social" href="https://www.instagram.com/rgb.irpsc/">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -876,7 +876,7 @@
                                 </svg>
 
                             </a>
-                            <a
+                            <a aria-label="social"
                                 href="https://ir.linkedin.com/in/%D8%AD%D8%B3%DB%8C%D9%86-%D9%82%D8%AF%DB%8C%D8%B1%DB%8C-89161a189?original_referer=https%3A%2F%2Frgb.irpsc.com%2F">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
@@ -894,7 +894,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.pinterest.com/metarangiran/">
+                            <a aria-label="social" href="https://www.pinterest.com/metarangiran/">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_631_6007)" />
@@ -909,7 +909,7 @@
                                     </defs>
                                 </svg>
                             </a>
-                            <a href="https://virgool.io/@metarang.iran">
+                            <a aria-label="social" href="https://virgool.io/@metarang.iran">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -925,7 +925,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a aria-label="social" href="#">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -941,7 +941,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://rubika.ir/metaverse_iran">
+                            <a aria-label="social" href="https://rubika.ir/metaverse_iran">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -957,7 +957,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.youtube.com/@Irpsc">
+                            <a aria-label="social" href="https://www.youtube.com/@Irpsc">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -973,7 +973,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a aria-label="social" href="#">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -989,7 +989,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://faq.irpsc.com/">
+                            <a aria-label="social" href="https://faq.irpsc.com/">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1005,7 +1005,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a aria-label="social" href="#">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1021,7 +1021,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.dalfak.com/metarang">
+                            <a aria-label="social" href="https://www.dalfak.com/metarang">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1037,7 +1037,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.aparat.com/Qzparadise.ir">
+                            <a aria-label="social" href="https://www.aparat.com/Qzparadise.ir">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1053,7 +1053,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a aria-label="social" href="#">
 
                                 <svg width="63" height="63" viewBox="0 0 63 63" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1069,7 +1069,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.namasha.com/qzparadise">
+                            <a aria-label="social" href="https://www.namasha.com/qzparadise">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1086,7 +1086,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://www.mp4.ir/meta.rang">
+                            <a aria-label="social" href="https://www.mp4.ir/meta.rang">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_631_6021)" />
@@ -1101,7 +1101,7 @@
                                     </defs>
                                 </svg>
                             </a>
-                            <a href="https://medium.com/@metarang.iran">
+                            <a aria-label="social" href="https://medium.com/@metarang.iran">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1118,7 +1118,7 @@
                                 </svg>
 
                             </a>
-                            <a href="https://jabeh.com/c/1nk44b">
+                            <a  aria-label="social"href="https://jabeh.com/c/1nk44b">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -1135,7 +1135,7 @@
                                 </svg>
 
                             </a>
-                            <a href="#">
+                            <a  aria-label="social" href="#">
 
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

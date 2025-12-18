@@ -7,7 +7,7 @@
         </div>
         <div class="w-full xl:w-1/2 2xl:w-[40%] mx-auto">
             <div
-                class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
+                class=" rounded-xl p-6 md:p-8">
                 <form method="POST" action="{{ route('login') }}" id="login-form">
                     <div class="flex flex-col gap-5">
                         @csrf
@@ -16,11 +16,11 @@
                             <x-form.text for="password" id="password" name="password" type="password" required
                                 autocomplete="current-password" />
 
-                            <a href="javascript:void(0)" id="toggle-password"
+                            <button aria-label="show btn" href="javascript:void(0)" id="toggle-password"
                                 class="absolute left-[10px] top-1/2 -translate-y-1/2 cursor-pointer">
 
                                 <!-- eye open -->
-                                <svg id="eye-open" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                <svg id="eye-open" class="w-7 h-7 " width="20" height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M12.9833 9.999C12.9833 11.649 11.6499 12.9823 9.99993 12.9823C8.34993 12.9823 7.0166 11.649 7.0166 9.999C7.0166 8.349 8.34993 7.0156 9.99993 7.0156C11.6499 7.0156 12.9833 8.349 12.9833 9.999Z"
@@ -31,7 +31,7 @@
                                 </svg>
 
                                 <!-- eye closed -->
-                               <svg id="eye-closed" class="hidden" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                               <svg  aria-label="show btn" id="eye-closed" class="hidden w-7 h-7 " width="20" height="20" viewBox="0 0 20 20" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 3L17 17" stroke="#868B90" stroke-width="1.5" stroke-linecap="round" />
                                     <path
@@ -42,7 +42,7 @@
                                         stroke="#868B90" stroke-width="1.5" />
                                 </svg>
 
-                            </a>
+                            </button>
 
                         </div>
                         <div class="flex flex-col  px-1">

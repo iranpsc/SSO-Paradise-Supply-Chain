@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-3">
         <input id="{{ $for }}" type="{{ $type }}"
             placeholder="{{ trans('validation.attributes.' . $name) }}"
-            class="bg-[#FCFCFC] dark:bg-[#000000] border-2 rounded-xl py-[10px] w-full placeholder:text-[#868B90] dark:text-[#FFFFFF] text-[#868B90] font-normal focus:text-[#1A1A18] text-sm lg:text-base focus:ring-0 transition-all duration-200 @error($name) border-red-500 dark:border-red-500 shadow-lg shadow-red-500/20 focus:border-red-500 dark:focus:border-red-500 @else border-[#DEDEE9] dark:border-[#1A1A18] focus:border-primery-blue dark:focus:border-dark-yellow @enderror"
+            class="bg-[#FCFCFC] dark:bg-[#000000] border-2 rounded-xl py-[10px] w-full placeholder:text-gray-500 dark:text-[#FFFFFF] text-gray-700 font-normal focus:text-[#1A1A18] text-sm lg:text-base focus:ring-0 transition-all duration-200 @error($name) border-red-500 dark:border-red-500 shadow-lg shadow-red-500/20 focus:border-red-500 dark:focus:border-red-500 @else border-[#DEDEE9] dark:border-[#1A1A18] focus:border-primery-blue dark:focus:border-dark-yellow @enderror"
             name="{{ $name }}" value="{{ old($name, $value) }}" @if ($required) required @endif
             @if ($disabled) disabled @endif>
         @error($name)
