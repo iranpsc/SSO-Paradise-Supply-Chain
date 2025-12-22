@@ -31,9 +31,7 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
-
-@push('scripts')
+    @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Loading state for change password form
@@ -52,3 +50,6 @@
         });
     </script>
 @endpush
+</x-layouts.app>
+
+

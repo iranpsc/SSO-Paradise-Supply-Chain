@@ -37,9 +37,82 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
+    @push('scripts')
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="email"]');
+            const resendEmailInput = document.querySelector('#resend-email');
+            const emailViewButton = document.querySelector('#email-view-button');
 
-@push('scripts')
+            // Save email in localStorage when the main form is submitted
+            emailInput?.form.addEventListener('submit', function() {
+                if (emailInput?.value) {
+                    localStorage.setItem('email', emailInput.value);
+                }
+            });
+
+            // Retrieve saved email and update the link dynamically
+            const savedEmail = localStorage.getItem('email');
+            if (resendEmailInput && savedEmail) {
+                resendEmailInput.value = savedEmail;
+
+                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
+                let emailLink;
+
+                if (emailDomain.includes('gmail')) {
+                    emailLink = 'https://mail.google.com/';
+                } else if (emailDomain.includes('yahoo')) {
+                    emailLink = 'https://mail.yahoo.com/';
+                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                    emailLink = 'https://outlook.live.com/';
+                } else {
+                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                }
+
+                if (emailViewButton) {
+                    emailViewButton.href = emailLink; // Update button link
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resendButton = document.getElementById('resend-button');
+            const resendForm = document.getElementById('resend-form');
+            const resendSpinner = document.getElementById('resend-spinner');
+            const resendText = document.getElementById('resend-text');
+            const timerSpan = document.getElementById('timer');
+            let timeLeft = 60; // Time in seconds
+            const timerMessage = timerSpan ? timerSpan.parentNode :
+            null; // Get the parent element of the timer span to hide it
+
+            if (resendButton) {
+                resendButton.disabled = true; // Disable the button initially
+            }
+
+            // Loading state for resend form
+            if (resendForm && resendButton) {
+                resendForm.addEventListener('submit', function() {
+                    resendButton.disabled = true;
+                    if (resendSpinner) resendSpinner.classList.remove('hidden');
+                    if (resendText) resendText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+
+            // Countdown function
+            if (timerSpan) {
+                const countdown = setInterval(function() {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        if (resendButton) resendButton.disabled = false;
+                        if (timerMessage) timerMessage.style.display = 'none'; // Hide the timer message
+                    }
+                }, 1000);
+            }
+        });
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -89,3 +162,6 @@
         });
     </script>
 @endpush
+</x-layouts.app>
+
+

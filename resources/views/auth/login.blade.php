@@ -66,10 +66,34 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toggleBtn = document.getElementById('toggle-password');
+                const eyeOpen = document.getElementById('eye-open');
+                const eyeClosed = document.getElementById('eye-closed');
 
-</x-layouts.app>
-@push('scripts')
-    <script type="application/ld+json">
+                if (!toggleBtn) return;
+
+                toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const wrapper = toggleBtn.closest('.relative');
+                    const passwordInput = wrapper.querySelector('input');
+
+                    if (!passwordInput) return;
+
+                    const isPassword = passwordInput.type === 'password';
+
+                    passwordInput.type = isPassword ? 'text' : 'password';
+
+                    // تغییر آیکن
+                    eyeOpen.classList.toggle('hidden', isPassword);
+                    eyeClosed.classList.toggle('hidden', !isPassword);
+                });
+            });
+        </script>
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -100,4 +124,5 @@
       }
     }
     </script>
-@endpush
+    @endpush
+</x-layouts.app>
