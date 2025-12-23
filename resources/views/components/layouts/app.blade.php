@@ -43,7 +43,7 @@
                 "target.irpsc.com": "حم",
                 "crm.irpsc.com": "مدیریت بر مدیران",
                 "shop.irpsc.com": " فروشگاه ملی",
-                "faq.irpsc.com": " انجمن حم | پرسش و پاسخ عمومی",
+                "fqahub.ir": " انجمن حم | پرسش و پاسخ عمومی",
                 "video.irpsc.com": "مرکز آموزش ویدویی",
                 "nft.irpsc.com": " nft.irpsc.com",
                 "ad.irpsc.com": "تبلیغات ملی",
@@ -730,93 +730,137 @@
                 </div>
             </div>
         </div>
-        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-5 ">
+        <footer class="w-full md:w-[95%] 3xl:w-[85%]  mx-auto mt-10 ">
             <div
-                class="flex-wrap flex justify-between  items-ctener gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
-                <a aria-label="systems" href="https://irpsc.com" style="width:55px ;" target="_blank "
-                    title="وزارت تعاون کار و رفاه اجتماعی">
-                    <img src="https://irpsc.com/img-icon/vezarat.png" alt="وزارت تعاون کار و رفاه اجتماعی">
-                </a>
-                <a aria-label="systems" class="active" href="#" target="_blank " style="width:55px ;"
-                    title="نماد اعتماد الکترونیک">
-                    <img src="https://irpsc.com/img-icon/enamad.png" alt="نماد اعتماد الکترونیک">
+                class="flex flex-wrap justify-between items-center gap-1 md:gap-2 mx-auto w-full bg-white dark:bg-[#1A1A18] p-3 mb-10 rounded-2xl">
 
+                <a href="https://irpsc.com" target="_blank" title="وزارت تعاون کار و رفاه اجتماعی">
+                    <img src="https://irpsc.com/img-icon/vezarat.png"
+                        srcset="https://irpsc.com/img-icon/vezarat.png 1x, https://irpsc.com/img-icon/vezarat.png 2x"
+                        width="55" height="55" alt="وزارت تعاون کار و رفاه اجتماعی" loading="lazy">
                 </a>
-                <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;"
-                    title="ثبت اسناد و املاک کشور">
-                    <img src="https://irpsc.com/img-icon/qazaii.png" alt="ثبت اسناد و املاک کشور">
+
+                <a href="#" target="_blank" title="نماد اعتماد الکترونیک">
+                    <img src="https://irpsc.com/img-icon/enamad.png"
+                        srcset="https://irpsc.com/img-icon/enamad.png 1x, https://irpsc.com/img-icon/enamad.png 2x"
+                        width="55" height="55" alt="نماد اعتماد الکترونیک" loading="lazy">
                 </a>
-                <a aria-label="systems" href="https://video.irpsc.com" target="_blank " style="width:55px ;"
-                    title="مرکز آموزش ویدئویی">
-                    <img src="https://irpsc.com/img-icon/video.png" alt="مرکز آموزش ویدئویی">
+
+                <a href="https://irpsc.com" target="_blank" title="ثبت اسناد و املاک کشور">
+                    <img src="https://irpsc.com/img-icon/qazaii.png"
+                        srcset="https://irpsc.com/img-icon/qazaii.png 1x, https://irpsc.com/img-icon/qazaii.png 2x"
+                        width="55" height="55" alt="ثبت اسناد و املاک کشور" loading="lazy">
                 </a>
-                <a aria-label="systems" href="https://faq.irpsc.com" target="_blank " style="width:55px ;"
-                    title="انجمن پرسش و پاسخ">
-                    <img src="https://irpsc.com/img-icon/faq.png" alt="انجمن پرسش و پاسخ">
+
+                <a href="https://video.irpsc.com" target="_blank" title="مرکز آموزش ویدئویی">
+                    <img src="https://irpsc.com/img-icon/video.png"
+                        srcset="https://irpsc.com/img-icon/video.png 1x, https://irpsc.com/img-icon/video.png 2x"
+                        width="55" height="55" alt="مرکز آموزش ویدئویی" loading="lazy">
                 </a>
-                <a aria-label="systems" href="https://Shop.irpsc.com" target="_blank " style="width:55px ;"
-                    title="فروشگاه ملی">
-                    <img src="https://irpsc.com/img-icon/shop.png" alt="فروشگاه ملی">
+
+                <a href="https://faqhub.ir" target="_blank" title="انجمن پرسش و پاسخ">
+                    <img src="https://irpsc.com/img-icon/faq.png"
+                        srcset="https://irpsc.com/img-icon/faq.png 1x, https://irpsc.com/img-icon/faq.png 2x"
+                        width="55" height="55" alt="انجمن پرسش و پاسخ" loading="lazy">
                 </a>
-                <a aria-label="systems" href="https://supply.irpsc.com" target="_blank " style="width:55px ;"
-                    title="تولید کنندگان">
-                    <img src="https://irpsc.com/img-icon/supply.png" alt="تولید کنندگان">
-                    <a aria-label="systems" href="https://crm.irpsc.com" target="_blank " style="width:55px ;"
-                        title="مدیریت بر مدیران">
-                        <img src="https://irpsc.com/img-icon/crm.png" alt="مدیریت بر مدیران">
-                    </a>
-                    <a aria-label="systems" href="https://target.irpsc.com" target="_blank " style="width:55px ;"
-                        title="نگرش ملی">
-                        <img src="https://irpsc.com/img-icon/target.png" alt="نگرش ملی">
-                    </a>
-                    <a aria-label="systems" href="https://animal.irpsc.com" target="_blank " style="width:55px ;"
-                        title="حیوانات و دامپزشک">
-                        <img src="https://irpsc.com/img-icon/animal.png" alt="حیوانات و دامپزشک">
-                    </a>
-                    <a aria-label="systems" href="https://irpsc.com" target="_blank " style="width:55px ;"
-                        title="رسانه ملی">
-                        <img src="https://irpsc.com/img-icon/irpsc.png" alt="رسانه ملی">
-                    </a>
-                    <a aria-label="systems" href="https://meta.irpsc.com" target="_blank " style="width:55px ;"
-                        title="اخبار متا">
-                        <img src="https://irpsc.com/img-icon/meta.png" alt="اخبار متا">
-                    </a>
-                    <a aria-label="systems" href="https://uni.irpsc.com" target="_blank " style="width:55px ;"
-                        title="دانشگاه متاورس">
-                        <img src="https://irpsc.com/img-icon/uni.png" alt="دانشگاه متاورس">
-                    </a>
-                    <a aria-label="systems" href="https://crm.irpsc.com/knowledgebase" target="_blank "
-                        style="width:55px ;" title="استخدام | دانش محور">
-                        <img src="https://irpsc.com/img-icon/knowledge.png" alt="استخدام | دانش محور">
-                    </a>
-                    <a aria-label="systems" href="https://sale.irpsc.com" target="_blank " style="width:55px ;"
-                        title="فروشگاه مجازی حم">
-                        <img src="https://irpsc.com/img-icon/sale.png" alt="فروشگاه مجازی حم">
-                    </a>
-                    <a aria-label="systems" href="https://ad.irpsc.com" target="_blank " style="width:55px ;"
-                        title="تبلیغات ملی">
-                        <img src="https://irpsc.com/img-icon/ad.png" alt="تبلیغات ملی">
-                    </a>
-                    <a aria-label="systems" href="https://nft.irpsc.com" target="_blank " style="width:55px ;"
-                        title="بازار NFT">
-                        <img src="https://irpsc.com/img-icon/nft.png" alt="nft">
-                    </a>
-                    <a aria-label="systems" href="https://rgb.irpsc.com" target="_blank " style="width:55px ;"
-                        title="متاورس رنگ">
-                        <img src="https://irpsc.com/img-icon/rgb.png" alt="متاورس رنگ">
-                    </a>
-                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;"
-                        title="سه بعدی متا">
-                        <img src="https://irpsc.com/img-icon/3d.png" alt="سه بعدی متا">
-                    </a>
-                    <a aria-label="systems" href="https://3d.irpsc.com" target="_blank " style="width:55px ;"
-                        title="تونل زمان">
-                        <img src="{{ asset('images/logo/accounts.gif') }}" alt="تونل زمان">
-                    </a>
-                    <a aria-label="systems" title="خانه" href="#" style="width:55px ;">
-                        <img src="https://irpsc.com/img-icon/home-soon.png" alt="خانه">
-                    </a>
+
+                <a href="https://shop.irpsc.com" target="_blank" title="فروشگاه ملی">
+                    <img src="https://irpsc.com/img-icon/shop.png"
+                        srcset="https://irpsc.com/img-icon/shop.png 1x, https://irpsc.com/img-icon/shop.png 2x"
+                        width="55" height="55" alt="فروشگاه ملی" loading="lazy">
+                </a>
+
+                <a href="https://supply.irpsc.com" target="_blank" title="تولید کنندگان">
+                    <img src="https://irpsc.com/img-icon/supply.png"
+                        srcset="https://irpsc.com/img-icon/supply.png 1x, https://irpsc.com/img-icon/supply.png 2x"
+                        width="55" height="55" alt="تولید کنندگان" loading="lazy">
+                </a>
+
+                <a href="https://crm.irpsc.com" target="_blank" title="مدیریت بر مدیران">
+                    <img src="https://irpsc.com/img-icon/crm.png"
+                        srcset="https://irpsc.com/img-icon/crm.png 1x, https://irpsc.com/img-icon/crm.png 2x"
+                        width="55" height="55" alt="مدیریت بر مدیران" loading="lazy">
+                </a>
+
+                <a href="https://target.irpsc.com" target="_blank" title="نگرش ملی">
+                    <img src="https://irpsc.com/img-icon/target.png"
+                        srcset="https://irpsc.com/img-icon/target.png 1x, https://irpsc.com/img-icon/target.png 2x"
+                        width="55" height="55" alt="نگرش ملی" loading="lazy">
+                </a>
+
+                <a href="https://animal.irpsc.com" target="_blank" title="حیوانات و دامپزشک">
+                    <img src="https://irpsc.com/img-icon/animal.png"
+                        srcset="https://irpsc.com/img-icon/animal.png 1x, https://irpsc.com/img-icon/animal.png 2x"
+                        width="55" height="55" alt="حیوانات و دامپزشک" loading="lazy">
+                </a>
+
+                <a href="https://irpsc.com" target="_blank" title="رسانه ملی">
+                    <img src="https://irpsc.com/img-icon/irpsc.png"
+                        srcset="https://irpsc.com/img-icon/irpsc.png 1x, https://irpsc.com/img-icon/irpsc.png 2x"
+                        width="55" height="55" alt="رسانه ملی" loading="lazy">
+                </a>
+
+                <a href="https://meta.irpsc.com" target="_blank" title="اخبار متا">
+                    <img src="https://irpsc.com/img-icon/meta.png"
+                        srcset="https://irpsc.com/img-icon/meta.png 1x, https://irpsc.com/img-icon/meta.png 2x"
+                        width="55" height="55" alt="اخبار متا" loading="lazy">
+                </a>
+
+                <a href="https://uni.irpsc.com" target="_blank" title="دانشگاه متاورس">
+                    <img src="https://irpsc.com/img-icon/uni.png"
+                        srcset="https://irpsc.com/img-icon/uni.png 1x, https://irpsc.com/img-icon/uni.png 2x"
+                        width="55" height="55" alt="دانشگاه متاورس" loading="lazy">
+                </a>
+
+                <a href="https://crm.irpsc.com/knowledgebase" target="_blank" title="استخدام | دانش محور">
+                    <img src="https://irpsc.com/img-icon/knowledge.png"
+                        srcset="https://irpsc.com/img-icon/knowledge.png 1x, https://irpsc.com/img-icon/knowledge.png 2x"
+                        width="55" height="55" alt="استخدام | دانش محور" loading="lazy">
+                </a>
+
+                <a href="https://sale.irpsc.com" target="_blank" title="فروشگاه مجازی حم">
+                    <img src="https://irpsc.com/img-icon/sale.png"
+                        srcset="https://irpsc.com/img-icon/sale.png 1x, https://irpsc.com/img-icon/sale.png 2x"
+                        width="55" height="55" alt="فروشگاه مجازی حم" loading="lazy">
+                </a>
+
+                <a href="https://ad.irpsc.com" target="_blank" title="تبلیغات ملی">
+                    <img src="https://irpsc.com/img-icon/ad.png"
+                        srcset="https://irpsc.com/img-icon/ad.png 1x, https://irpsc.com/img-icon/ad.png 2x"
+                        width="55" height="55" alt="تبلیغات ملی" loading="lazy">
+                </a>
+
+                <a href="https://nft.irpsc.com" target="_blank" title="بازار NFT">
+                    <img src="https://irpsc.com/img-icon/nft.png"
+                        srcset="https://irpsc.com/img-icon/nft.png 1x, https://irpsc.com/img-icon/nft.png 2x"
+                        width="55" height="55" alt="بازار NFT" loading="lazy">
+                </a>
+
+                <a href="https://rgb.irpsc.com" target="_blank" title="متاورس رنگ">
+                    <img src="https://irpsc.com/img-icon/rgb.png"
+                        srcset="https://irpsc.com/img-icon/rgb.png 1x, https://irpsc.com/img-icon/rgb.png 2x"
+                        width="55" height="55" alt="متاورس رنگ" loading="lazy">
+                </a>
+
+                <a href="https://3d.irpsc.com" target="_blank" title="سه بعدی متا">
+                    <img src="https://irpsc.com/img-icon/3d.png"
+                        srcset="https://irpsc.com/img-icon/3d.png 1x, https://irpsc.com/img-icon/3d.png 2x"
+                        width="55" height="55" alt="سه بعدی متا" loading="lazy">
+                </a>
+
+                <a href="https://3d.irpsc.com" target="_blank" title="تونل زمان">
+                    <img src="{{ asset('images/logo/accounts.gif') }}" width="55" height="55"
+                        alt="تونل زمان" loading="lazy">
+                </a>
+
+                <a href="#" title="خانه">
+                    <img src="https://irpsc.com/img-icon/home-soon.png"
+                        srcset="https://irpsc.com/img-icon/home-soon.png 1x, https://irpsc.com/img-icon/home-soon.png 2x"
+                        width="55" height="55" alt="خانه" loading="lazy">
+                </a>
+
             </div>
+
             <div
                 class="bg-[#FFFFFF] dark:bg-[#1A1A18] w-full rounded-[10px] p-7 flex flex-col gap-10 lg:flex-row justify-between mb-5">
                 <div class="flex flex-col gap-10 w-full lg:w-[60%]">
@@ -1178,8 +1222,8 @@
 
         </footer>
     </main>
-    
-   
+
+
 
     <!-- Import jquery -->
     {{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -1188,7 +1232,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script> --}}
-@stack('scripts')
+    @stack('scripts')
 
 
     <script>
