@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.6.0 (2025-12-27)
+
+
+### Features
+
+* add "Resend verification email" functionality and improve alert modal handling ([110cc49](https://github.com/iranpsc/sso/commit/110cc49ae71d796c53f5b0348f2e52e0b4cc8a00))
+
 ### 1.5.6 (2025-12-27)
 
 ### 1.5.5 (2025-12-23)
