@@ -15,11 +15,13 @@
                 @endsession
 
                 <div id="alert-modal"
-                    class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
+                    class="bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center" >
                     <div
                         class="relative flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
 
-
+                        <div onclick="document.getElementById('alert-modal').classList.add('hidden')" class="absolute top-4 right-4 cursor-pointer">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 21 20" class="   cursor-pointer stroke-2 stroke-[#00000096] dark:stroke-dark-gray top-5 end-5 z-50" alt="درباره من"><path d="M18.808.22a.75.75 0 0 1 1.061 1.06L11.561 9.59l8.308 8.308a.75.75 0 0 1-1.06 1.061L10.5 10.65l-8.308 8.308a.75.75 0 1 1-1.061-1.06l8.308-8.31L1.131 1.28A.75.75 0 0 1 2.19.22L10.5 8.528 18.808.22Z" clip-rule="evenodd"></path></svg>
+                        </div>
                         <div>
                             <div class="flex w-full justify-center">
                                 <svg width="58" height="58" viewBox="0 0 58 58" fill="none"
@@ -83,8 +85,85 @@
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
+@push('scripts')
+                <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resendButton = document.getElementById('resend-button');
+            const resendForm = document.getElementById('resend-form');
+            const resendSpinner = document.getElementById('resend-spinner');
+            const resendText = document.getElementById('resend-text');
+            const timerSpan = document.getElementById('timer');
+            let timeLeft = 60; // Time in seconds
+            const timerMessage = timerSpan ? timerSpan.parentNode :
+            null; // Get the parent element of the timer span to hide it
+
+            if (resendButton) {
+                resendButton.disabled = true; // Disable the button initially
+            }
+
+            // Loading state for resend form
+            if (resendForm && resendButton) {
+                resendForm.addEventListener('submit', function() {
+                    resendButton.disabled = true;
+                    if (resendSpinner) resendSpinner.classList.remove('hidden');
+                    if (resendText) resendText.textContent = '{{ __('Loading...') }}';
+                });
+            }
+
+            // Countdown function
+            if (timerSpan) {
+                const countdown = setInterval(function() {
+                    timeLeft--;
+                    timerSpan.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        if (resendButton) resendButton.disabled = false;
+                        if (timerMessage) timerMessage.style.display = 'none'; // Hide the timer message
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+            <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailInput = document.querySelector('input[name="email"]');
+            const resendEmailInput = document.querySelector('#resend-email');
+            const emailViewButton = document.querySelector('#email-view-button');
+
+            // Save email in localStorage when the main form is submitted
+            emailInput?.form.addEventListener('submit', function() {
+                if (emailInput?.value) {
+                    localStorage.setItem('email', emailInput.value);
+                }
+            });
+
+            // Retrieve saved email and update the link dynamically
+            const savedEmail = localStorage.getItem('email');
+            if (resendEmailInput && savedEmail) {
+                resendEmailInput.value = savedEmail;
+
+                const emailDomain = savedEmail.split('@')[1]; // Get domain from email
+                let emailLink;
+
+                if (emailDomain.includes('gmail')) {
+                    emailLink = 'https://mail.google.com/';
+                } else if (emailDomain.includes('yahoo')) {
+                    emailLink = 'https://mail.yahoo.com/';
+                } else if (emailDomain.includes('outlook') || emailDomain.includes('hotmail')) {
+                    emailLink = 'https://outlook.live.com/';
+                } else {
+                    emailLink = 'https://mail.' + emailDomain; // Generic mail link
+                }
+
+                if (emailViewButton) {
+                    emailViewButton.href = emailLink; // Update button link
+                }
+            }
+        });
+    </script>
+@endpush
 </x-layouts.app>
 
 
