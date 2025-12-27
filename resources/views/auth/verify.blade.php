@@ -4,7 +4,7 @@
             <div
                 class="bg-white dark:bg-[#0F0F0E] rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 md:p-8">
                 <div class="flex flex-col gap-7 dark:text-gray-300">
-                    <div class="text-2xl mb-2 dark:text-white">{{ __('Verify Your Email Address') }}</div>
+                    <div class="text-2xl mb-2 dark:text-white mx-auto">{{ __('Verify Your Email Address') }}</div>
                     <div class="flex flex-col gap-5">
 
                         <x-partials.alerts />
@@ -16,23 +16,13 @@
                         @endsession
 
                         <div class="text-center">
-                            <form method="POST" action="{{ route('verification.resend') }}" id="request-resend-form">
-                                @csrf
-                                <input type="hidden" name="email" value="{{ Auth::user()->email }}">
-                                <x-form.button
-                                    id="show-resend-modal-btn"
-                                    spinner-id="show-resend-spinner"
-                                    text-id="show-resend-text"
-                                    variant="outline"
-                                    size="small"
-                                    class="!bg-transparent !border-0 hover:underline text-primery-blue dark:text-dark-yellow text-sm !p-0 !rounded-none">
-                                    {{ __('Resend verification email') }}
-                                </x-form.button>
-                            </form>
+                            <button onclick="document.getElementById('alert-modal').classList.remove('hidden')"
+                                class="!bg-transparent !border-0 hover:underline text-primery-blue dark:text-dark-yellow text-sm !p-0 !rounded-none">ارسال
+                                مجدد ایمیل</button>
                         </div>
 
                         <div id="alert-modal"
-                            class="hidden bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
+                            class=" bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
                             <div
                                 class="relative flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
 
@@ -65,8 +55,8 @@
 
                                 {{ session('status') }}
 
-                                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل <span
-                                        id="timer">60</span> ثانیه
+                                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل 
+                                    <span id="timer">60</span> ثانیه
                                     صبر کنید </span>
                                 <div class="text-center">
                                     <span class="text-xs text-[#868B90] dark:text-[#ECEEF3] text-center">
@@ -117,119 +107,80 @@
 
     </div>
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const alertModal = document.getElementById('alert-modal');
-                const showResendModalBtn = document.getElementById('show-resend-modal-btn');
-                const showResendSpinner = document.getElementById('show-resend-spinner');
-                const showResendText = document.getElementById('show-resend-text');
-                const resendButton = document.getElementById('resend-button');
-                const resendForm = document.getElementById('resend-form');
-                const resendSpinner = document.getElementById('resend-spinner');
-                const resendText = document.getElementById('resend-text');
-                const timerSpan = document.getElementById('timer');
-                const timerMessage = timerSpan ? timerSpan.parentNode :
-                    null; // Get the parent element of the timer span to hide it
-                let countdownInterval = null;
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-                // Function to start the countdown timer
-                function startCountdown() {
-                    // Clear any existing countdown interval
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                    }
+    const resendForm = document.getElementById('resend-form');
+    const resendButton = document.getElementById('resend-button');
+    const timerSpan = document.getElementById('timer');
 
-                    // Reset timer to 60 seconds
-                    let timeLeft = 60;
-                    if (timerSpan) timerSpan.textContent = timeLeft;
+    const STORAGE_KEY = 'verify_timer_end';
+    const AUTO_SENT_KEY = 'verify_auto_sent';
+    const DURATION = 60;
 
-                    // Show timer message and disable resend button
-                    if (timerMessage) timerMessage.style.display = '';
-                    if (resendButton) resendButton.disabled = true;
+    let interval = null;
 
-                    // Start countdown
-                    countdownInterval = setInterval(function() {
-                        timeLeft--;
-                        if (timerSpan) timerSpan.textContent = timeLeft;
+    function getRemainingSeconds(endTime) {
+        return Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+    }
 
-                        if (timeLeft <= 0) {
-                            clearInterval(countdownInterval);
-                            countdownInterval = null;
-                            if (resendButton) resendButton.disabled = false;
-                            if (timerMessage) timerMessage.style.display = 'none'; // Hide the timer message
-                        }
-                    }, 1000);
-                }
+    function render(remaining) {
+        timerSpan.textContent = remaining;
+        resendButton.disabled = remaining > 0;
+    }
 
-                // Handle request resend form submission via AJAX
-                const requestResendForm = document.getElementById('request-resend-form');
-                if (requestResendForm && showResendModalBtn && alertModal) {
-                    requestResendForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
+    function runTimer(endTime) {
+        clearInterval(interval);
 
-                        // Disable button and show loading state
-                        showResendModalBtn.disabled = true;
-                        const originalText = showResendText ? showResendText.textContent : '';
-                        if (showResendSpinner) showResendSpinner.classList.remove('hidden');
-                        if (showResendText) showResendText.classList.remove('hidden');
+        render(getRemainingSeconds(endTime));
 
-                        // Get form data
-                        const formData = new FormData(requestResendForm);
+        interval = setInterval(() => {
+            const remaining = getRemainingSeconds(endTime);
 
-                        // Get CSRF token from meta tag or form data
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token');
+            if (remaining <= 0) {
+                clearInterval(interval);
+                localStorage.removeItem(STORAGE_KEY);
+                render(0);
+            } else {
+                render(remaining);
+            }
+        }, 1000);
+    }
 
-                        // Submit via AJAX
-                        fetch(requestResendForm.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            credentials: 'same-origin'
-                        })
-                        .then(response => {
-                            // Handle successful responses (200-299 status codes)
-                            if (response.ok) {
-                                // Show modal on success
-                                alertModal.classList.remove('hidden');
-                                // Start the countdown timer when modal opens
-                                startCountdown();
-                                // Reset button state
-                                showResendModalBtn.disabled = false;
-                                if (showResendSpinner) showResendSpinner.classList.add('hidden');
-                                if (showResendText) showResendText.textContent = originalText;
-                            } else {
-                                throw new Error('Request failed with status: ' + response.status);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            // Reset button state on error
-                            showResendModalBtn.disabled = false;
-                            if (showResendSpinner) showResendSpinner.classList.add('hidden');
-                            if (showResendText) showResendText.textContent = originalText;
-                            // Show error message
-                            alert('{{ __('An error occurred. Please try again.') }}');
-                        });
-                    });
-                }
+    function startTimer(seconds) {
+        const endTime = Date.now() + seconds * 1000;
+        localStorage.setItem(STORAGE_KEY, endTime);
+        runTimer(endTime);
+    }
 
-                if (resendButton) {
-                    resendButton.disabled = true; // Disable the button initially
-                }
+    // ---------- منطق لود صفحه ----------
+    const storedEndTime = Number(localStorage.getItem(STORAGE_KEY));
+    const hasAutoSent = localStorage.getItem(AUTO_SENT_KEY);
 
-                // Loading state for resend form
-                if (resendForm && resendButton) {
-                    resendForm.addEventListener('submit', function() {
-                        resendButton.disabled = true;
-                        if (resendSpinner) resendSpinner.classList.remove('hidden');
-                        if (resendText) resendText.classList.remove('hidden');
-                    });
-                }
-            });
-        </script>
+    if (storedEndTime && storedEndTime > Date.now()) {
+        // تایمر قبلاً شروع شده → ادامه بده
+        runTimer(storedEndTime);
+    } else {
+        // تایمر جدید
+        startTimer(DURATION);
+
+        if (!hasAutoSent) {
+            localStorage.setItem(AUTO_SENT_KEY, '1');
+            setTimeout(() => {
+                resendForm.submit();
+            }, 300);
+        }
+    }
+
+    // ---------- ارسال دستی ----------
+    resendForm.addEventListener('submit', function () {
+        startTimer(DURATION);
+    });
+
+});
+</script>
+
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const emailInput = document.querySelector('input[name="email"]');
