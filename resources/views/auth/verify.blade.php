@@ -20,8 +20,7 @@
                                 id="resend-form">
                                 @csrf
                                 <x-form.button spinner-id="resend-spinner"
-                                    text-id="resend-text" variant="primary"
-                                    onclick="document.getElementById('alert-modal').classList.remove('hidden')">
+                                    text-id="resend-text" variant="primary">
                                     {{ __('Resend Verification Email') }}
                                 </x-form.button>
                                 <input class="hidden" type="email" name="email"
@@ -96,14 +95,14 @@
                                     </a>
 
                                     <form method="POST" action="{{ route('verification.resend') }}" class="w-1/2"
-                                        id="resend-form">
+                                        id="resend-form-modal">
                                         @csrf
-                                        <x-form.button id="resend-button" spinner-id="resend-spinner"
-                                            text-id="resend-text" variant="primary" :disabled="true">
+                                        <x-form.button id="resend-button" spinner-id="resend-spinner-modal"
+                                            text-id="resend-text-modal" variant="primary" :disabled="true">
                                             ارسال مجدد
                                         </x-form.button>
                                         <input class="hidden" type="email" name="email"
-                                            value="{{ Auth::user()->email }}" id="resend-email" required>
+                                            value="{{ Auth::user()->email }}" id="resend-email-modal" required>
                                     </form>
                                 </div>
                             </div>
@@ -119,8 +118,10 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const resendForm = document.getElementById('resend-form');
+    const resendFormModal = document.getElementById('resend-form-modal');
     const resendButton = document.getElementById('resend-button');
     const timerSpan = document.getElementById('timer');
+    const alertModal = document.getElementById('alert-modal');
 
     const STORAGE_KEY = 'verify_timer_end';
     const AUTO_SENT_KEY = 'verify_auto_sent';
@@ -133,8 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function render(remaining) {
-        timerSpan.textContent = remaining;
-        resendButton.disabled = remaining > 0;
+        if (timerSpan) {
+            timerSpan.textContent = remaining;
+        }
+        if (resendButton) {
+            resendButton.disabled = remaining > 0;
+        }
     }
 
     function runTimer(endTime) {
@@ -161,9 +166,20 @@ document.addEventListener('DOMContentLoaded', function () {
         runTimer(endTime);
     }
 
+    function showModal() {
+        if (alertModal) {
+            alertModal.classList.remove('hidden');
+        }
+    }
+
     // ---------- منطق لود صفحه ----------
     const storedEndTime = Number(localStorage.getItem(STORAGE_KEY));
     const hasAutoSent = localStorage.getItem(AUTO_SENT_KEY);
+
+    // Check if form was just submitted (show modal if session has 'resent')
+    @if(session('resent'))
+        showModal();
+    @endif
 
     if (storedEndTime && storedEndTime > Date.now()) {
         // تایمر قبلاً شروع شده → ادامه بده
@@ -175,15 +191,120 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!hasAutoSent) {
             localStorage.setItem(AUTO_SENT_KEY, '1');
             setTimeout(() => {
-                resendForm.submit();
+                if (resendForm) {
+                    resendForm.submit();
+                }
             }, 300);
         }
     }
 
-    // ---------- ارسال دستی ----------
-    resendForm.addEventListener('submit', function () {
-        startTimer(DURATION);
-    });
+    // ---------- ارسال دستی از فرم اصلی ----------
+    if (resendForm) {
+        resendForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(resendForm);
+            const submitButton = resendForm.querySelector('button[type="submit"]');
+
+            // Disable button and show loading state
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+            fetch(resendForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token'),
+                    'Accept': 'application/json'
+                },
+                redirect: 'follow'
+            })
+            .then(response => {
+                // Check if response is successful (200-299)
+                if (response.ok) {
+                    // Start timer
+                    startTimer(DURATION);
+                    // Show modal after successful submission
+                    showModal();
+                } else {
+                    // Handle errors (validation, rate limiting, etc.)
+                    response.json().then(data => {
+                        console.error('Error response:', data);
+                    }).catch(() => {
+                        // Not JSON, might be HTML error page
+                        console.error('Request failed with status:', response.status);
+                    });
+                }
+                // Re-enable button
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+                return response;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Re-enable button on error
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+            });
+        });
+    }
+
+    // ---------- ارسال دستی از فرم داخل مودال ----------
+    if (resendFormModal) {
+        resendFormModal.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(resendFormModal);
+            const submitButton = resendFormModal.querySelector('button[type="submit"]');
+
+            // Disable button and show loading state
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+            fetch(resendFormModal.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || formData.get('_token'),
+                    'Accept': 'application/json'
+                },
+                redirect: 'follow'
+            })
+            .then(response => {
+                // Check if response is successful (200-299)
+                if (response.ok) {
+                    // Start timer
+                    startTimer(DURATION);
+                } else {
+                    // Handle errors (validation, rate limiting, etc.)
+                    response.json().then(data => {
+                        console.error('Error response:', data);
+                    }).catch(() => {
+                        // Not JSON, might be HTML error page
+                        console.error('Request failed with status:', response.status);
+                    });
+                }
+                // Re-enable button
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+                return response;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Re-enable button on error
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+            });
+        });
+    }
 
 });
 </script>
