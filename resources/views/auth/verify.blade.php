@@ -22,7 +22,7 @@
                         </div>
 
                         <div id="alert-modal"
-                            class=" bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
+                            class="hidden bg-black/10 backdrop-blur-md flex justify-center items-center z-[20000] h-screen w-screen fixed right-0 top-0 text-center">
                             <div
                                 class="relative flex items-center justify-center bg-white dark:bg-[#0F0F0E] rounded-xl flex-col gap-5 p-5 text-center min-w-72 dark:text-white">
 
@@ -55,7 +55,7 @@
 
                                 {{ session('status') }}
 
-                                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل 
+                                <span class="text-gray-400 text-xs"> برای ارسال مجدد ایمیل
                                     <span id="timer">60</span> ثانیه
                                     صبر کنید </span>
                                 <div class="text-center">
