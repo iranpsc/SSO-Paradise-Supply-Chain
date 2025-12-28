@@ -52,7 +52,7 @@
                     registerForm.addEventListener('submit', function() {
                         registerButton.disabled = true;
                         if (registerSpinner) registerSpinner.classList.remove('hidden');
-                        if (registerText) registerText.textContent = '{{ __('Loading...') }}';
+                        if (registerText) registerText.textContent = '{{ __('درحال ثبت نام...') }}';
                     });
                 }
             });
