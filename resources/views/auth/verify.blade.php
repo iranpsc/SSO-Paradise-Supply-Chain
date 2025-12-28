@@ -15,10 +15,18 @@
                             </div>
                         @endsession
 
-                        <div class="text-center">
-                            <button onclick="document.getElementById('alert-modal').classList.remove('hidden')"
-                                class="!bg-transparent !border-0 hover:underline text-primery-blue dark:text-dark-yellow text-sm !p-0 !rounded-none">ارسال
-                                مجدد ایمیل</button>
+                        <div class="mx-auto">
+                                <form method="POST" action="{{ route('verification.resend') }}" class="w-1/2"
+                                id="resend-form">
+                                @csrf
+                                <x-form.button spinner-id="resend-spinner"
+                                    text-id="resend-text" variant="primary"
+                                    onclick="document.getElementById('alert-modal').classList.remove('hidden')">
+                                    {{ __('Resend Verification Email') }}
+                                </x-form.button>
+                                <input class="hidden" type="email" name="email"
+                                    value="{{ Auth::user()->email }}" id="resend-email" required>
+                            </form>
                         </div>
 
                         <div id="alert-modal"
