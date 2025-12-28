@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,6 +14,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Delete unverified users older than 24 hours daily at midnight
+        $schedule->command('users:delete-unverified')
+            ->dailyAt('00:00')
+            ->withoutOverlapping()
+            ->onFailure(function () {
+                Log::error('Failed to delete unverified users scheduled task');
+            });
     }
 
     /**
