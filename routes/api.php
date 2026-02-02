@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LoginController;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,6 +18,10 @@ use Illuminate\Validation\ValidationException;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::post('login', [LoginController::class, 'login'])->middleware('guest');
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:api');
+Route::post('me', [LoginController::class, 'me'])->middleware('auth:api');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
