@@ -95,14 +95,14 @@
         </script>
         <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "Organization",
+      "@@context": "https://schema.org",
+      "@@type": "Organization",
       "name": "تونل زمان",
       "url": "https://accounts.irpsc.com/login",
-      "logo": "https://accounts.irpsc.com/images/logo/accounts.png",
+      "@@logo": "https://accounts.irpsc.com/images/logo/accounts.png",
       "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
       "contactPoint": {
-        "@type": "ContactPoint",
+        "@@type": "ContactPoint",
         "telephone": "+98-28-33696489",
         "contactType": "Customer Service",
         "availableLanguage": "Persian"
@@ -118,9 +118,9 @@
         "addressCountry": "IR"
       }, --}}
       "potentialAction": {
-        "@type": "LoginAction",
+        "@@type": "LoginAction",
         "target": "https://accounts.irpsc.com/login",
-        "query-input": "required name=username"
+        "@@query-input": "required name=username"
       }
     }
     </script>

@@ -21,7 +21,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|' . $this->username(),
             'password' => 'required|string',
         ]);
 
@@ -31,6 +31,8 @@ class LoginController extends Controller
         }
 
         if (Auth::attempt($request->only('email', 'password'))) {
+            $request->session()->regenerate();
+
             return response()->json([
                 'message' => 'Login successful',
                 'token' => $request->user()->createToken('api')->plainTextToken,
@@ -60,7 +62,19 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         $request->user()->tokens()->delete();
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    /**
+     * Get username to authentication
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'email';
     }
 }

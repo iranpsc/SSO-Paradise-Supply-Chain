@@ -6,6 +6,7 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 'email' => $notifiable->getEmailForPasswordReset(),
             ], false));
 
-            $expireTime = config('auth.passwords.'.config('auth.defaults.passwords').'.expire');
+            $expireTime = config('auth.passwords.' . config('auth.defaults.passwords') . '.expire');
 
             return (new MailMessage)
                 ->subject(__('Reset Your Password - Secure Account Access'))
@@ -70,5 +71,11 @@ class AppServiceProvider extends ServiceProvider
                     'expireTime' => $expireTime,
                 ]);
         });
+
+        Passport::enablePasswordGrant();
+
+        Passport::tokensExpireIn(now()->addMinutes(60));
+        Passport::refreshTokensExpireIn(now()->addMinutes(120));
+        Passport::personalAccessTokensExpireIn(now()->addMinutes(60));
     }
 }
