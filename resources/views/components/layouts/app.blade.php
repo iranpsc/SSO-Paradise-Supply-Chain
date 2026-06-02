@@ -35,6 +35,7 @@
                 "irpsc.com": "زنجیره تامین بهشت",
                 "3d.irpsc.com": "3 بعدی متا",
                 "rgb.irpsc.com": " متارنگ",
+                "metarang.com": " متارنگ",
                 "sale.irpsc.com": " فروشگاه مجازی",
                 "map.irpsc.com": " نقشه",
                 "uni.irpsc.com": "دانشگاه متاورس",
@@ -343,7 +344,7 @@
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
                             <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="متارنگ">
-                            <a href="https://rgb.irpsc.com/" class="text-[#868B90]">متارنگ</a>
+                            <a href="https://metarang.com/" class="text-[#868B90]">متارنگ</a>
                         </div>
                         <div class="pr-[20PX] p-[14px] flex items-center gap-4">
                             <img src="{{ asset('images/logo/supply.irpsc.png') }}" alt="تولید کنندگان">
@@ -561,7 +562,7 @@
                             </a>
                         </div>
                         <div class="w-6 h-6">
-                            <a href="https://rgb.irpsc.com" class="w-full">
+                            <a href="https://metarang.com" class="w-full">
                                 <img src="{{ asset('images/logo/metargb.irpsc.png') }}" alt="metargb"
                                     class="w-6 h-6">
                             </a>
@@ -687,7 +688,7 @@
                             زیرساخت های فعال زنجیره تامین بهشت
                         </p>
                         <p class="text-gray-600 dark:text-[#868B90] text-xs md:text-sm lg:text-xl font-normal">
-                            با ثبت نام در این صفحه شما میتوانید به تمامی سامانه های تحت پوشش هلدینگ زنجیره تامین بهداشت
+                            با ثبت نام در این صفحه شما میتوانید به تمامی سامانه های تحت پوشش هلدینگ زنجیره تامین بهشت
                             دسترسی مستقیم داشته باشید.
                         </p>
                     </div>
@@ -836,7 +837,7 @@
                         width="55" height="55" alt="بازار NFT" loading="lazy">
                 </a>
 
-                <a href="https://rgb.irpsc.com" target="_blank" title="متاورس رنگ">
+                <a href="https://metarang.com" target="_blank" title="متاورس رنگ">
                     <img src="https://irpsc.com/img-icon/rgb.png"
                         srcset="https://irpsc.com/img-icon/rgb.png 1x, https://irpsc.com/img-icon/rgb.png 2x"
                         width="55" height="55" alt="متاورس رنگ" loading="lazy">
@@ -890,7 +891,7 @@
                     <div class="flex flex-col items-center justify-center gap-8">
                         <p class="text-2xl text-[#4C4C4C] dark:text-[#D4D4D4]">به شبکه های ما ملحق شوید.</p>
                         <div class="grid grid-cols-5  gap-3 md:gap-4">
-                            <a aria-label="social" href="https://rgb.irpsc.com/[lang]/undefined">
+                            <a aria-label="social" href="https://metarang.com/[lang]/undefined">
                                 <svg width="63" height="64" viewBox="0 0 63 64" fill="none"
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="63" height="64" fill="url(#pattern0_611_7340)" />
