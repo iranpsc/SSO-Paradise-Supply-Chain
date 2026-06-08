@@ -142,5 +142,7 @@
     "Authorization Request": "درخواست اجازه دسترسی",
     "Authorization": "اجازه دسترسی",
     "Go to Gmail": "رفتن به Gmail",
-    "QZParadise": "زنچیره تامین بهشت"
+    "QZParadise": "زنچیره تامین بهشت",
+    "Wallet Login": "ورود با کیف پول",
+    "The current password field is required.": "رمز عبور فعلی الزامی است."
 }

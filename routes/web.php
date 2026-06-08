@@ -8,6 +8,7 @@ use App\Http\Controllers\PersonalInfoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Web3AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,9 @@ use App\Http\Controllers\UserController;
 
 Route::redirect('/', '/home');
 
+Route::get('/web3/nonce', [Web3AuthController::class, 'getNonce']);
+Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature']);
+
 Route::middleware(['auth' , 'verified', 'auth.session'])->group(function() {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::singleton('account', AccountController::class);
@@ -30,7 +34,6 @@ Route::middleware(['auth' , 'verified', 'auth.session'])->group(function() {
     Route::put('/change-password', [NewPasswordController::class, 'update'])->name('password.new');
     Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 });
-
 
 Auth::routes();
 

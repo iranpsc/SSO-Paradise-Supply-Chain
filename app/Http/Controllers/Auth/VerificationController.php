@@ -59,7 +59,7 @@ class VerificationController extends Controller
                 ? $parsedUrl['scheme'] . '://' . $parsedUrl['host']
                 : null;
 
-            if ($domain !== 'https://rgb.irpsc.com') {
+            if ($domain !== 'https://metarang.com') {
                 return redirect()->route('home')->with('warning', 'Invalid redirect URL.');
             }
         }
