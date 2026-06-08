@@ -12,8 +12,10 @@
                         @csrf
                         @method('PUT')
 
+                        @if(Auth::user()->password)
                         <x-form.text :label="__('Current Password')" for="current_password" name="current_password" type="current_password"
                             requried />
+                        @endif
 
                         <x-form.text :label="__('New Password')" for="password" name="password" type="password" required />
 
