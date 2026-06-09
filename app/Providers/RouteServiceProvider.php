@@ -28,6 +28,14 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        RateLimiter::for('web3', function (Request $request) {
+            $key = $request->user()?->id
+                ? 'web3-user-' . $request->user()->id
+                : 'web3-ip-' . $request->ip();
+
+            return Limit::perMinute(10)->by($key);
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
