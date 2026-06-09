@@ -84,25 +84,28 @@
     </div>
 
     @if (!Auth::user()->wallet_address)
+        @php
+            $walletApiMessages = [
+                'Wallet already connected to this account.' => __('Wallet already connected to this account.'),
+                'This wallet is already linked to another account.' => __('This wallet is already linked to another account.'),
+                'Nonce expired or not found. Please try again.' => __('Nonce expired or not found. Please try again.'),
+                'Signature verification failed' => __('Signature verification failed'),
+                'Signature verification failed.' => __('Signature verification failed.'),
+                'Wallet connected successfully' => __('Wallet connected successfully'),
+                'Too Many Attempts.' => __('Too Many Attempts.'),
+                'Failed to retrieve authentication nonce.' => __('Failed to retrieve authentication nonce.'),
+                'Web3 wallet not found. Please install MetaMask or a compatible wallet.' => __('Web3 wallet not found. Please install MetaMask or a compatible wallet.'),
+                'Connection or signature request was rejected.' => __('Connection or signature request was rejected.'),
+                'Something went wrong. Please try again.' => __('Something went wrong. Please try again.'),
+                'The address field format is invalid.' => __('The address field format is invalid.'),
+                'The address field is required.' => __('The address field is required.'),
+                'The signature field format is invalid.' => __('The signature field format is invalid.'),
+                'The signature field is required.' => __('The signature field is required.'),
+            ];
+        @endphp
         @push('scripts')
             <script>
-                const walletApiMessages = @json([
-                    'Wallet already connected to this account.' => __('Wallet already connected to this account.'),
-                    'This wallet is already linked to another account.' => __('This wallet is already linked to another account.'),
-                    'Nonce expired or not found. Please try again.' => __('Nonce expired or not found. Please try again.'),
-                    'Signature verification failed' => __('Signature verification failed'),
-                    'Signature verification failed.' => __('Signature verification failed.'),
-                    'Wallet connected successfully' => __('Wallet connected successfully'),
-                    'Too Many Attempts.' => __('Too Many Attempts.'),
-                    'Failed to retrieve authentication nonce.' => __('Failed to retrieve authentication nonce.'),
-                    'Web3 wallet not found. Please install MetaMask or a compatible wallet.' => __('Web3 wallet not found. Please install MetaMask or a compatible wallet.'),
-                    'Connection or signature request was rejected.' => __('Connection or signature request was rejected.'),
-                    'Something went wrong. Please try again.' => __('Something went wrong. Please try again.'),
-                    'The address field format is invalid.' => __('The address field format is invalid.'),
-                    'The address field is required.' => __('The address field is required.'),
-                    'The signature field format is invalid.' => __('The signature field format is invalid.'),
-                    'The signature field is required.' => __('The signature field is required.'),
-                ]);
+                const walletApiMessages = @json($walletApiMessages);
 
                 function translateWalletMessage(message) {
                     return walletApiMessages[message] || message;
