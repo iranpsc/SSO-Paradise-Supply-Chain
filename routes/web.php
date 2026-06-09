@@ -23,11 +23,17 @@ use App\Http\Controllers\Web3AuthController;
 
 Route::redirect('/', '/home');
 
-Route::get('/web3/nonce', [Web3AuthController::class, 'getNonce']);
-Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature']);
+Route::middleware(['throttle:web3', 'guest'])->group(function () {
+    Route::get('/web3/nonce', [Web3AuthController::class, 'getLoginNonce']);
+    Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature']);
+});
 
-Route::middleware(['auth' , 'verified', 'auth.session'])->group(function() {
+Route::middleware(['auth', 'verified', 'auth.session'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::middleware('throttle:web3')->group(function () {
+        Route::get('/web3/link/nonce', [Web3AuthController::class, 'getLinkNonce'])->name('web3.link.nonce');
+        Route::post('/web3/link', [Web3AuthController::class, 'linkWallet'])->name('web3.link');
+    });
     Route::singleton('account', AccountController::class);
     Route::singleton('personal-info', PersonalInfoController::class);
     Route::get('/change-password', [NewPasswordController::class, 'showForm'])->name('password.edit');
