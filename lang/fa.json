@@ -159,5 +159,16 @@
     "Something went wrong. Please try again.": "خطایی رخ داد. لطفا دوباره تلاش کنید.",
     "Connection or signature request was rejected.": "درخواست امضا یا اتصال توسط کاربر رد شد.",
     "Status": "وضعیت",
+    "Wallet already connected to this account.": "کیف پول قبلاً به این حساب متصل شده است.",
+    "This wallet is already linked to another account.": "این کیف پول قبلاً به حساب دیگری متصل شده است.",
+    "Nonce expired or not found. Please try again.": "کد یکبار مصرف منقضی شده یا یافت نشد. لطفاً دوباره تلاش کنید.",
+    "Signature verification failed": "تایید امضا ناموفق بود.",
+    "Wallet connected successfully": "کیف پول با موفقیت متصل شد.",
+    "Too Many Attempts.": "تعداد درخواست‌ها بیش از حد مجاز است. لطفاً کمی بعد دوباره تلاش کنید.",
+    "The address field format is invalid.": "فرمت آدرس کیف پول نامعتبر است.",
+    "The address field is required.": "وارد کردن آدرس کیف پول الزامی است.",
+    "The signature field format is invalid.": "فرمت امضا نامعتبر است.",
+    "The signature field is required.": "وارد کردن امضا الزامی است.",
+    "Wallet connection failed": "اتصال کیف پول ناموفق بود.",
     "The current password field is required.": "رمز عبور فعلی الزامی است."
 }

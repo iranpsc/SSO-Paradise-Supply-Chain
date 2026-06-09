@@ -41,6 +41,9 @@
                             value="{{ Auth::user()->wallet_address }}" disabled>
                     </div>
                 @else
+                    <div id="wallet-error"
+                        class="hidden rounded-xl border-2 border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 px-4 py-3 text-sm w-full mb-5"
+                        role="alert"></div>
                     <div class="flex flex-col gap-5 md:flex-row items-center justify-between">
                         <label class="form-label">{{ __('Status') }}</label>
                         <span
@@ -81,16 +84,76 @@
     </div>
 
     @if (!Auth::user()->wallet_address)
+        @php
+            $walletApiMessages = [
+                'Wallet already connected to this account.' => __('Wallet already connected to this account.'),
+                'This wallet is already linked to another account.' => __('This wallet is already linked to another account.'),
+                'Nonce expired or not found. Please try again.' => __('Nonce expired or not found. Please try again.'),
+                'Signature verification failed' => __('Signature verification failed'),
+                'Signature verification failed.' => __('Signature verification failed.'),
+                'Wallet connected successfully' => __('Wallet connected successfully'),
+                'Too Many Attempts.' => __('Too Many Attempts.'),
+                'Failed to retrieve authentication nonce.' => __('Failed to retrieve authentication nonce.'),
+                'Web3 wallet not found. Please install MetaMask or a compatible wallet.' => __('Web3 wallet not found. Please install MetaMask or a compatible wallet.'),
+                'Connection or signature request was rejected.' => __('Connection or signature request was rejected.'),
+                'Something went wrong. Please try again.' => __('Something went wrong. Please try again.'),
+                'The address field format is invalid.' => __('The address field format is invalid.'),
+                'The address field is required.' => __('The address field is required.'),
+                'The signature field format is invalid.' => __('The signature field format is invalid.'),
+                'The signature field is required.' => __('The signature field is required.'),
+            ];
+        @endphp
         @push('scripts')
             <script>
+                const walletApiMessages = @json($walletApiMessages);
+
+                function translateWalletMessage(message) {
+                    return walletApiMessages[message] || message;
+                }
+
+                function showWalletError(messages) {
+                    const errorEl = document.getElementById('wallet-error');
+                    const items = Array.isArray(messages) ? messages : [messages];
+
+                    errorEl.replaceChildren();
+                    items.filter(Boolean).forEach((message) => {
+                        const paragraph = document.createElement('p');
+                        paragraph.textContent = translateWalletMessage(message);
+                        errorEl.appendChild(paragraph);
+                    });
+                    errorEl.classList.remove('hidden');
+                }
+
+                function hideWalletError() {
+                    const errorEl = document.getElementById('wallet-error');
+                    errorEl.innerHTML = '';
+                    errorEl.classList.add('hidden');
+                }
+
+                async function parseApiError(response, fallbackMessage) {
+                    const data = await response.json().catch(() => ({}));
+
+                    if (data.errors && typeof data.errors === 'object') {
+                        return Object.values(data.errors).flat();
+                    }
+
+                    if (data.message) {
+                        return [data.message];
+                    }
+
+                    return [fallbackMessage];
+                }
+
                 async function connectWallet() {
                     const btn = document.getElementById('connect-wallet-btn');
                     const icon = document.getElementById('wallet-icon');
                     const spinner = document.getElementById('wallet-spinner');
                     const text = document.getElementById('wallet-text');
 
+                    hideWalletError();
+
                     if (!window.ethereum) {
-                        alert("{{ __('Web3 wallet not found. Please install MetaMask or a compatible wallet.') }}");
+                        showWalletError(['Web3 wallet not found. Please install MetaMask or a compatible wallet.']);
                         return;
                     }
 
@@ -108,7 +171,11 @@
 
                         const nonceResponse = await fetch(`{{ route('web3.link.nonce') }}?address=${address}`);
                         if (!nonceResponse.ok) {
-                            throw new Error("{{ __('Failed to retrieve authentication nonce.') }}");
+                            showWalletError(await parseApiError(
+                                nonceResponse,
+                                "{{ __('Failed to retrieve authentication nonce.') }}"
+                            ));
+                            return;
                         }
                         const nonceData = await nonceResponse.json();
 
@@ -139,25 +206,27 @@
                             })
                         });
 
-                        const linkData = await linkResponse.json();
-
                         if (linkResponse.ok) {
                             text.innerText = "{{ __('Wallet connected successfully.') }}";
                             window.location.reload();
-                        } else {
-                            throw new Error(linkData.message || "{{ __('Signature verification failed.') }}");
+                            return;
                         }
+
+                        showWalletError(await parseApiError(
+                            linkResponse,
+                            "{{ __('Signature verification failed.') }}"
+                        ));
                     } catch (error) {
                         console.error("Web3 link error:", error);
 
-                        let errorMsg = "{{ __('Something went wrong. Please try again.') }}";
                         if (error.code === 4001) {
-                            errorMsg = "{{ __('Connection or signature request was rejected.') }}";
+                            showWalletError(['Connection or signature request was rejected.']);
                         } else if (error.message) {
-                            errorMsg = error.message;
+                            showWalletError([error.message]);
+                        } else {
+                            showWalletError(['Something went wrong. Please try again.']);
                         }
-                        alert(errorMsg);
-
+                    } finally {
                         btn.disabled = false;
                         icon.classList.remove('hidden');
                         spinner.classList.add('hidden');
