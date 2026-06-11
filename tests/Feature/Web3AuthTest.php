@@ -110,6 +110,28 @@ class Web3AuthTest extends TestCase
     }
 
     /** @test */
+    public function it_redirects_browser_requests_to_intended_url_after_wallet_authentication()
+    {
+        $intendedUrl = url('/oauth/authorize?client_id=test&redirect_uri=https://example.com/callback');
+        session(['url.intended' => $intendedUrl]);
+
+        $key = $this->ec->genKeyPair();
+        $publicKey = $key->getPublic()->encode('hex');
+        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+
+        $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
+        $nonce = $nonceResponse->json('nonce');
+        $signature = $this->signMessage($key, $nonce);
+
+        $verifyResponse = $this->post('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ]);
+
+        $verifyResponse->assertRedirect($intendedUrl);
+    }
+
+    /** @test */
     public function it_prevents_replay_attacks_by_consuming_nonce()
     {
         $key = $this->ec->genKeyPair();
