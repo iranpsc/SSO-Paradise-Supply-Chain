@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Elliptic\EC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -102,7 +104,17 @@ class Web3AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['message' => 'Authenticated successfully']);
+        if (!$user->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'Authenticated successfully',
+                'redirect' => route('verification.notice'),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Authenticated successfully',
+            'redirect' => redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl(),
+        ]);
     }
 
     public function linkWallet(Request $request)

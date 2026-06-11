@@ -98,7 +98,7 @@
                         icon.classList.add('hidden');
                         spinner.classList.remove('hidden');
                         const originalText = text.innerText;
-                        text.innerText = "در حال اتصال...";     
+                        text.innerText = "در حال اتصال...";
 
                         try {
                             // 2. Request the user's wallet address
@@ -147,14 +147,14 @@
 
                             if (verifyResponse.ok) {
                                 text.innerText = "ورود موفقیت‌آمیز...";
-                                window.location.href = '/home';
+                                window.location.href = verifyData.redirect || '/home';
                             } else {
                                 throw new Error(verifyData.message || "تایید امضا ناموفق بود.");
                             }
 
                         } catch (error) {
                             console.error("Web3 auth error:", error);
-                            
+
                             // User rejected connection or sign request
                             let errorMsg = "خطایی رخ داد. لطفا دوباره تلاش کنید.";
                             if (error.code === 4001) {
