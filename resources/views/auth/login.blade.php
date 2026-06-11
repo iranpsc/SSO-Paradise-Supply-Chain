@@ -80,6 +80,14 @@
                         </span>
                     </button>
                 </div>
+                <form id="web3-verify-form" method="POST" action="{{ route('web3.verify') }}" class="hidden">
+                    @csrf
+                    <input type="hidden" name="address" value="">
+                    <input type="hidden" name="signature" value="">
+                </form>
+                @if ($errors->has('wallet'))
+                    <p class="mt-4 text-center text-sm text-red-600 dark:text-red-400">{{ $errors->first('wallet') }}</p>
+                @endif
                 <script>
                     async function connectWallet() {
                         const btn = document.getElementById('connect-wallet-btn');
@@ -98,7 +106,7 @@
                         icon.classList.add('hidden');
                         spinner.classList.remove('hidden');
                         const originalText = text.innerText;
-                        text.innerText = "در حال اتصال...";     
+                        text.innerText = "در حال اتصال...";
 
                         try {
                             // 2. Request the user's wallet address
@@ -108,7 +116,9 @@
                             const address = accounts[0];
 
                             // 3. Fetch the Nonce from your Laravel backend
-                            const nonceResponse = await fetch(`/web3/nonce?address=${address}`);
+                            const nonceResponse = await fetch(`/web3/nonce?address=${address}`, {
+                                credentials: 'same-origin',
+                            });
                             if (!nonceResponse.ok) {
                                 throw new Error("دریافت کد یکبار مصرف با خطا مواجه شد.");
                             }
@@ -130,31 +140,16 @@
 
                             text.innerText = "در حال تایید امضا...";
 
-                            // 5. Send the signature back to Laravel for verification
-                            const verifyResponse = await fetch('/web3/verify', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                                },
-                                body: JSON.stringify({
-                                    address: address,
-                                    signature: signature
-                                })
-                            });
-
-                            const verifyData = await verifyResponse.json();
-
-                            if (verifyResponse.ok) {
-                                text.innerText = "ورود موفقیت‌آمیز...";
-                                window.location.href = '/home';
-                            } else {
-                                throw new Error(verifyData.message || "تایید امضا ناموفق بود.");
-                            }
+                            // 5. Submit via form POST so Laravel can issue a server-side
+                            // redirect to the Passport authorize URL (url.intended), matching email login.
+                            const verifyForm = document.getElementById('web3-verify-form');
+                            verifyForm.querySelector('[name="address"]').value = address;
+                            verifyForm.querySelector('[name="signature"]').value = signature;
+                            verifyForm.submit();
 
                         } catch (error) {
                             console.error("Web3 auth error:", error);
-                            
+
                             // User rejected connection or sign request
                             let errorMsg = "خطایی رخ داد. لطفا دوباره تلاش کنید.";
                             if (error.code === 4001) {

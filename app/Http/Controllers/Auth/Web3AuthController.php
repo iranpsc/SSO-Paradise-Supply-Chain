@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use Elliptic\EC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +78,11 @@ class Web3AuthController extends Controller
                 'ip' => $request->ip(),
             ]);
 
-            return response()->json(['message' => 'Nonce expired or not found. Please try again.'], 422);
+            return $this->walletLoginError(
+                $request,
+                'Nonce expired or not found. Please try again.',
+                422
+            );
         }
 
         if (!$this->isValidWalletSignature($address, $request->signature, $nonce)) {
@@ -85,7 +91,7 @@ class Web3AuthController extends Controller
                 'ip' => $request->ip(),
             ]);
 
-            return response()->json(['message' => 'Signature verification failed'], 401);
+            return $this->walletLoginError($request, 'Signature verification failed', 401);
         }
 
         $user = User::where('wallet_address', $address)->first();
@@ -99,10 +105,42 @@ class Web3AuthController extends Controller
             $user->personalInfo()->create();
         }
 
+        return $this->completeWalletLogin($request, $user);
+    }
+
+    private function completeWalletLogin(Request $request, User $user)
+    {
         Auth::login($user);
         $request->session()->regenerate();
 
-        return response()->json(['message' => 'Authenticated successfully']);
+        if (!$user->hasVerifiedEmail()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Authenticated successfully',
+                    'redirect' => route('verification.notice'),
+                ]);
+            }
+
+            return redirect()->route('verification.notice');
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Authenticated successfully',
+                'redirect' => redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl(),
+            ]);
+        }
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
+    private function walletLoginError(Request $request, string $message, int $status)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $message], $status);
+        }
+
+        return back()->withErrors(['wallet' => $message]);
     }
 
     public function linkWallet(Request $request)
