@@ -40,7 +40,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     protected $hidden = [
         'password',
         'remember_token',
-        'wallet_address',
         'nonce',
     ];
 
