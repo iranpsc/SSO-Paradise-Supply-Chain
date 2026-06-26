@@ -1,114 +1,53 @@
-<div align="center">
+# SSO - Paradise Supply Chain
 
-# SSO Paradise Supply Chain
+A centralized **Single Sign-On (SSO)** application built with Laravel for the Paradise Supply Chain ecosystem.
 
-Secure, Scalable & Modern Single Sign-On (SSO) Service for Paradise Supply Chain
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js)]()
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)]()
-[![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?logo=typescript)]()
-
-</div>
+This project provides a secure authentication gateway that enables users to access multiple Paradise Supply Chain services using a single account. It centralizes authentication, session management, and authorization while delivering a consistent login experience across integrated applications.
 
 ---
 
-# 📖 Overview
+## Features
 
-**SSO Paradise Supply Chain** is a centralized authentication and authorization service designed for the Paradise Supply Chain ecosystem.
-
-It enables users to authenticate once and securely access multiple applications while providing a unified identity management experience.
-
-The project focuses on:
-
-- Secure Authentication
-- Centralized User Management
-- Token-based Authorization
-- Scalable Architecture
-- Enterprise-ready Security
-
----
-
-# ✨ Features
-
-- 🔐 Secure Login & Authentication
-- 👤 User Identity Management
-- 🎫 JWT Access & Refresh Tokens
-- 🔄 Token Refresh Mechanism
-- 🛡️ Role-Based Access Control (RBAC)
-- 🔑 Password Recovery
-- 📧 Email Verification
-- 📱 Responsive User Interface
-- ⚡ Built with Modern Web Technologies
-- 🌍 RESTful API Integration
+- Single Sign-On (SSO)
+- Secure User Authentication
+- Session Management
+- Role-Based Authorization
+- Protected Routes
+- REST API Integration
+- CSRF Protection
+- Form Validation
+- Responsive User Interface
+- Error Handling
 
 ---
 
-# 🏗 Architecture
+## Tech Stack
 
-```
-                +----------------+
-                |    Client App  |
-                +-------+--------+
-                        |
-                        |
-                 Authentication
-                        |
-                        ▼
-             +----------------------+
-             |      SSO Server      |
-             +----------+-----------+
-                        |
-        +---------------+----------------+
-        |                                |
-        ▼                                ▼
- User Database                   Token Service
-        |
-        ▼
- Protected Applications
-```
+- Laravel
+- PHP
+- Blade
+- Tailwind CSS
+- Vite
+- JavaScript
+- MySQL
+- Composer
+- npm
 
 ---
 
-# 🛠 Tech Stack
+## Requirements
 
-| Technology | Description |
-|------------|-------------|
-| Next.js | React Framework |
-| React | UI Library |
-| TypeScript | Type Safety |
-| Tailwind CSS | Styling |
-| Axios | HTTP Client |
-| JWT | Authentication |
-| REST API | Communication |
+- PHP 8.2 or later
+- Composer
+- Node.js 18 or later
+- npm
+- MySQL / MariaDB
 
 ---
 
-# 📂 Project Structure
+## Installation
 
-```
-src/
-│
-├── app/
-├── components/
-│   ├── common/
-│   ├── layout/
-│   └── features/
-│
-├── hooks/
-├── services/
-├── utils/
-├── types/
-├── store/
-├── styles/
-└── assets/
-```
-
----
-
-# 🚀 Getting Started
-
-## Clone Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/iranpsc/SSO-Paradise-Supply-Chain.git
@@ -118,178 +57,231 @@ git clone https://github.com/iranpsc/SSO-Paradise-Supply-Chain.git
 cd SSO-Paradise-Supply-Chain
 ```
 
----
+### 2. Install dependencies
 
-## Install Dependencies
+Install PHP dependencies:
 
-Using npm
+```bash
+composer install
+```
+
+Install frontend dependencies:
 
 ```bash
 npm install
 ```
 
-or
+### 3. Configure environment
+
+Copy the environment file:
 
 ```bash
-yarn
+cp .env.example .env
 ```
 
-or
+Generate the application key:
 
 ```bash
-pnpm install
+php artisan key:generate
+```
+
+Update your database configuration inside the `.env` file.
+
+### 4. Run database migrations
+
+```bash
+php artisan migrate
+```
+
+### 5. Start the development servers
+
+Run Laravel:
+
+```bash
+php artisan serve
+```
+
+Run Vite:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```
+http://127.0.0.1:8000
 ```
 
 ---
 
 ## Environment Variables
 
-Create a `.env.local` file.
+Example configuration:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_APP_NAME=Paradise SSO
+APP_NAME="SSO Paradise Supply Chain"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+```
+
+---
+
+## Project Structure
+
+```
+app/
+bootstrap/
+config/
+database/
+public/
+resources/
+├── css/
+├── js/
+└── views/
+routes/
+storage/
+tests/
+vendor/
+```
+
+---
+
+## Authentication Flow
+
+```
+          User
+            │
+            ▼
+       Login Page
+            │
+            ▼
+ Authentication Service
+            │
+            ▼
+   Session / Access Token
+            │
+            ▼
+   Protected Applications
+```
+
+---
+
+## Available Commands
+
+### Backend
+
+Start the development server:
+
+```bash
+php artisan serve
+```
+
+Run database migrations:
+
+```bash
+php artisan migrate
+```
+
+Clear all caches:
+
+```bash
+php artisan optimize:clear
+```
+
+Run tests:
+
+```bash
+php artisan test
+```
+
+### Frontend
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+Build production assets:
+
+```bash
+npm run build
 ```
 
 ---
 
 ## Development
 
+During development, run both services simultaneously:
+
+Backend:
+
+```bash
+php artisan serve
+```
+
+Frontend:
+
 ```bash
 npm run dev
 ```
 
-Open
-
-```
-http://localhost:3000
-```
+Laravel handles the backend application while Vite compiles frontend assets and provides Hot Module Replacement (HMR).
 
 ---
 
-## Production Build
+## Security
 
-```bash
-npm run build
-```
+This project follows Laravel's built-in security best practices, including:
 
-```bash
-npm start
-```
-
----
-
-# 🔑 Authentication Flow
-
-```text
-User
- │
- ▼
-Login
- │
- ▼
-SSO Server
- │
- ├── Validate Credentials
- ├── Generate JWT
- └── Generate Refresh Token
- │
- ▼
-Client
- │
- ▼
-Protected APIs
-```
-
----
-
-# 📡 API
-
-Example Login Request
-
-```http
-POST /auth/login
-```
-
-Request
-
-```json
-{
-  "username": "user@example.com",
-  "password": "********"
-}
-```
-
-Response
-
-```json
-{
-  "accessToken": "...",
-  "refreshToken": "...",
-  "expiresIn": 3600
-}
-```
-
----
-
-# 🔒 Security
-
-- JWT Authentication
-- Refresh Tokens
-- Protected Routes
-- HTTPS Ready
-- Secure Cookie Support
+- CSRF Protection
 - Input Validation
 - Authentication Middleware
+- Authorization
+- Secure Session Handling
+- Encrypted Configuration
+- XSS Protection
 
 ---
 
-# 📜 Available Scripts
-
-```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
-```
-
----
-
-# 🤝 Contributing
+## Contributing
 
 Contributions are welcome.
 
-1. Fork the repository
-2. Create your feature branch
+1. Fork the repository.
+
+2. Create a feature branch.
 
 ```bash
-git checkout -b feature/amazing-feature
+git checkout -b feature/your-feature
 ```
 
-3. Commit your changes
+3. Commit your changes.
 
 ```bash
-git commit -m "Add amazing feature"
+git commit -m "Add your feature"
 ```
 
-4. Push to the branch
+4. Push the branch.
 
 ```bash
-git push origin feature/amazing-feature
+git push origin feature/your-feature
 ```
 
-5. Open a Pull Request
+5. Open a Pull Request.
 
 ---
 
-# 📄 License
+## License
 
-This project is licensed under the MIT License.
-
----
-
-<div align="center">
-
-Made with ❤️ by Paradise Supply Chain Team
-
-</div>
+This project is proprietary software developed for the Paradise Supply Chain ecosystem. Unauthorized distribution, modification, or commercial use is prohibited unless explicitly permitted by the project owner.
