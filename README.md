@@ -1,66 +1,295 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# SSO Paradise Supply Chain
 
-## About Laravel
+Secure, Scalable & Modern Single Sign-On (SSO) Service for Paradise Supply Chain
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js)]()
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?logo=typescript)]()
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+# 📖 Overview
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**SSO Paradise Supply Chain** is a centralized authentication and authorization service designed for the Paradise Supply Chain ecosystem.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+It enables users to authenticate once and securely access multiple applications while providing a unified identity management experience.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The project focuses on:
 
-## Laravel Sponsors
+- Secure Authentication
+- Centralized User Management
+- Token-based Authorization
+- Scalable Architecture
+- Enterprise-ready Security
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+# ✨ Features
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- 🔐 Secure Login & Authentication
+- 👤 User Identity Management
+- 🎫 JWT Access & Refresh Tokens
+- 🔄 Token Refresh Mechanism
+- 🛡️ Role-Based Access Control (RBAC)
+- 🔑 Password Recovery
+- 📧 Email Verification
+- 📱 Responsive User Interface
+- ⚡ Built with Modern Web Technologies
+- 🌍 RESTful API Integration
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 🏗 Architecture
 
-## Code of Conduct
+```
+                +----------------+
+                |    Client App  |
+                +-------+--------+
+                        |
+                        |
+                 Authentication
+                        |
+                        ▼
+             +----------------------+
+             |      SSO Server      |
+             +----------+-----------+
+                        |
+        +---------------+----------------+
+        |                                |
+        ▼                                ▼
+ User Database                   Token Service
+        |
+        ▼
+ Protected Applications
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+# 🛠 Tech Stack
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Technology | Description |
+|------------|-------------|
+| Next.js | React Framework |
+| React | UI Library |
+| TypeScript | Type Safety |
+| Tailwind CSS | Styling |
+| Axios | HTTP Client |
+| JWT | Authentication |
+| REST API | Communication |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 📂 Project Structure
+
+```
+src/
+│
+├── app/
+├── components/
+│   ├── common/
+│   ├── layout/
+│   └── features/
+│
+├── hooks/
+├── services/
+├── utils/
+├── types/
+├── store/
+├── styles/
+└── assets/
+```
+
+---
+
+# 🚀 Getting Started
+
+## Clone Repository
+
+```bash
+git clone https://github.com/iranpsc/SSO-Paradise-Supply-Chain.git
+```
+
+```bash
+cd SSO-Paradise-Supply-Chain
+```
+
+---
+
+## Install Dependencies
+
+Using npm
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn
+```
+
+or
+
+```bash
+pnpm install
+```
+
+---
+
+## Environment Variables
+
+Create a `.env.local` file.
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_APP_NAME=Paradise SSO
+```
+
+---
+
+## Development
+
+```bash
+npm run dev
+```
+
+Open
+
+```
+http://localhost:3000
+```
+
+---
+
+## Production Build
+
+```bash
+npm run build
+```
+
+```bash
+npm start
+```
+
+---
+
+# 🔑 Authentication Flow
+
+```text
+User
+ │
+ ▼
+Login
+ │
+ ▼
+SSO Server
+ │
+ ├── Validate Credentials
+ ├── Generate JWT
+ └── Generate Refresh Token
+ │
+ ▼
+Client
+ │
+ ▼
+Protected APIs
+```
+
+---
+
+# 📡 API
+
+Example Login Request
+
+```http
+POST /auth/login
+```
+
+Request
+
+```json
+{
+  "username": "user@example.com",
+  "password": "********"
+}
+```
+
+Response
+
+```json
+{
+  "accessToken": "...",
+  "refreshToken": "...",
+  "expiresIn": 3600
+}
+```
+
+---
+
+# 🔒 Security
+
+- JWT Authentication
+- Refresh Tokens
+- Protected Routes
+- HTTPS Ready
+- Secure Cookie Support
+- Input Validation
+- Authentication Middleware
+
+---
+
+# 📜 Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create your feature branch
+
+```bash
+git checkout -b feature/amazing-feature
+```
+
+3. Commit your changes
+
+```bash
+git commit -m "Add amazing feature"
+```
+
+4. Push to the branch
+
+```bash
+git push origin feature/amazing-feature
+```
+
+5. Open a Pull Request
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+
+Made with ❤️ by Paradise Supply Chain Team
+
+</div>
