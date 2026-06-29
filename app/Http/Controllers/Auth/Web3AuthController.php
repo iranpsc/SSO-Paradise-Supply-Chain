@@ -94,6 +94,12 @@ class Web3AuthController extends Controller
             return $this->walletLoginError($request, 'Signature verification failed', 401);
         }
 
+        $authenticatedUser = $request->user();
+
+        if ($authenticatedUser) {
+            return $this->respondToWalletLink($request, $this->attachWallet($authenticatedUser, $address));
+        }
+
         $user = User::where('wallet_address', $address)->first();
         if (!$user) {
             $user = new User();
@@ -174,7 +180,12 @@ class Web3AuthController extends Controller
             return response()->json(['message' => 'Signature verification failed'], 401);
         }
 
-        $result = DB::transaction(function () use ($user, $address) {
+        return $this->respondToWalletLink($request, $this->attachWallet($user, $address));
+    }
+
+    private function attachWallet(User $user, string $address): string
+    {
+        return DB::transaction(function () use ($user, $address) {
             $lockedUser = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
 
             if ($lockedUser->wallet_address) {
@@ -190,11 +201,23 @@ class Web3AuthController extends Controller
 
             return 'success';
         });
+    }
 
+    private function respondToWalletLink(Request $request, string $result)
+    {
         return match ($result) {
-            'already_connected' => response()->json(['message' => 'Wallet already connected to this account.'], 422),
-            'already_linked' => response()->json(['message' => 'This wallet is already linked to another account.'], 422),
-            default => response()->json(['message' => 'Wallet connected successfully']),
+            'already_connected' => $request->expectsJson()
+                ? response()->json(['message' => 'Wallet already connected to this account.'], 422)
+                : back()->withErrors(['wallet' => 'Wallet already connected to this account.']),
+            'already_linked' => $request->expectsJson()
+                ? response()->json(['message' => 'This wallet is already linked to another account.'], 422)
+                : back()->withErrors(['wallet' => 'This wallet is already linked to another account.']),
+            default => $request->expectsJson()
+                ? response()->json([
+                    'message' => 'Wallet connected successfully',
+                    'redirect' => redirect()->intended(RouteServiceProvider::HOME)->getTargetUrl(),
+                ])
+                : redirect()->intended(RouteServiceProvider::HOME),
         };
     }
 

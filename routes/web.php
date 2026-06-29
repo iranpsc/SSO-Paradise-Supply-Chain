@@ -25,8 +25,11 @@ Route::redirect('/', '/home');
 
 Route::middleware(['throttle:web3', 'guest'])->group(function () {
     Route::get('/web3/nonce', [Web3AuthController::class, 'getLoginNonce']);
-    Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature'])->name('web3.verify');
 });
+
+Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature'])
+    ->middleware('throttle:web3')
+    ->name('web3.verify');
 
 Route::middleware(['auth', 'verified', 'auth.session'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');

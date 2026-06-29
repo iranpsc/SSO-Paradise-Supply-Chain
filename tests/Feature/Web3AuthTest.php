@@ -279,6 +279,37 @@ class Web3AuthTest extends TestCase
     }
 
     /** @test */
+    public function authenticated_user_connecting_wallet_via_verify_does_not_create_new_user_or_code()
+    {
+        $user = User::factory()->create(['code' => 'hm-2000001']);
+
+        $key = $this->ec->genKeyPair();
+        $publicKey = $key->getPublic()->encode('hex');
+        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+
+        $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
+        $nonce = $nonceResponse->json('nonce');
+        $signature = $this->signMessage($key, $nonce);
+
+        $verifyResponse = $this->actingAs($user)->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ]);
+
+        $verifyResponse->assertStatus(200);
+        $verifyResponse->assertJson(['message' => 'Wallet connected successfully']);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'wallet_address' => strtolower($address),
+            'code' => 'hm-2000001',
+        ]);
+
+        $this->assertDatabaseCount('users', 1);
+        $this->assertAuthenticatedAs($user);
+    }
+
+    /** @test */
     public function authenticated_users_cannot_request_login_nonce()
     {
         $user = User::factory()->create();
