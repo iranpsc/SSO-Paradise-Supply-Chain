@@ -1,66 +1,287 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SSO - Paradise Supply Chain
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A centralized **Single Sign-On (SSO)** application built with Laravel for the Paradise Supply Chain ecosystem.
 
-## About Laravel
+This project provides a secure authentication gateway that enables users to access multiple Paradise Supply Chain services using a single account. It centralizes authentication, session management, and authorization while delivering a consistent login experience across integrated applications.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Single Sign-On (SSO)
+- Secure User Authentication
+- Session Management
+- Role-Based Authorization
+- Protected Routes
+- REST API Integration
+- CSRF Protection
+- Form Validation
+- Responsive User Interface
+- Error Handling
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Laravel
+- PHP
+- Blade
+- Tailwind CSS
+- Vite
+- JavaScript
+- MySQL
+- Composer
+- npm
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2 or later
+- Composer
+- Node.js 18 or later
+- npm
+- MySQL / MariaDB
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/iranpsc/SSO-Paradise-Supply-Chain.git
+```
+
+```bash
+cd SSO-Paradise-Supply-Chain
+```
+
+### 2. Install dependencies
+
+Install PHP dependencies:
+
+```bash
+composer install
+```
+
+Install frontend dependencies:
+
+```bash
+npm install
+```
+
+### 3. Configure environment
+
+Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+Update your database configuration inside the `.env` file.
+
+### 4. Run database migrations
+
+```bash
+php artisan migrate
+```
+
+### 5. Start the development servers
+
+Run Laravel:
+
+```bash
+php artisan serve
+```
+
+Run Vite:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Environment Variables
+
+Example configuration:
+
+```env
+APP_NAME="SSO Paradise Supply Chain"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+```
+
+---
+
+## Project Structure
+
+```
+app/
+bootstrap/
+config/
+database/
+public/
+resources/
+├── css/
+├── js/
+└── views/
+routes/
+storage/
+tests/
+vendor/
+```
+
+---
+
+## Authentication Flow
+
+```
+          User
+            │
+            ▼
+       Login Page
+            │
+            ▼
+ Authentication Service
+            │
+            ▼
+   Session / Access Token
+            │
+            ▼
+   Protected Applications
+```
+
+---
+
+## Available Commands
+
+### Backend
+
+Start the development server:
+
+```bash
+php artisan serve
+```
+
+Run database migrations:
+
+```bash
+php artisan migrate
+```
+
+Clear all caches:
+
+```bash
+php artisan optimize:clear
+```
+
+Run tests:
+
+```bash
+php artisan test
+```
+
+### Frontend
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+Build production assets:
+
+```bash
+npm run build
+```
+
+---
+
+## Development
+
+During development, run both services simultaneously:
+
+Backend:
+
+```bash
+php artisan serve
+```
+
+Frontend:
+
+```bash
+npm run dev
+```
+
+Laravel handles the backend application while Vite compiles frontend assets and provides Hot Module Replacement (HMR).
+
+---
+
+## Security
+
+This project follows Laravel's built-in security best practices, including:
+
+- CSRF Protection
+- Input Validation
+- Authentication Middleware
+- Authorization
+- Secure Session Handling
+- Encrypted Configuration
+- XSS Protection
+
+---
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Contributions are welcome.
 
-## Code of Conduct
+1. Fork the repository.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Create a feature branch.
 
-## Security Vulnerabilities
+```bash
+git checkout -b feature/your-feature
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Commit your changes.
+
+```bash
+git commit -m "Add your feature"
+```
+
+4. Push the branch.
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request.
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is proprietary software developed for the Paradise Supply Chain ecosystem. Unauthorized distribution, modification, or commercial use is prohibited unless explicitly permitted by the project owner.

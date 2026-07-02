@@ -48,5 +48,20 @@
     "Welcome aboard!": "Welcome aboard!",
     "Team": "Team",
     "Email Verification": "Email Verification",
-    "Account Security": "Account Security"
+    "Account Security": "Account Security",
+    "Wallet Connection": "Wallet Connection",
+    "Connected": "Connected",
+    "Not Connected": "Not Connected",
+    "Wallet Address": "Wallet Address",
+    "Connect MetaMask": "Connect MetaMask",
+    "Web3 wallet not found. Please install MetaMask or a compatible wallet.": "Web3 wallet not found. Please install MetaMask or a compatible wallet.",
+    "Connecting...": "Connecting...",
+    "Signing message...": "Signing message...",
+    "Verifying signature...": "Verifying signature...",
+    "Wallet connected successfully.": "Wallet connected successfully.",
+    "Failed to retrieve authentication nonce.": "Failed to retrieve authentication nonce.",
+    "Signature verification failed.": "Signature verification failed.",
+    "Something went wrong. Please try again.": "Something went wrong. Please try again.",
+    "Connection or signature request was rejected.": "Connection or signature request was rejected.",
+    "Status": "Status"
 }

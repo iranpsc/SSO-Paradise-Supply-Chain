@@ -28,6 +28,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         'code',
         'mobile',
         'referral',
+        'wallet_address',
+        'nonce',
     ];
 
     /**
@@ -38,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
     protected $hidden = [
         'password',
         'remember_token',
+        'nonce',
     ];
 
     /**
