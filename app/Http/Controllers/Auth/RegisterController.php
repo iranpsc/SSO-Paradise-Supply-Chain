@@ -64,7 +64,17 @@ class RegisterController extends Controller
                 'max:40',
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
-            'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
+            'redirect_uri' => [
+                'nullable',
+                'url',
+                function ($attribute, $value, $fail) {
+                    // Passport stores redirect URIs as a comma-separated string in the
+                    // "redirect" text column, so match against the set instead of JSON.
+                    if (! Client::whereRaw('FIND_IN_SET(?, `redirect`)', [$value])->exists()) {
+                        $fail(__('validation.exists', ['attribute' => $attribute]));
+                    }
+                },
+            ],
             'back_url' => ['nullable', 'url'],
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
