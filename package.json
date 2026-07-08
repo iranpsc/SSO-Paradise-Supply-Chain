@@ -19,6 +19,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@walletconnect/ethereum-provider": "^2.23.10",
         "preline": "^2.3.0"
     }
 }
