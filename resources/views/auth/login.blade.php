@@ -49,10 +49,10 @@
                             <x-form.checkbox :label="__('Remember Me')" for="remember" name="remember" id="remember"
                                 :checked="old('remember')" />
                             @if (Route::has('password.request'))
-                                <a class="text-xs text-primery-blue dark:text-dark-yellow "
-                                    href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
+                            <a class="text-xs text-primery-blue dark:text-dark-yellow "
+                                href="{{ route('password.request') }}">
+                                {{ __('Forgot Your Password?') }}
+                            </a>
                             @endif
                         </div>
                         <div>
@@ -63,7 +63,7 @@
 
                     </div>
                 </form>
-                <div class="flex justify-center mt-6">
+                <div class="flex justify-center mt-6 gap-2">
                     <button type="button" id="connect-wallet-btn" onclick="connectWallet()"
                         class="w-full bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700 rounded-lg px-4 py-3 flex items-center justify-center gap-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
                         <svg id="wallet-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-yellow-500" fill="none"
@@ -79,6 +79,21 @@
                             {{ __('Wallet Login') }}
                         </span>
                     </button>
+                    <button type="button" id="connectWallet-btn" onclick="connectWalletBtn()"
+                        class="w-full bg-white dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700 rounded-lg px-4 py-3 flex items-center justify-center gap-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg id="connectWallet-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-yellow-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path d="M21 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2z" />
+                            <circle cx="12" cy="12" r="4" fill="#f59e42" />
+                        </svg>
+                        <svg id="connectWallet-spinner" class="hidden animate-spin h-5 w-5 text-gray-800 dark:text-gray-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span id="ConnectWalletTxt" class="text-sm font-medium text-gray-800 dark:text-gray-100">
+                            {{ __('connectWallet Login') }}
+                        </span>
+                    </button>
                 </div>
                 <form id="web3-verify-form" method="POST" action="{{ route('web3.verify') }}" class="hidden">
                     @csrf
@@ -86,9 +101,18 @@
                     <input type="hidden" name="signature" value="">
                 </form>
                 @if ($errors->has('wallet'))
-                    <p class="mt-4 text-center text-sm text-red-600 dark:text-red-400">{{ $errors->first('wallet') }}</p>
+                <p class="mt-4 text-center text-sm text-red-600 dark:text-red-400">{{ $errors->first('wallet') }}</p>
                 @endif
                 <script>
+                    const isMobile =
+                        "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+                    if (isMobile) {
+                        document
+                            .getElementById("connect-wallet-btn")
+                            .classList.add("hidden");
+                    }
+
                     async function connectWallet() {
                         const btn = document.getElementById('connect-wallet-btn');
                         const icon = document.getElementById('wallet-icon');
@@ -146,7 +170,10 @@
                             verifyForm.querySelector('[name="address"]').value = address;
                             verifyForm.querySelector('[name="signature"]').value = signature;
                             verifyForm.submit();
-
+                            console.log({
+                                address,
+                                signature
+                            });
                         } catch (error) {
                             console.error("Web3 auth error:", error);
 
@@ -166,67 +193,123 @@
                             text.innerText = originalText;
                         }
                     }
+                    async function connectWalletBtn() {
+                        alert("لطفا برای اتصال با connectWallert از نرم افزار های تغییر آی پی (VPN) استفاده کنید ")
+                        const btn = document.getElementById('connectWallet-btn');
+                        const icon = document.getElementById('connectWallet-icon');
+                        const spinner = document.getElementById('connectWallet-spinner');
+                        const text = document.getElementById('ConnectWalletTxt');
+
+                        const resetButton = () => {
+                            btn.disabled = false;
+                            icon.classList.remove('hidden');
+                            spinner.classList.add('hidden');
+                            text.innerText = "ورود با connectWallet";
+                        };
+
+                        btn.disabled = true;
+                        icon.classList.add('hidden');
+                        spinner.classList.remove('hidden');
+                        text.innerText = "در حال اتصال...";
+
+                        try {
+                            const {
+                                address,
+                                signature
+                            } = await Promise.race([
+                                window.connectWalletConnect(),
+                                new Promise((_, reject) =>
+                                    setTimeout(() => reject(new Error("TIMEOUT")), 40000)
+                                ),
+                            ]);
+
+                            text.innerText = "در حال تایید...";
+
+                            const verifyForm = document.getElementById("web3-verify-form");
+                            verifyForm.querySelector('[name="address"]').value = address;
+                            verifyForm.querySelector('[name="signature"]').value = signature;
+                            verifyForm.submit();
+                            console.log({
+                                address,
+                                signature
+                            });
+                        } catch (error) {
+                            console.error(error);
+
+                            // فقط دکمه را ریست کن، Alert نمایش نده
+                            resetButton();
+
+                            // اگر خطا از Timeout نبود و خواستی بعداً لاگ بگیری
+                            if (error.message !== "TIMEOUT") {
+                                // اینجا می‌توانی فقط لاگ بگیری
+                            }
+                        }
+                    }
                 </script>
             </div>
         </div>
     </div>
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const toggleBtn = document.getElementById('toggle-password');
-                const eyeOpen = document.getElementById('eye-open');
-                const eyeClosed = document.getElementById('eye-closed');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggle-password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
 
-                if (!toggleBtn) return;
+            if (!toggleBtn) return;
 
-                toggleBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
 
-                    const wrapper = toggleBtn.closest('.relative');
-                    const passwordInput = wrapper.querySelector('input');
+                const wrapper = toggleBtn.closest('.relative');
+                const passwordInput = wrapper.querySelector('input');
 
-                    if (!passwordInput) return;
+                if (!passwordInput) return;
 
-                    const isPassword = passwordInput.type === 'password';
+                const isPassword = passwordInput.type === 'password';
 
-                    passwordInput.type = isPassword ? 'text' : 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
 
-                    // تغییر آیکن
-                    eyeOpen.classList.toggle('hidden', isPassword);
-                    eyeClosed.classList.toggle('hidden', !isPassword);
-                });
+                // تغییر آیکن
+                eyeOpen.classList.toggle('hidden', isPassword);
+                eyeClosed.classList.toggle('hidden', !isPassword);
             });
-        </script>
-        <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "Organization",
-      "name": "تونل زمان",
-      "url": "https://accounts.irpsc.com/login",
-      "@@logo": "https://accounts.irpsc.com/images/logo/accounts.png",
-      "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
-      "contactPoint": {
-        "@@type": "ContactPoint",
-        "telephone": "+98-28-33696489",
-        "contactType": "Customer Service",
-        "availableLanguage": "Persian"
-      },
-      "email": "Cq@irpsc.com",
+        });
+    </script>
+    <script type="application/ld+json">
+        {
+            "@@context": "https://schema.org",
+            "@@type": "Organization",
+            "name": "تونل زمان",
+            "url": "https://accounts.irpsc.com/login",
+            "@@logo": "https://accounts.irpsc.com/images/logo/accounts.png",
+            "description": "سامانه مدیریت حساب کاربری IRPSC، ورود امن و سریع به تمامی سرویس‌ها و خدمات آنلاین ما را فراهم می‌کند. با استفاده از این پلتفرم، کاربران می‌توانند به سادگی حساب‌های کاربری خود را مدیریت کرده و با یک بار ورود، به تمامی خدمات متصل دسترسی داشته باشند.",
+            "contactPoint": {
+                "@@type": "ContactPoint",
+                "telephone": "+98-28-33696489",
+                "contactType": "Customer Service",
+                "availableLanguage": "Persian"
+            },
+            "email": "Cq@irpsc.com",
 
-      {{-- "foundingDate": "2020-01-01",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "خیابان مثال، پلاک 1",
-        "addressLocality": "شهر مثال",
-        "postalCode": "12345",
-        "addressCountry": "IR"
-      }, --}}
-      "potentialAction": {
-        "@@type": "LoginAction",
-        "target": "https://accounts.irpsc.com/login",
-        "@@query-input": "required name=username"
-      }
-    }
+            {
+                {
+                    --"foundingDate": "2020-01-01",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "خیابان مثال، پلاک 1",
+                        "addressLocality": "شهر مثال",
+                        "postalCode": "12345",
+                        "addressCountry": "IR"
+                    }, --
+                }
+            }
+            "potentialAction": {
+                "@@type": "LoginAction",
+                "target": "https://accounts.irpsc.com/login",
+                "@@query-input": "required name=username"
+            }
+        }
     </script>
     @endpush
 </x-layouts.app>

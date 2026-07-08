@@ -143,7 +143,9 @@
     "Authorization": "اجازه دسترسی",
     "Go to Gmail": "رفتن به Gmail",
     "QZParadise": "زنچیره تامین بهشت",
-    "Wallet Login": "ورود با کیف پول",
+    "Wallet Login": "ورود با کیف پول متامسک",
+    "connectWallet Login": "ورود با connectWallet",
+
     "Wallet Connection": "اتصال کیف پول",
     "Connected": "متصل",
     "Not Connected": "متصل نیست",
