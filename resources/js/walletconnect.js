@@ -15,7 +15,6 @@ window.connectWalletConnect = async function () {
         throw new Error("No wallet connected.");
     }
 
-    // دریافت nonce از لاراول
     const nonceResponse = await fetch(`/web3/nonce?address=${address}`, {
         credentials: "same-origin",
     });
@@ -26,14 +25,12 @@ window.connectWalletConnect = async function () {
 
     const nonceData = await nonceResponse.json();
 
-    // تبدیل nonce به Hex (دقیقاً مثل MetaMask)
     const msgHex =
         "0x" +
         Array.from(new TextEncoder().encode(nonceData.nonce))
             .map((byte) => byte.toString(16).padStart(2, "0"))
             .join("");
 
-    // امضا با WalletConnect
     const signature = await provider.request({
         method: "personal_sign",
         params: [msgHex, address],
