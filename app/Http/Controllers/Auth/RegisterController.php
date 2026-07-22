@@ -67,10 +67,17 @@ class RegisterController extends Controller
             'redirect_uri' => [
                 'nullable',
                 'url',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) use ($data) {
                     // Passport stores redirect URIs as a comma-separated string in the
                     // "redirect" text column, so match against the set instead of JSON.
-                    if (! Client::whereRaw('FIND_IN_SET(?, `redirect`)', [$value])->exists()) {
+                    // When client_id is present, the URI must belong to that client.
+                    $query = Client::query()->whereRaw('FIND_IN_SET(?, `redirect`)', [$value]);
+
+                    if (! empty($data['client_id'])) {
+                        $query->where('id', $data['client_id']);
+                    }
+
+                    if (! $query->exists()) {
                         $fail(__('validation.exists', ['attribute' => $attribute]));
                     }
                 },
@@ -92,7 +99,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'referral' => $data['referral'],
+            'referral' => ! empty($data['referral']) ? $data['referral'] : null,
         ]);
     }
 
