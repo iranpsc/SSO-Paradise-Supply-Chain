@@ -167,88 +167,65 @@
                                 text.innerText = originalText;
                             }
                         }
-                        async function connectWalletBtn() {
-                            alert("لطفا برای اتصال با WalletConnect از نرم افزار های تغییر آی پی (VPN) استفاده کنید.");
+                      async function connectWalletBtn() {
+                        alert("لطفا برای اتصال با connectWallert از نرم افزار های تغییر آی پی (VPN) استفاده کنید ")
+                        const btn = document.getElementById('connectWallet-btn');
+                        const icon = document.getElementById('connectWallet-icon');
+                        const spinner = document.getElementById('connectWallet-spinner');
+                        const text = document.getElementById('ConnectWalletTxt');
 
-                            const btn = document.getElementById("connectWallet-btn");
-                            const icon = document.getElementById("connectWallet-icon");
-                            const spinner = document.getElementById("connectWallet-spinner");
-                            const text = document.getElementById("ConnectWalletTxt");
+                        let uiWasReset = false;
 
-                            const originalText = text.innerText;
+                        const resetButton = () => {
+                            uiWasReset = true;
+                            btn.disabled = false;
+                            icon.classList.remove('hidden');
+                            spinner.classList.add('hidden');
+                            text.innerText = "ورود با connectWallet";
+                        };
 
-                            const resetButton = () => {
-                                btn.disabled = false;
-                                icon.classList.remove("hidden");
-                                spinner.classList.add("hidden");
-                                text.innerText = originalText;
-                            };
-
+                        const setConnecting = () => {
+                            uiWasReset = false;
                             btn.disabled = true;
-                            icon.classList.add("hidden");
-                            spinner.classList.remove("hidden");
+                            icon.classList.add('hidden');
+                            spinner.classList.remove('hidden');
                             text.innerText = "در حال اتصال...";
+                        };
 
-                            try {
-                                const {
-                                    provider,
-                                    address
-                                } = await Promise.race([
-                                    window.connectWalletConnect(),
-                                    new Promise((_, reject) =>
-                                        setTimeout(() => reject(new Error("TIMEOUT")), 40000)
-                                    ),
-                                ]);
+                        setConnecting();
 
-                                const nonceResponse = await fetch(`/web3/nonce?address=${address}`);
+                        const uiTimeout = setTimeout(() => {
+                            resetButton();
+                        }, 5000);
 
-                                if (!nonceResponse.ok) {
-                                    throw new Error("دریافت کد یکبار مصرف با خطا مواجه شد.");
-                                }
+                        try {
+                            const {
+                                address,
+                                signature
+                            } = await window.connectWalletConnect();
 
-                                const nonceData = await nonceResponse.json();
+                            clearTimeout(uiTimeout);
 
-                                text.innerText = "در حال امضای پیام...";
-
-                                const msg = nonceData.nonce;
-                                const msgHex =
-                                    "0x" +
-                                    Array.from(new TextEncoder().encode(msg))
-                                    .map((byte) => byte.toString(16).padStart(2, "0"))
-                                    .join("");
-
-                                const signature = await provider.request({
-                                    method: "personal_sign",
-                                    params: [msgHex, address],
-                                });
-
-                                text.innerText = "در حال تایید امضا...";
-
-                                const verifyResponse = await fetch("/web3/verify", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        "X-CSRF-TOKEN": document.querySelector(
-                                            'meta[name="csrf-token"]'
-                                        ).content,
-                                    },
-                                    body: JSON.stringify({
-                                        address,
-                                        signature,
-                                    }),
-                                });
-
-                                if (verifyResponse.ok) {
-                                    text.innerText = "ورود موفقیت‌آمیز...";
-                                    window.location.href = "/home";
-                                }
-                            } catch (error) {
-                                console.error("WalletConnect auth error:", error);
-
-                                resetButton();
-
+                            if (uiWasReset && btn.disabled) {
+                                return;
                             }
+
+                            text.innerText = "در حال تایید...";
+
+                            const verifyForm = document.getElementById("web3-verify-form");
+                            verifyForm.querySelector('[name="address"]').value = address;
+                            verifyForm.querySelector('[name="signature"]').value = signature;
+                            verifyForm.submit();
+                            console.log({
+                                address,
+                                signature
+                            });
+                        } catch (error) {
+                            clearTimeout(uiTimeout);
+                            console.error(error);
+                            resetButton();
                         }
+                    }
                     </script>
 
                 </div>

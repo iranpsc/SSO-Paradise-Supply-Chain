@@ -200,28 +200,46 @@
                         const spinner = document.getElementById('connectWallet-spinner');
                         const text = document.getElementById('ConnectWalletTxt');
 
+                        let uiWasReset = false;
+
                         const resetButton = () => {
+                            uiWasReset = true;
                             btn.disabled = false;
                             icon.classList.remove('hidden');
                             spinner.classList.add('hidden');
                             text.innerText = "ورود با connectWallet";
                         };
 
-                        btn.disabled = true;
-                        icon.classList.add('hidden');
-                        spinner.classList.remove('hidden');
-                        text.innerText = "در حال اتصال...";
+                        const setConnecting = () => {
+                            uiWasReset = false;
+                            btn.disabled = true;
+                            icon.classList.add('hidden');
+                            spinner.classList.remove('hidden');
+                            text.innerText = "در حال اتصال...";
+                        };
+
+                        setConnecting();
+
+                        // فقط برای ریست ظاهر دکمه - عملیات اصلی رو لغو نمی‌کنه
+                        const uiTimeout = setTimeout(() => {
+                            resetButton();
+                        }, 5000);
 
                         try {
+                            // عملیات واقعی، بدون race - نمی‌ذاریم لغو بشه
                             const {
                                 address,
                                 signature
-                            } = await Promise.race([
-                                window.connectWalletConnect(),
-                                new Promise((_, reject) =>
-                                    setTimeout(() => reject(new Error("TIMEOUT")), 40000)
-                                ),
-                            ]);
+                            } = await window.connectWalletConnect();
+
+                            clearTimeout(uiTimeout);
+
+                            // اگه کاربر قبلاً دوباره کلیک کرده و یه عملیات جدید شروع شده،
+                            // دیگه به نتیجه‌ی این عملیات قدیمی کاری نداریم
+                            if (uiWasReset && btn.disabled) {
+                                // یعنی یه اتصال جدید داره اجرا میشه - این نتیجه قدیمیه، نادیده بگیر
+                                return;
+                            }
 
                             text.innerText = "در حال تایید...";
 
@@ -234,15 +252,9 @@
                                 signature
                             });
                         } catch (error) {
+                            clearTimeout(uiTimeout);
                             console.error(error);
-
-                            // فقط دکمه را ریست کن، Alert نمایش نده
                             resetButton();
-
-                            // اگر خطا از Timeout نبود و خواستی بعداً لاگ بگیری
-                            if (error.message !== "TIMEOUT") {
-                                // اینجا می‌توانی فقط لاگ بگیری
-                            }
                         }
                     }
                 </script>
