@@ -151,7 +151,6 @@
                             } catch (error) {
                                 console.error("Web3 auth error:", error);
 
-                                // User rejected connection or sign request
                                 let errorMsg = "خطایی رخ داد. لطفا دوباره تلاش کنید.";
                                 if (error.code === 4001) {
                                     errorMsg = "درخواست امضا یا اتصال توسط کاربر رد شد.";
