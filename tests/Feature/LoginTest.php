@@ -7,7 +7,6 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -89,25 +88,21 @@ class LoginTest extends TestCase
     }
 
     #[Test]
-    public function login_preserves_intended_verification_url_for_unverified_users(): void
+    public function unverified_user_is_always_redirected_to_verification_notice_ignoring_intended_url(): void
     {
         $unverified = User::factory()->unverified()->create([
             'email' => 'unverified-intended@example.com',
             'password' => Hash::make(self::VALID_PASSWORD),
         ]);
 
-        $intended = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $unverified->id, 'hash' => sha1($unverified->email)]
-        );
+        $intended = url('/change-password');
 
         $this->withSession(['url.intended' => $intended])
             ->post('/login', [
                 'email' => 'unverified-intended@example.com',
                 'password' => self::VALID_PASSWORD,
             ])
-            ->assertRedirect($intended);
+            ->assertRedirect(route('verification.notice'));
 
         $this->assertAuthenticatedAs($unverified);
     }

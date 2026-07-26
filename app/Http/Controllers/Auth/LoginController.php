@@ -64,8 +64,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if (!$user->hasVerifiedEmail()) {
-            // Prefer the signed verification link (url.intended) over the notice page.
-            return redirect()->intended(route('verification.notice'));
+            return redirect()->route('verification.notice');
         }
 
         return redirect()->intended($this->redirectPath());
