@@ -232,4 +232,24 @@ class EmailVerificationTest extends TestCase
         $this->get($url)->assertRedirect(route('login'));
         $this->assertNull($user->fresh()->email_verified_at);
     }
+
+    #[Test]
+    public function verification_rejects_back_url_without_scheme_and_host(): void
+    {
+        $user = User::factory()->unverified()->create();
+        Cache::put('back_url_' . $user->id, '/relative/path', now()->addHour());
+
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
+        $this->actingAs($user)
+            ->get($url)
+            ->assertRedirect(route('home'))
+            ->assertSessionHas('warning', 'Invalid redirect URL.');
+
+        $this->assertNotNull($user->fresh()->email_verified_at);
+    }
 }

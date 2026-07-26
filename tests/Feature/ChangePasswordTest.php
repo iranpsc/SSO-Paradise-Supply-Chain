@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -297,5 +298,24 @@ class ChangePasswordTest extends TestCase
             ->assertRedirect(route('login'));
 
         $this->assertGuest();
+    }
+
+    #[Test]
+    public function changing_password_with_remember_cookie_calls_logout_other_devices(): void
+    {
+        $recaller = Auth::guard()->getRecallerName();
+
+        $this->actingAs($this->user)
+            ->withCookie($recaller, 'remember-cookie-value')
+            ->put(route('password.new'), [
+                'current_password' => self::VALID_PASSWORD,
+                'password' => self::NEW_VALID_PASSWORD,
+                'password_confirmation' => self::NEW_VALID_PASSWORD,
+            ])
+            ->assertRedirect(route('password.edit'))
+            ->assertSessionHas('success');
+
+        $this->assertTrue(Hash::check(self::NEW_VALID_PASSWORD, $this->user->fresh()->password));
+        $this->assertAuthenticatedAs($this->user);
     }
 }

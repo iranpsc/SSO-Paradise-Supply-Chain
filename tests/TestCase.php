@@ -12,6 +12,15 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Blade layouts use @vite; skip the manifest so feature tests do not
+        // require npm run build / npm run dev.
+        $this->withoutVite();
+    }
+
     /**
      * Valid registration password that satisfies mixedCase + numbers + symbols.
      */

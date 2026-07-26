@@ -337,4 +337,38 @@ class LoginTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
     }
+
+    #[Test]
+    public function logout_returns_logged_out_hook_response_when_present(): void
+    {
+        $user = User::factory()->create([
+            'password' => Hash::make(self::VALID_PASSWORD),
+        ]);
+
+        $this->actingAs($user);
+        $this->startSession();
+
+        $request = \Illuminate\Http\Request::create('/logout', 'POST');
+        $request->setLaravelSession($this->app['session']->driver());
+        $request->setUserResolver(fn () => $user);
+
+        $controller = new class extends \App\Http\Controllers\Auth\LoginController
+        {
+            public function __construct()
+            {
+                // Skip middleware registration for direct invocation.
+            }
+
+            protected function loggedOut(\Illuminate\Http\Request $request)
+            {
+                return redirect('/logged-out-hook');
+            }
+        };
+
+        $response = $controller->logout($request);
+
+        $this->assertTrue($response->isRedirect());
+        $this->assertSame(url('/logged-out-hook'), $response->headers->get('Location'));
+        $this->assertGuest();
+    }
 }

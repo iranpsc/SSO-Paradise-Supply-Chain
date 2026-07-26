@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PersonalInfoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\Web3AuthController;
 
 /*
@@ -41,7 +40,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::singleton('personal-info', PersonalInfoController::class);
     Route::get('/change-password', [NewPasswordController::class, 'showForm'])->name('password.edit');
     Route::put('/change-password', [NewPasswordController::class, 'update'])->name('password.new');
-    Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 });
 
 Auth::routes();
