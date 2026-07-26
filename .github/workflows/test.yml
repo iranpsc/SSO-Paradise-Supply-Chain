@@ -20,9 +20,9 @@ permissions:
 
 jobs:
 
-  # ==================================================
+  # ============================================================
   # Laravel Tests
-  # ==================================================
+  # ============================================================
 
   laravel-tests:
 
@@ -50,17 +50,17 @@ jobs:
 
     steps:
 
-      # ==================================================
+      # ============================================================
       # Checkout
-      # ==================================================
+      # ============================================================
 
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
 
-      # ==================================================
+      # ============================================================
       # Setup PHP
-      # ==================================================
+      # ============================================================
 
       - name: 🐘 Setup PHP
         uses: shivammathur/setup-php@v2
@@ -82,19 +82,19 @@ jobs:
           tools: composer:v2
 
 
-      # ==================================================
-      # Check PHP Version
-      # ==================================================
+      # ============================================================
+      # Check PHP & Composer
+      # ============================================================
 
-      - name: 🔍 Check PHP Version
+      - name: 🔍 Check PHP & Composer Version
         run: |
           php -v
           composer --version
 
 
-      # ==================================================
+      # ============================================================
       # Install Composer Dependencies
-      # ==================================================
+      # ============================================================
 
       - name: 📦 Install Composer Dependencies
         run: |
@@ -105,9 +105,9 @@ jobs:
             --optimize-autoloader
 
 
-      # ==================================================
+      # ============================================================
       # Prepare Laravel Environment
-      # ==================================================
+      # ============================================================
 
       - name: ⚙️ Prepare Laravel Environment
         run: |
@@ -115,9 +115,9 @@ jobs:
           php artisan key:generate
 
 
-      # ==================================================
+      # ============================================================
       # Configure Database
-      # ==================================================
+      # ============================================================
 
       - name: 🗄️ Configure Test Database
         run: |
@@ -129,18 +129,18 @@ jobs:
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=root/' .env
 
 
-      # ==================================================
+      # ============================================================
       # Run Migrations
-      # ==================================================
+      # ============================================================
 
       - name: 🗄️ Run Database Migrations
         run: |
           php artisan migrate --force
 
 
-      # ==================================================
+      # ============================================================
       # Setup Node.js
-      # ==================================================
+      # ============================================================
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
@@ -149,53 +149,55 @@ jobs:
           cache: npm
 
 
-      # ==================================================
+      # ============================================================
       # Install NPM Dependencies
-      # ==================================================
+      # ============================================================
 
       - name: 📦 Install NPM Dependencies
         run: |
           npm ci
 
 
-      # ==================================================
+      # ============================================================
       # Build Frontend
-      # ==================================================
+      # ============================================================
 
       - name: 🏗️ Build Frontend
         run: |
           npm run build
 
 
-      # ==================================================
+      # ============================================================
       # Run Laravel Tests
-      # ==================================================
+      # ============================================================
+      #
+      # IMPORTANT:
+      # - Tests run only ONCE
+      # - Coverage minimum is 100%
+      # - JUnit XML is generated
+      #
+      # ============================================================
 
-      - name: 🧪 Run Laravel Tests
+      - name: 🧪 Run Laravel Tests & Generate Coverage
+        id: tests
+        continue-on-error: true
         run: |
           php artisan test \
             --coverage \
-            --min=70 \
-            --log-junit=test-results.xml
+            --min=100 \
+            --log-junit=test-results.xml \
+            2>&1 | tee test-output.txt
+
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+
+          echo "TEST_EXIT_CODE=$TEST_EXIT_CODE" >> "$GITHUB_ENV"
+
+          exit $TEST_EXIT_CODE
 
 
-      # ==================================================
-      # Publish Test Results
-      # ==================================================
-
-      - name: 📊 Publish Test Results
-        if: always()
-        uses: dorny/test-reporter@v2
-        with:
-          name: 🧪 Laravel Test Results
-          path: test-results.xml
-          reporter: java-junit
-          fail-on-error: true
-
-
-      # ==================================================
-      # Generate GitHub Summary
-      # ==================================================
+      # ============================================================
+      # Generate GitHub Actions Summary
+      # ============================================================
 
       - name: 📝 Generate Test Summary
         if: always()
@@ -212,13 +214,96 @@ jobs:
 
           echo "| Metric | Result |" >> "$GITHUB_STEP_SUMMARY"
 
-          echo "|--------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---:|" >> "$GITHUB_STEP_SUMMARY"
+
+          # ------------------------------------------------------------
+          # Extract test statistics from PHPUnit output
+          # ------------------------------------------------------------
+
+          if [ -f test-output.txt ]; then
+
+            TESTS=$(grep -oP 'Tests:\s+\K[0-9]+' test-output.txt | tail -1 || true)
+
+            FAILED=$(grep -oP '[0-9]+(?=\s+failed)' test-output.txt | tail -1 || true)
+
+            PASSED=$(grep -oP '[0-9]+(?=\s+passed)' test-output.txt | tail -1 || true)
+
+            SKIPPED=$(grep -oP '[0-9]+(?=\s+skipped)' test-output.txt | tail -1 || true)
+
+            if [ -z "$TESTS" ]; then
+              TESTS="N/A"
+            fi
+
+            if [ -z "$FAILED" ]; then
+              FAILED="0"
+            fi
+
+            if [ -z "$PASSED" ]; then
+              PASSED="N/A"
+            fi
+
+            if [ -z "$SKIPPED" ]; then
+              SKIPPED="0"
+            fi
+
+          else
+
+            TESTS="N/A"
+            FAILED="N/A"
+            PASSED="N/A"
+            SKIPPED="N/A"
+
+          fi
+
+
+          # ------------------------------------------------------------
+          # Extract Coverage
+          # ------------------------------------------------------------
+
+          COVERAGE="N/A"
+
+          if [ -f test-output.txt ]; then
+
+            COVERAGE=$(grep -oP 'Lines:\s+\K[0-9.]+(?=%)' test-output.txt | tail -1 || true)
+
+          fi
+
+
+          # ------------------------------------------------------------
+          # Workflow Status
+          # ------------------------------------------------------------
+
+          if [ "${TEST_EXIT_CODE:-1}" -eq 0 ]; then
+            STATUS="✅ PASSED"
+          else
+            STATUS="❌ FAILED"
+          fi
+
+
+          # ------------------------------------------------------------
+          # Main Summary Table
+          # ------------------------------------------------------------
 
           echo "| 🧪 Test Suite | Laravel |" >> "$GITHUB_STEP_SUMMARY"
 
-          echo "| 🎯 Required Coverage | **70%** |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 🧪 Total Tests | **$TESTS** |" >> "$GITHUB_STEP_SUMMARY"
 
-          echo "| 🚦 Workflow Status | **${{ job.status }}** |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| ✅ Passed | **$PASSED** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| ❌ Failed | **$FAILED** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| ⏭️ Skipped | **$SKIPPED** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| 📈 Total Coverage | **$COVERAGE%** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| 🎯 Required Coverage | **100%** |" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "| 🚦 Workflow Status | **$STATUS** |" >> "$GITHUB_STEP_SUMMARY"
+
+
+          # ============================================================
+          # Coverage Output
+          # ============================================================
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
@@ -226,30 +311,71 @@ jobs:
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
-          echo "## 📈 Coverage" >> "$GITHUB_STEP_SUMMARY"
+          echo "## 📈 Coverage Report" >> "$GITHUB_STEP_SUMMARY"
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
 
-          if [ -f test-results.xml ]; then
-            php artisan test \
-              --coverage \
-              --min=70 \
-              2>&1 | tee coverage-summary.txt || true
+          if [ -f test-output.txt ]; then
 
-            cat coverage-summary.txt >> "$GITHUB_STEP_SUMMARY"
+            sed -n '/Coverage:/,$p' test-output.txt >> "$GITHUB_STEP_SUMMARY"
+
           else
-            echo "❌ Test results were not generated." >> "$GITHUB_STEP_SUMMARY"
-            echo "❌ Test results were not generated." > coverage-summary.txt
+
+            echo "❌ Coverage report was not generated." >> "$GITHUB_STEP_SUMMARY"
+
           fi
 
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
 
-      # ==================================================
+          # ============================================================
+          # Full Test Output
+          # ============================================================
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "---" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "## 🧪 Test Details" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+
+          if [ -f test-output.txt ]; then
+
+            cat test-output.txt >> "$GITHUB_STEP_SUMMARY"
+
+          else
+
+            echo "❌ Test output was not generated." >> "$GITHUB_STEP_SUMMARY"
+
+          fi
+
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+
+      # ============================================================
+      # Publish Test Results
+      # ============================================================
+
+      - name: 📊 Publish Test Results
+        if: always() && hashFiles('test-results.xml') != ''
+        uses: dorny/test-reporter@v2
+        with:
+          name: 🧪 Laravel Test Results
+          path: test-results.xml
+          reporter: java-junit
+          fail-on-error: false
+
+
+      # ============================================================
       # Upload Test Results
-      # ==================================================
+      # ============================================================
 
       - name: 📄 Upload Test Results
         if: always() && hashFiles('test-results.xml') != ''
@@ -259,21 +385,47 @@ jobs:
           path: test-results.xml
 
 
-      # ==================================================
-      # Upload Coverage Summary
-      # ==================================================
+      # ============================================================
+      # Upload Full Test Output
+      # ============================================================
 
-      - name: 📈 Upload Coverage Report
-        if: always() && hashFiles('coverage-summary.txt') != ''
+      - name: 📄 Upload Test Output
+        if: always() && hashFiles('test-output.txt') != ''
         uses: actions/upload-artifact@v4
         with:
-          name: laravel-coverage-report
-          path: coverage-summary.txt
+          name: laravel-test-output
+          path: test-output.txt
 
 
-  # ==================================================
+      # ============================================================
+      # Final Job Status
+      # ============================================================
+      #
+      # Because the test step uses continue-on-error,
+      # we explicitly fail the job here if tests failed.
+      #
+      # ============================================================
+
+      - name: 🚦 Final Test Status
+        if: always()
+        run: |
+
+          if [ "${TEST_EXIT_CODE:-1}" -ne 0 ]; then
+
+            echo "❌ Laravel tests or coverage check failed."
+
+            exit 1
+
+          fi
+
+          echo "✅ All Laravel tests passed."
+
+          echo "✅ Coverage is at least 100%."
+
+
+  # ============================================================
   # Slack Notification
-  # ==================================================
+  # ============================================================
 
   notify_slack:
 
