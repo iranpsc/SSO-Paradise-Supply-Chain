@@ -11,7 +11,7 @@
 
 {{ __('TO RESET YOUR PASSWORD:') }}
 1. {{ __('Copy and paste this URL into your browser:') }}
-   {{ $resetUrl }}
+   {!! $resetUrl !!}
 2. {{ __('Enter your new password (minimum 8 characters)') }}
 3. {{ __('Confirm your new password') }}
 4. {{ __('Save your changes') }}

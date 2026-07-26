@@ -23,16 +23,12 @@ class UpdatePasswordRequest extends FormRequest
      */
     public function rules(): array
     {
+        $hasPassword = filled(Auth::user()?->getAuthPassword());
+
         return [
-            'current_password' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (Auth::user()->password) {
-                        $fail(__('The current password field is required.'));
-                    }
-                },
-                'current_password',
-            ],
+            'current_password' => $hasPassword
+                ? ['required', 'current_password']
+                : ['nullable'],
             'password' => [
                 'required',
                 'confirmed',

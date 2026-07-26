@@ -2,251 +2,518 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\User;
+use App\Notifications\CustomVerifyEmailNotification;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function a_user_can_register_receive_verification_email_login_logout_and_login_again()
+    #[Test]
+    public function guest_can_view_registration_form(): void
     {
-        // Disable sending real notifications
+        $this->get('/register')
+            ->assertOk()
+            ->assertViewIs('auth.register');
+    }
+
+    #[Test]
+    public function authenticated_user_cannot_view_registration_form(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/register')
+            ->assertRedirect('/home');
+    }
+
+    #[Test]
+    public function user_can_register_with_valid_data(): void
+    {
         Notification::fake();
 
-        // Registration data
-        $userData = [
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'referral' => null,
-            'client_id' => null,
-            'redirect_uri' => null,
-            'back_url' => null,
-        ];
+        $response = $this->post('/register', $this->validRegistrationData());
 
-        // Send registration request
-        $response = $this->post('/register', $userData);
-
-        // Check redirect to home page
         $response->assertRedirect('/home');
-        dump('User successfully registered and redirected to /home.');
 
-        // Check that user is stored in the database
         $this->assertDatabaseHas('users', [
             'email' => 'testuser@example.com',
+            'name' => 'Test User',
+            'referral' => null,
         ]);
-        dump('User data is stored in the database.');
 
-        // Check if verification email notification was sent
-        $user = User::where('email', 'testuser@example.com')->first();
-        Notification::assertSentTo(
-            [$user], VerifyEmail::class
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+
+        $this->assertTrue(Hash::check(self::VALID_PASSWORD, $user->password));
+        $this->assertNull($user->email_verified_at);
+        $this->assertNull($user->code);
+        $this->assertAuthenticatedAs($user);
+        $this->assertDatabaseHas('personal_infos', ['user_id' => $user->id]);
+
+        Notification::assertSentTo($user, CustomVerifyEmailNotification::class);
+    }
+
+    #[Test]
+    public function registration_dispatches_registered_event(): void
+    {
+        Event::fake([Registered::class]);
+
+        $this->post('/register', $this->validRegistrationData())->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+
+        Event::assertDispatched(
+            Registered::class,
+            fn (Registered $event) => $event->user->is($user)
         );
-        dump('Verification email sent successfully.');
-
-        // Check that password is correctly hashed
-        $this->assertTrue(Hash::check('SecurePass!2024', $user->password));
-        dump('Password hashed and stored correctly.');
-
-        // Check if the user is authenticated after registration
-        $this->assertAuthenticatedAs($user);
-        dump('User is successfully logged in after registration.');
-
-        // Log out the user
-        $this->post('/logout');
-        $this->assertGuest();
-        dump('User successfully logged out.');
-
-        // Login again
-        $loginData = [
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-        ];
-
-        // Send login request
-        $response = $this->post('/login', $loginData);
-
-        // Check redirect to home page after login
-        $response->assertRedirect('/home');
-        dump('User successfully logged in again after logout.');
-
-        // Check if the user is authenticated again
-        $this->assertAuthenticatedAs($user);
-        dump('User is authenticated after re-login.');
     }
 
-    /** @test */
-    public function it_requires_a_valid_email()
+    #[Test]
+    public function registration_stores_back_url_in_cache_for_one_hour(): void
     {
-        // Invalid email data
-        $userData = [
-            'name' => 'Test User',
-            'email' => 'invalid-email',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'redirect_uri' => null,
-        ];
+        Notification::fake();
 
-        // Send registration request with invalid email
-        $response = $this->post('/register', $userData);
+        $backUrl = 'https://metarang.com/dashboard';
 
-        // Check for email validation error
-        $response->assertSessionHasErrors(['email']);
-        dump('Email validation failed as expected.');
+        $this->post('/register', $this->validRegistrationData([
+            'back_url' => $backUrl,
+        ]))->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+
+        $this->assertSame($backUrl, Cache::get('back_url_' . $user->id));
     }
 
-    /** @test */
-    public function it_requires_a_password_confirmation()
+    #[Test]
+    public function registration_stores_valid_referral_code(): void
     {
-        // Mismatching password confirmation data
-        $userData = [
-            'name' => 'Test User',
+        Notification::fake();
+
+        $referrer = User::factory()->withCode('hm-2000100')->create();
+
+        $this->post('/register', $this->validRegistrationData([
+            'referral' => $referrer->code,
+        ]))->assertRedirect('/home');
+
+        $this->assertDatabaseHas('users', [
             'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'wrong_password',
-            'redirect_uri' => null,
-        ];
-
-        // Send registration request with incorrect password confirmation
-        $response = $this->post('/register', $userData);
-
-        // Check for password confirmation validation error
-        $response->assertSessionHasErrors(['password']);
-        dump('Password confirmation validation failed as expected.');
+            'referral' => 'hm-2000100',
+        ]);
     }
 
-    /** @test */
-    public function it_requires_a_unique_email()
+    #[Test]
+    public function registration_accepts_valid_client_id_and_matching_redirect_uri(): void
     {
-        // Create a user with a duplicate email
-        User::create([
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'password' => Hash::make('SecurePass!2024'),
+        Notification::fake();
+
+        $client = $this->createOAuthClient('https://app.example.com/callback');
+
+        $this->post('/register', $this->validRegistrationData([
+            'client_id' => $client->id,
+            'redirect_uri' => 'https://app.example.com/callback',
+        ]))->assertRedirect('/home');
+
+        $this->assertDatabaseHas('users', ['email' => 'testuser@example.com']);
+    }
+
+    #[Test]
+    public function registration_accepts_redirect_uri_from_comma_separated_client_redirects(): void
+    {
+        Notification::fake();
+
+        $client = $this->createOAuthClient([
+            'https://app.example.com/callback',
+            'https://app.example.com/oauth',
         ]);
 
-        // Duplicate registration data
-        $userData = [
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',  // Duplicate email
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'redirect_uri' => null,
-        ];
-
-        // Send registration request with duplicate email
-        $response = $this->post('/register', $userData);
-
-        // Check for unique email validation error
-        $response->assertSessionHasErrors(['email']);
-        dump('Duplicate email validation failed as expected.');
+        $this->post('/register', $this->validRegistrationData([
+            'client_id' => $client->id,
+            'redirect_uri' => 'https://app.example.com/oauth',
+        ]))->assertRedirect('/home');
     }
 
-    /** @test */
-    public function it_disallows_names_starting_with_hm_prefix()
+    #[Test]
+    public function registration_allows_persian_names(): void
     {
-        // Invalid name data (name starting with HM-)
-        $userData = [
-            'name' => 'HM-InvalidName',
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'referral' => null,
-            'client_id' => null,
-            'redirect_uri' => null,
-            'back_url' => null,
-        ];
+        Notification::fake();
 
-        // Send registration request with invalid name
-        $response = $this->post('/register', $userData);
-
-        // Check for name validation error
-        $response->assertSessionHasErrors(['name']);
-        dump('Name validation failed as expected due to forbidden HM- prefix.');
-    }
-    /** @test */
-    public function it_allows_persian_name()
-    {
-        // Persian name data
-        $userData = [
+        $this->post('/register', $this->validRegistrationData([
             'name' => 'کاربر تستی',
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'referral' => null,
-            'client_id' => null,
-            'redirect_uri' => null,
-            'back_url' => null,
-        ];
+        ]))->assertRedirect('/home');
 
-        // Send registration request with Persian name
-        $response = $this->post('/register', $userData);
-
-        // Check for successful registration and redirection to home
-        $response->assertRedirect('/home');
-        dump('Registration successful with Persian name.');
-
-        // Check that user with Persian name is stored in the database
         $this->assertDatabaseHas('users', [
             'name' => 'کاربر تستی',
             'email' => 'testuser@example.com',
         ]);
-        dump('User with Persian name stored in the database.');
     }
-    /** @test */
 
-    /** @test */
-    public function it_allows_name_with_max_50_characters()
+    #[Test]
+    public function missing_required_fields_fail_validation(): void
     {
-        // Name with exactly 50 characters
-        $userData = [
-            'name' => str_repeat('a', 50),  // 50 characters
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'referral' => null,
-            'client_id' => null,
-            'redirect_uri' => null,
-            'back_url' => null,
-        ];
+        $this->from('/register')
+            ->post('/register', [])
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['name', 'email', 'password']);
 
-        // Send registration request with valid 50-character name
-        $response = $this->post('/register', $userData);
-
-        // Check for successful registration and redirection to home
-        $response->assertRedirect('/home');
-        dump('Registration successful with a 50-character name.');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
     }
-    /** @test */
-    public function it_disallows_name_longer_than_50_characters()
+
+    #[Test]
+    #[DataProvider('invalidNameProvider')]
+    public function name_validation_rejects_invalid_values(mixed $name, string $description): void
     {
-        // Name with more than 50 characters
-        $userData = [
-            'name' => str_repeat('a', 51),  // 51 characters (1 more than allowed)
-            'email' => 'testuser@example.com',
-            'password' => 'SecurePass!2024',
-            'password_confirmation' => 'SecurePass!2024',
-            'referral' => null,
-            'client_id' => null,
-            'redirect_uri' => null,
-            'back_url' => null,
-        ];
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData(['name' => $name]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['name']);
 
-        // Send registration request with too long name
-        $response = $this->post('/register', $userData);
-
-        // Check for name length validation error
-        $response->assertSessionHasErrors(['name']);
-        dump('Name validation failed as expected because name is longer than 50 characters.');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
     }
 
+    /**
+     * @return array<string, array{0: mixed, 1: string}>
+     */
+    public static function invalidNameProvider(): array
+    {
+        return [
+            'null' => [null, 'null name'],
+            'empty string' => ['', 'empty name'],
+            'too long' => [str_repeat('a', 51), 'name longer than 50'],
+            'HM- uppercase' => ['HM-Admin', 'HM- prefix'],
+            'hm- lowercase' => ['hm-admin', 'hm- prefix'],
+            'Hm- mixed' => ['Hm-Admin', 'Hm- prefix'],
+            'hM- mixed' => ['hM-Admin', 'hM- prefix'],
+        ];
+    }
 
+    #[Test]
+    #[DataProvider('validNameProvider')]
+    public function name_validation_accepts_valid_values(string $name): void
+    {
+        Notification::fake();
 
+        $this->post('/register', $this->validRegistrationData([
+            'name' => $name,
+            'email' => Str::uuid() . '@example.com',
+        ]))->assertRedirect('/home');
+
+        $this->assertDatabaseHas('users', ['name' => $name]);
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function validNameProvider(): array
+    {
+        return [
+            'simple ascii' => ['John Doe'],
+            'exactly 50 chars' => [str_repeat('a', 50)],
+            'contains hm without prefix' => ['John hm-smith'],
+            'starts with H without M-' => ['Happy User'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('invalidEmailProvider')]
+    public function email_validation_rejects_invalid_values(mixed $email): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData(['email' => $email]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    /**
+     * @return array<string, array{0: mixed}>
+     */
+    public static function invalidEmailProvider(): array
+    {
+        return [
+            'null' => [null],
+            'empty' => [''],
+            'missing at' => ['not-an-email'],
+            'missing domain' => ['user@'],
+            'spaces' => ['user @example.com'],
+            'too long' => [str_repeat('a', 250) . '@x.com'],
+        ];
+    }
+
+    #[Test]
+    public function email_must_be_unique(): void
+    {
+        User::factory()->create(['email' => 'taken@example.com']);
+
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'email' => 'taken@example.com',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    #[Test]
+    #[DataProvider('invalidPasswordProvider')]
+    public function password_validation_rejects_invalid_values(
+        ?string $password,
+        ?string $confirmation,
+        string $expectedErrorField = 'password'
+    ): void {
+        $payload = $this->validRegistrationData([
+            'password' => $password,
+            'password_confirmation' => $confirmation,
+        ]);
+
+        $this->from('/register')
+            ->post('/register', $payload)
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors([$expectedErrorField]);
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    /**
+     * @return array<string, array{0: ?string, 1: ?string, 2?: string}>
+     */
+    public static function invalidPasswordProvider(): array
+    {
+        return [
+            'null' => [null, null],
+            'empty' => ['', ''],
+            'too short' => ['Ab1!', 'Ab1!'],
+            'missing uppercase' => ['securepass!2024', 'securepass!2024'],
+            'missing lowercase' => ['SECUREPASS!2024', 'SECUREPASS!2024'],
+            'missing number' => ['SecurePass!', 'SecurePass!'],
+            'missing symbol' => ['SecurePass2024', 'SecurePass2024'],
+            'confirmation mismatch' => ['SecurePass!2024', 'DifferentPass!2024'],
+            'too long' => [str_repeat('Aa1!', 11), str_repeat('Aa1!', 11)], // 44 chars
+        ];
+    }
+
+    #[Test]
+    public function password_at_max_length_is_accepted(): void
+    {
+        Notification::fake();
+
+        // 40 characters matching complexity rules
+        $password = 'Aa1!' . str_repeat('x', 36);
+
+        $this->post('/register', $this->validRegistrationData([
+            'password' => $password,
+            'password_confirmation' => $password,
+        ]))->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+        $this->assertTrue(Hash::check($password, $user->password));
+    }
+
+    #[Test]
+    public function referral_must_exist_as_user_code(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'referral' => 'hm-9999999',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['referral']);
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    #[Test]
+    public function empty_referral_is_stored_as_null(): void
+    {
+        Notification::fake();
+
+        $this->post('/register', $this->validRegistrationData([
+            'referral' => '',
+        ]))->assertRedirect('/home');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'testuser@example.com',
+            'referral' => null,
+        ]);
+    }
+
+    #[Test]
+    public function client_id_must_exist(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'client_id' => 999999,
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['client_id']);
+    }
+
+    #[Test]
+    public function redirect_uri_must_be_a_valid_url(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'redirect_uri' => 'not-a-url',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['redirect_uri']);
+    }
+
+    #[Test]
+    public function redirect_uri_must_belong_to_an_oauth_client(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'redirect_uri' => 'https://evil.example.com/callback',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['redirect_uri']);
+    }
+
+    #[Test]
+    public function redirect_uri_must_belong_to_the_given_client_id(): void
+    {
+        $clientA = $this->createOAuthClient('https://a.example.com/callback');
+        $this->createOAuthClient('https://b.example.com/callback');
+
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'client_id' => $clientA->id,
+                'redirect_uri' => 'https://b.example.com/callback',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['redirect_uri']);
+    }
+
+    #[Test]
+    public function back_url_must_be_a_valid_url(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'back_url' => 'javascript:alert(1)',
+            ]))
+            ->assertRedirect('/register')
+            ->assertSessionHasErrors(['back_url']);
+    }
+
+    #[Test]
+    public function mass_assignment_cannot_set_privileged_attributes_on_register(): void
+    {
+        Notification::fake();
+
+        $this->post('/register', $this->validRegistrationData([
+            'email_verified_at' => now()->toDateTimeString(),
+            'code' => 'hm-hacked',
+            'wallet_address' => '0x' . str_repeat('a', 40),
+            'remember_token' => 'stolen-token',
+            'id' => 99999,
+        ]))->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+
+        $this->assertNull($user->email_verified_at);
+        $this->assertNull($user->code);
+        $this->assertNull($user->wallet_address);
+        $this->assertNotSame(99999, $user->id);
+    }
+
+    #[Test]
+    public function sql_injection_payload_in_email_does_not_compromise_registration(): void
+    {
+        $payload = "test' OR '1'='1@example.com";
+
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'email' => $payload,
+            ]))
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
+    #[Test]
+    public function xss_payload_in_name_is_stored_without_executing_and_does_not_break_registration(): void
+    {
+        Notification::fake();
+
+        $xssName = '<script>alert("xss")</script>';
+
+        $this->post('/register', $this->validRegistrationData([
+            'name' => $xssName,
+        ]))->assertRedirect('/home');
+
+        $this->assertDatabaseHas('users', [
+            'name' => $xssName,
+            'email' => 'testuser@example.com',
+        ]);
+    }
+
+    #[Test]
+    public function password_is_never_stored_in_plain_text(): void
+    {
+        Notification::fake();
+
+        $this->post('/register', $this->validRegistrationData())->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+
+        $this->assertNotSame(self::VALID_PASSWORD, $user->getAttributes()['password']);
+        $this->assertTrue(Hash::check(self::VALID_PASSWORD, $user->password));
+    }
+
+    #[Test]
+    public function sensitive_attributes_are_hidden_when_user_is_serialized(): void
+    {
+        Notification::fake();
+
+        $this->post('/register', $this->validRegistrationData())->assertRedirect('/home');
+
+        $user = User::where('email', 'testuser@example.com')->firstOrFail();
+        $array = $user->toArray();
+
+        $this->assertArrayNotHasKey('password', $array);
+        $this->assertArrayNotHasKey('remember_token', $array);
+        $this->assertArrayNotHasKey('nonce', $array);
+    }
+
+    #[Test]
+    public function failed_validation_does_not_create_personal_info_or_cache_back_url(): void
+    {
+        $this->from('/register')
+            ->post('/register', $this->validRegistrationData([
+                'email' => 'bad-email',
+                'back_url' => 'https://metarang.com/x',
+            ]))
+            ->assertSessionHasErrors(['email']);
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertDatabaseCount('personal_infos', 0);
+    }
+
+    #[Test]
+    public function authenticated_user_cannot_register_again(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->post('/register', $this->validRegistrationData([
+                'email' => 'another@example.com',
+            ]))
+            ->assertRedirect('/home');
+
+        $this->assertDatabaseMissing('users', ['email' => 'another@example.com']);
+    }
 }

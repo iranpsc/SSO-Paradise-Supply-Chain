@@ -13,7 +13,7 @@
                         @method('PUT')
 
                         @if(Auth::user()->password)
-                        <x-form.text :label="__('Current Password')" for="current_password" name="current_password" type="current_password"
+                        <x-form.text :label="__('Current Password')" for="current_password" name="current_password" type="password"
                             requried />
                         @endif
 

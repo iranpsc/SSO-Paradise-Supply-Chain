@@ -31,7 +31,7 @@
         </div>
 
         <div class="btn-container">
-            <a href="{{ $verificationUrl }}" class="btn">{{ __('Verify Email Address') }}</a>
+            <a href="{!! $verificationUrl !!}" class="btn">{{ __('Verify Email Address') }}</a>
         </div>
 
         <div class="expire-info">
@@ -39,7 +39,7 @@
         </div>
 
         <p><strong>{{ __('Alternative verification:') }}</strong> {{ __('If the button above doesn\'t work, copy and paste this URL into your browser:') }}</p>
-        <div class="url-fallback">{{ $verificationUrl }}</div>
+        <div class="url-fallback">{!! $verificationUrl !!}</div>
 
         <div class="security-notice">
             <h3>{{ __('🔒 Security Information') }}</h3>

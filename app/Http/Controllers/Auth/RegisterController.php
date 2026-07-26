@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Passport\Client;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Rules\RedirectUriBelongsToClient;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -66,21 +66,9 @@ class RegisterController extends Controller
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
             'redirect_uri' => [
                 'nullable',
+                'bail',
                 'url',
-                function ($attribute, $value, $fail) use ($data) {
-                    // Passport stores redirect URIs as a comma-separated string in the
-                    // "redirect" text column, so match against the set instead of JSON.
-                    // When client_id is present, the URI must belong to that client.
-                    $query = Client::query()->whereRaw('FIND_IN_SET(?, `redirect`)', [$value]);
-
-                    if (! empty($data['client_id'])) {
-                        $query->where('id', $data['client_id']);
-                    }
-
-                    if (! $query->exists()) {
-                        $fail(__('validation.exists', ['attribute' => $attribute]));
-                    }
-                },
+                new RedirectUriBelongsToClient,
             ],
             'back_url' => ['nullable', 'url'],
             'referral' => ['nullable', 'string', 'exists:users,code'],

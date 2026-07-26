@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Elliptic\EC;
 use kornrunner\Keccak;
+use PHPUnit\Framework\Attributes\Test;
 
 class Web3AuthTest extends TestCase
 {
@@ -21,7 +22,7 @@ class Web3AuthTest extends TestCase
         $this->ec = new EC('secp256k1');
     }
 
-    /** @test */
+    #[Test]
     public function it_generates_nonce_without_creating_user_in_database()
     {
         $address = '0x90f8bfac9c63c35718a7a77e94b002d274950e89';
@@ -42,7 +43,7 @@ class Web3AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_nonce_generation_with_invalid_address()
     {
         $response = $this->getJson('/web3/nonce?address=invalid-eth-address');
@@ -51,7 +52,7 @@ class Web3AuthTest extends TestCase
         $response->assertJsonValidationErrors(['address']);
     }
 
-    /** @test */
+    #[Test]
     public function it_authenticates_successfully_with_valid_signature()
     {
         $key = $this->ec->genKeyPair();
@@ -83,7 +84,7 @@ class Web3AuthTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_to_intended_url_after_wallet_authentication()
     {
         $intendedUrl = url('/oauth/authorize?client_id=test&redirect_uri=https://example.com/callback');
@@ -109,7 +110,7 @@ class Web3AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_redirects_browser_requests_to_intended_url_after_wallet_authentication()
     {
         $intendedUrl = url('/oauth/authorize?client_id=test&redirect_uri=https://example.com/callback');
@@ -131,7 +132,7 @@ class Web3AuthTest extends TestCase
         $verifyResponse->assertRedirect($intendedUrl);
     }
 
-    /** @test */
+    #[Test]
     public function it_prevents_replay_attacks_by_consuming_nonce()
     {
         $key = $this->ec->genKeyPair();
@@ -158,7 +159,7 @@ class Web3AuthTest extends TestCase
         $verifyResponse2->assertJson(['message' => 'Nonce expired or not found. Please try again.']);
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_verification_with_invalid_signature()
     {
         $key = $this->ec->genKeyPair();
@@ -182,7 +183,7 @@ class Web3AuthTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function authenticated_user_can_link_wallet_to_account()
     {
         $user = User::factory()->create();
@@ -209,7 +210,7 @@ class Web3AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function authenticated_user_cannot_link_wallet_already_used_by_another_account()
     {
         $existingUser = User::factory()->create();
@@ -226,7 +227,7 @@ class Web3AuthTest extends TestCase
         $nonceResponse->assertJson(['message' => 'This wallet is already linked to another account.']);
     }
 
-    /** @test */
+    #[Test]
     public function link_signature_cannot_be_used_for_wallet_login()
     {
         $user = User::factory()->create();
@@ -251,7 +252,7 @@ class Web3AuthTest extends TestCase
         $this->assertGuest();
     }
 
-    /** @test */
+    #[Test]
     public function login_signature_cannot_be_used_to_link_wallet()
     {
         $user = User::factory()->create();
@@ -278,7 +279,7 @@ class Web3AuthTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function authenticated_user_connecting_wallet_via_verify_does_not_create_new_user_or_code()
     {
         $user = User::factory()->create(['code' => 'hm-2000001']);
@@ -309,7 +310,7 @@ class Web3AuthTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    /** @test */
+    #[Test]
     public function authenticated_users_cannot_request_login_nonce()
     {
         $user = User::factory()->create();
@@ -329,7 +330,18 @@ class Web3AuthTest extends TestCase
         $sig = $key->sign($msgHash);
         $r = str_pad($sig->r->toString(16), 64, '0', STR_PAD_LEFT);
         $s = str_pad($sig->s->toString(16), 64, '0', STR_PAD_LEFT);
-        $v = dechex($sig->recoveryParam + 27);
+        $recoveryParam = $sig->recoveryParam;
+
+        // Normalize to low-s (EIP-2) to match Web3AuthController verification.
+        $halfN = '7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0';
+        if (strcasecmp($s, $halfN) > 0) {
+            $n = gmp_init('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141', 16);
+            $sGmp = gmp_init($s, 16);
+            $s = str_pad(gmp_strval(gmp_sub($n, $sGmp), 16), 64, '0', STR_PAD_LEFT);
+            $recoveryParam ^= 1;
+        }
+
+        $v = dechex($recoveryParam + 27);
 
         return '0x' . $r . $s . $v;
     }

@@ -23,7 +23,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Passport::hashClientSecrets();
+        // Client secrets are hashed by default in Passport 13.
         Passport::useClientModel(Client::class);
     }
 }

@@ -31,7 +31,7 @@ Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature'])
     ->middleware('throttle:web3')
     ->name('web3.verify');
 
-Route::middleware(['auth', 'verified', 'auth.session'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::middleware('throttle:web3')->group(function () {
         Route::get('/web3/link/nonce', [Web3AuthController::class, 'getLinkNonce'])->name('web3.link.nonce');

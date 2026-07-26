@@ -2,108 +2,344 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $user;
+    private User $user;
 
-    // Create the user before each test
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Assuming the user already exists in the database
-        $this->user = User::create([
-            'name' => 'Test User Login',
+        $this->user = User::factory()->create([
             'email' => 'testlogin@example.com',
-            'password' => Hash::make('zx987654321ZX!'),  // Hashed password
+            'password' => Hash::make(self::VALID_PASSWORD),
         ]);
     }
 
-    /** @test */
-    public function a_user_can_login_with_correct_credentials()
+    #[Test]
+    public function guest_can_view_login_form(): void
     {
-        // Login credentials
-        $loginData = [
+        $this->get('/login')
+            ->assertOk()
+            ->assertViewIs('auth.login');
+    }
+
+    #[Test]
+    public function authenticated_user_cannot_view_login_form(): void
+    {
+        $this->actingAs($this->user)
+            ->get('/login')
+            ->assertRedirect('/home');
+    }
+
+    #[Test]
+    public function verified_user_can_login_with_correct_credentials(): void
+    {
+        $response = $this->post('/login', [
             'email' => 'testlogin@example.com',
-            'password' => 'zx987654321ZX!',
-        ];
+            'password' => self::VALID_PASSWORD,
+        ]);
 
-        // Send login request
-        $response = $this->post('/login', $loginData);
-
-        // Check redirect to home page after successful login
         $response->assertRedirect('/home');
-        dump('User successfully logged in with correct credentials.');
-
-        // Check if the user is authenticated
         $this->assertAuthenticatedAs($this->user);
-        dump('User is authenticated after login.');
     }
 
-    /** @test */
-    public function a_user_cannot_login_with_incorrect_password()
+    #[Test]
+    public function login_regenerates_session_id_to_prevent_fixation(): void
     {
-        // Login credentials with wrong password
-        $loginData = [
+        $this->startSession();
+        $previousId = session()->getId();
+
+        $this->post('/login', [
             'email' => 'testlogin@example.com',
-            'password' => 'wrongpassword123',
-        ];
+            'password' => self::VALID_PASSWORD,
+        ])->assertRedirect('/home');
 
-        // Send login request
-        $response = $this->post('/login', $loginData);
-
-        // Check that the login failed and the user was redirected back with errors
-        $response->assertSessionHasErrors();
-        dump('Login failed as expected due to incorrect password.');
-
-        // Check that the user is not authenticated
-        $this->assertGuest();
-        dump('User is not authenticated due to incorrect password.');
+        $this->assertNotSame($previousId, session()->getId());
+        $this->assertAuthenticatedAs($this->user);
     }
 
-    /** @test */
-    public function a_user_cannot_login_with_invalid_email()
+    #[Test]
+    public function unverified_user_is_redirected_to_verification_notice_after_login(): void
     {
-        // Login credentials with invalid email
-        $loginData = [
-            'email' => 'invalid@example.com',
-            'password' => 'zx987654321ZX!',
-        ];
+        $unverified = User::factory()->unverified()->create([
+            'email' => 'unverified@example.com',
+            'password' => Hash::make(self::VALID_PASSWORD),
+        ]);
 
-        // Send login request
-        $response = $this->post('/login', $loginData);
+        $this->post('/login', [
+            'email' => 'unverified@example.com',
+            'password' => self::VALID_PASSWORD,
+        ])
+            ->assertRedirect(route('verification.notice'));
 
-        // Check that the login failed and the user was redirected back with errors
-        $response->assertSessionHasErrors();
-        dump('Login failed as expected due to invalid email.');
-
-        // Check that the user is not authenticated
-        $this->assertGuest();
-        dump('User is not authenticated due to invalid email.');
+        $this->assertAuthenticatedAs($unverified);
     }
 
-    /** @test */
-    public function a_user_can_logout_successfully()
+    #[Test]
+    public function login_preserves_intended_verification_url_for_unverified_users(): void
     {
-        // First login the user
+        $unverified = User::factory()->unverified()->create([
+            'email' => 'unverified-intended@example.com',
+            'password' => Hash::make(self::VALID_PASSWORD),
+        ]);
+
+        $intended = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $unverified->id, 'hash' => sha1($unverified->email)]
+        );
+
+        $this->withSession(['url.intended' => $intended])
+            ->post('/login', [
+                'email' => 'unverified-intended@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect($intended);
+
+        $this->assertAuthenticatedAs($unverified);
+    }
+
+    #[Test]
+    public function login_respects_intended_url_for_verified_users(): void
+    {
+        $intended = url('/change-password');
+
+        $this->withSession(['url.intended' => $intended])
+            ->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect($intended);
+
+        $this->assertAuthenticatedAs($this->user);
+    }
+
+    #[Test]
+    public function user_cannot_login_with_incorrect_password(): void
+    {
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => 'WrongPass!2024',
+            ])
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors();
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function user_cannot_login_with_unknown_email(): void
+    {
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'missing@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors();
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    #[DataProvider('missingLoginFieldsProvider')]
+    public function login_requires_email_and_password(array $payload, array $errors): void
+    {
+        $this->from('/login')
+            ->post('/login', $payload)
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors($errors);
+
+        $this->assertGuest();
+    }
+
+    /**
+     * @return array<string, array{0: array<string, mixed>, 1: array<int, string>}>
+     */
+    public static function missingLoginFieldsProvider(): array
+    {
+        return [
+            'both missing' => [[], ['email', 'password']],
+            'email missing' => [['password' => 'secret'], ['email']],
+            'password missing' => [['email' => 'a@b.com'], ['password']],
+            'email empty' => [['email' => '', 'password' => 'secret'], ['email']],
+            'password empty' => [['email' => 'a@b.com', 'password' => ''], ['password']],
+        ];
+    }
+
+    #[Test]
+    public function remember_me_sets_remember_cookie_when_requested(): void
+    {
+        $response = $this->post('/login', [
+            'email' => 'testlogin@example.com',
+            'password' => self::VALID_PASSWORD,
+            'remember' => 'on',
+        ]);
+
+        $response->assertRedirect('/home');
+        $this->assertAuthenticatedAs($this->user);
+        $response->assertCookie(auth()->guard()->getRecallerName());
+    }
+
+    #[Test]
+    public function login_is_throttled_after_too_many_failed_attempts(): void
+    {
+        Event::fake([Lockout::class]);
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->from('/login')->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => 'WrongPass!2024',
+            ]);
+        }
+
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => 'WrongPass!2024',
+            ])
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors('email');
+
+        Event::assertDispatched(Lockout::class);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function throttled_user_cannot_login_even_with_correct_password(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => 'WrongPass!2024',
+            ]);
+        }
+
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertSessionHasErrors('email');
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function authenticated_user_can_logout(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/logout')
+            ->assertRedirect('/');
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function logout_invalidates_session_and_regenerates_csrf_token(): void
+    {
         $this->actingAs($this->user);
+        $this->startSession();
+        $oldToken = session()->token();
+        $oldId = session()->getId();
 
-        // Log out the user
-        $response = $this->post('/logout');
+        $this->post('/logout')->assertRedirect('/');
 
-        // Check that the user was logged out and redirected to '/'
-        $response->assertRedirect('/');
-        dump('User successfully logged out.');
-
-        // Check that the user is no longer authenticated
         $this->assertGuest();
-        dump('User is no longer authenticated after logout.');
+        $this->assertNotSame($oldId, session()->getId());
+        $this->assertNotSame($oldToken, session()->token());
+    }
+
+    #[Test]
+    public function logout_returns_204_for_json_requests(): void
+    {
+        $this->actingAs($this->user)
+            ->postJson('/logout')
+            ->assertNoContent();
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function guest_logout_is_idempotent_and_redirects_home_root(): void
+    {
+        $this->post('/logout')->assertRedirect('/');
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function sql_injection_in_login_email_does_not_authenticate(): void
+    {
+        $this->from('/login')
+            ->post('/login', [
+                'email' => "testlogin@example.com' OR '1'='1",
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect('/login');
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function wallet_only_user_cannot_login_with_email_password(): void
+    {
+        User::factory()->walletOnly()->create([
+            'email' => null,
+            'password' => null,
+        ]);
+
+        $this->from('/login')
+            ->post('/login', [
+                'email' => 'wallet@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertSessionHasErrors();
+
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function authenticated_user_cannot_post_login_again(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/login', [
+                'email' => 'testlogin@example.com',
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect('/home');
+    }
+
+    #[Test]
+    public function register_then_logout_then_login_as_verified_user_reaches_home(): void
+    {
+        // Simulate a user who registered and later verified their email.
+        $user = User::factory()->create([
+            'email' => 'cycle@example.com',
+            'password' => Hash::make(self::VALID_PASSWORD),
+        ]);
+
+        $this->actingAs($user)->post('/logout')->assertRedirect('/');
+        $this->assertGuest();
+
+        $this->post('/login', [
+            'email' => 'cycle@example.com',
+            'password' => self::VALID_PASSWORD,
+        ])->assertRedirect('/home');
+
+        $this->assertAuthenticatedAs($user);
     }
 }

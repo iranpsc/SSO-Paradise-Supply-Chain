@@ -12,7 +12,7 @@
 
 {{ __('TO VERIFY YOUR EMAIL ADDRESS:') }}
 1. {{ __('Copy and paste this URL into your browser:') }}
-   {{ $verificationUrl }}
+   {!! $verificationUrl !!}
 2. {{ __('You will be automatically logged in and redirected to your account') }}
 3. {{ __('Your email will be marked as verified') }}
 

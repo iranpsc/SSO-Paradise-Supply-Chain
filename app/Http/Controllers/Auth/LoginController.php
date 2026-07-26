@@ -64,7 +64,8 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if (!$user->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice');
+            // Prefer the signed verification link (url.intended) over the notice page.
+            return redirect()->intended(route('verification.notice'));
         }
 
         return redirect()->intended($this->redirectPath());
@@ -78,7 +79,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $request->user()?->tokens()->delete();
 
         $this->guard()->logout();
 
