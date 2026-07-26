@@ -21,7 +21,7 @@ permissions:
 jobs:
 
   # ==================================================
-  # Laravel Tests & Coverage
+  # Laravel Tests
   # ==================================================
 
   laravel-tests:
@@ -64,9 +64,8 @@ jobs:
 
       - name: 🐘 Setup PHP
         uses: shivammathur/setup-php@v2
-
         with:
-          php-version: "8.1"
+          php-version: "8.2"
 
           extensions: >
             mbstring,
@@ -84,6 +83,16 @@ jobs:
 
 
       # ==================================================
+      # Check PHP Version
+      # ==================================================
+
+      - name: 🔍 Check PHP Version
+        run: |
+          php -v
+          composer --version
+
+
+      # ==================================================
       # Install Composer Dependencies
       # ==================================================
 
@@ -97,7 +106,7 @@ jobs:
 
 
       # ==================================================
-      # Prepare Environment
+      # Prepare Laravel Environment
       # ==================================================
 
       - name: ⚙️ Prepare Laravel Environment
@@ -121,10 +130,10 @@ jobs:
 
 
       # ==================================================
-      # Check MySQL
+      # Run Migrations
       # ==================================================
 
-      - name: 🩺 Check MySQL Connection
+      - name: 🗄️ Run Database Migrations
         run: |
           php artisan migrate --force
 
@@ -135,10 +144,8 @@ jobs:
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
-
         with:
-          node-version: "20"
-
+          node-version: "24"
           cache: npm
 
 
@@ -161,10 +168,10 @@ jobs:
 
 
       # ==================================================
-      # Run Laravel Tests + Coverage
+      # Run Laravel Tests
       # ==================================================
 
-      - name: 🧪 Run Laravel Tests & Coverage
+      - name: 🧪 Run Laravel Tests
         run: |
           php artisan test \
             --coverage \
@@ -178,16 +185,11 @@ jobs:
 
       - name: 📊 Publish Test Results
         if: always()
-
         uses: dorny/test-reporter@v2
-
         with:
           name: 🧪 Laravel Test Results
-
           path: test-results.xml
-
           reporter: java-junit
-
           fail-on-error: true
 
 
@@ -197,9 +199,7 @@ jobs:
 
       - name: 📝 Generate Test Summary
         if: always()
-
         shell: bash
-
         run: |
 
           echo "# 🧪 Laravel Test & Coverage Report" >> "$GITHUB_STEP_SUMMARY"
@@ -232,12 +232,17 @@ jobs:
 
           echo '```text' >> "$GITHUB_STEP_SUMMARY"
 
-          php artisan test \
-            --coverage \
-            --min=70 \
-            2>&1 | tee coverage-summary.txt || true
+          if [ -f test-results.xml ]; then
+            php artisan test \
+              --coverage \
+              --min=70 \
+              2>&1 | tee coverage-summary.txt || true
 
-          cat coverage-summary.txt >> "$GITHUB_STEP_SUMMARY"
+            cat coverage-summary.txt >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "❌ Test results were not generated." >> "$GITHUB_STEP_SUMMARY"
+            echo "❌ Test results were not generated." > coverage-summary.txt
+          fi
 
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
@@ -247,13 +252,10 @@ jobs:
       # ==================================================
 
       - name: 📄 Upload Test Results
-        if: always()
-
+        if: always() && hashFiles('test-results.xml') != ''
         uses: actions/upload-artifact@v4
-
         with:
           name: laravel-test-results
-
           path: test-results.xml
 
 
@@ -262,13 +264,10 @@ jobs:
       # ==================================================
 
       - name: 📈 Upload Coverage Report
-        if: always()
-
+        if: always() && hashFiles('coverage-summary.txt') != ''
         uses: actions/upload-artifact@v4
-
         with:
           name: laravel-coverage-report
-
           path: coverage-summary.txt
 
 
@@ -285,17 +284,14 @@ jobs:
     needs:
       - laravel-tests
 
-    if: ${{ failure() }}
+    if: ${{ needs.laravel-tests.result == 'failure' }}
 
     steps:
 
       - name: 🔔 Send Slack Notification
-
         uses: slackapi/slack-github-action@v2.1.1
-
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-
           webhook-type: incoming-webhook
 
           payload: |
