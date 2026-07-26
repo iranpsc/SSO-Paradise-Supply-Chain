@@ -121,4 +121,12 @@ class DeleteUnverifiedUsersCommandTest extends TestCase
 
         $this->assertDatabaseHas('users', ['id' => $eligible->id]);
     }
+
+    #[Test]
+    public function delete_unverified_users_command_is_scheduled_daily(): void
+    {
+        $this->artisan('schedule:list')
+            ->expectsOutputToContain('users:delete-unverified')
+            ->assertSuccessful();
+    }
 }

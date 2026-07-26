@@ -9,6 +9,8 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+
   # اجرای خودکار هر یک ساعت
   # schedule:
   #   - cron: "0 * * * *"
@@ -140,6 +142,9 @@ jobs:
       - name: 🔑 Generate Passport Keys
         run: |
           php artisan passport:keys --force
+          chmod 600 storage/oauth-private.key storage/oauth-public.key
+          test -s storage/oauth-private.key
+          test -s storage/oauth-public.key
 
 
       # ========================================================
@@ -798,6 +803,7 @@ jobs:
 
       - name: 🔔 Send Slack Notification
         if: ${{ env.SLACK_WEBHOOK_URL != '' }}
+        continue-on-error: true
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
