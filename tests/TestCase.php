@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Passport\Client;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Laravel\Passport\ClientRepository;
 
@@ -122,12 +123,20 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Ensure a Passport personal-access client exists (required for createToken()).
+     *
+     * OAuth keys are gitignored; generate them when missing so CI and fresh
+     * local checkouts behave the same as a machine that already ran passport:keys.
      */
     protected function ensurePersonalAccessClient(): Client
     {
-        foreach (['oauth-private.key', 'oauth-public.key'] as $key) {
-            $path = storage_path($key);
+        $privateKey = storage_path('oauth-private.key');
+        $publicKey = storage_path('oauth-public.key');
 
+        if (! is_file($privateKey) || ! is_file($publicKey)) {
+            Artisan::call('passport:keys', ['--force' => true]);
+        }
+
+        foreach ([$privateKey, $publicKey] as $path) {
             if (is_file($path)) {
                 @chmod($path, 0600);
             }
