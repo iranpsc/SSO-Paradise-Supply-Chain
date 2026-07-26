@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePasswordRequest;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class NewPasswordController extends Controller
@@ -29,11 +27,16 @@ class NewPasswordController extends Controller
     public function update(UpdatePasswordRequest $request)
     {
         $request->user()->update([
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
-        // Invalidate other sessions
-        Auth::logoutOtherDevices($request->password);
+        // Updating the password hash invalidates other sessions via AuthenticateSession.
+        // Only call logoutOtherDevices when a remember-me cookie is present — CookieJar::hasQueued()
+        // throws when no recaller cookie has been queued (framework edge case).
+        $recaller = Auth::guard()->getRecallerName();
+        if ($request->cookies->has($recaller)) {
+            Auth::logoutOtherDevices($request->password);
+        }
 
         return redirect()->route('password.edit')->with('success', __('Password updated successfully.'));
     }

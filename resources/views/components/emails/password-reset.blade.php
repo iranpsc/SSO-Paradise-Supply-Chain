@@ -31,7 +31,7 @@
         </div>
 
         <div class="btn-container">
-            <a href="{{ $resetUrl }}" class="btn">{{ __('Reset Password') }}</a>
+            <a href="{!! $resetUrl !!}" class="btn">{{ __('Reset Password') }}</a>
         </div>
 
         <div class="expire-info">
@@ -39,7 +39,7 @@
         </div>
 
         <p><strong>{{ __('Alternative access:') }}</strong> {{ __('If the button above doesn\'t work, copy and paste this URL into your browser:') }}</p>
-        <div class="url-fallback">{{ $resetUrl }}</div>
+        <div class="url-fallback">{!! $resetUrl !!}</div>
 
         <div class="warning">
             <strong>{{ __('⚠️ Didn\'t request this?') }}</strong><br>

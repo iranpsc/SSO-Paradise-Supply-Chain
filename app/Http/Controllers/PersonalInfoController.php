@@ -10,7 +10,7 @@ class PersonalInfoController extends Controller
 
     /**
      * Display the specified resource.
-     * 
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function show()
@@ -21,7 +21,7 @@ class PersonalInfoController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * 
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function edit()
@@ -32,13 +32,13 @@ class PersonalInfoController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
+     *
      * @param \App\Http\Requests\UpdatePersonalInfoRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdatePersonalInfoRequest $request)
     {
-        $request->user()->personalInfo()->updateOrCreate(
+        $personalInfo = $request->user()->personalInfo()->updateOrCreate(
             ['user_id' => $request->user()->id],
             $request->only([
                 'is_company',
@@ -58,20 +58,20 @@ class PersonalInfoController extends Controller
         );
 
         if ($request->hasFile('melli_card_scan')) {
-            $request->user()->personalInfo->clearMediaCollection('melli_card_scan', 'local');
-            $request->user()->personalInfo->addMediaFromRequest('melli_card_scan')
+            $personalInfo->clearMediaCollection('melli_card_scan');
+            $personalInfo->addMediaFromRequest('melli_card_scan')
                 ->toMediaCollection('melli_card_scan', 'local');
         }
 
         if ($request->hasFile('certificate_scan')) {
-            $request->user()->personalInfo->clearMediaCollection('melli_card_scan', 'local');
-            $request->user()->personalInfo->addMediaFromRequest('certificate_scan')
+            $personalInfo->clearMediaCollection('certificate_scan');
+            $personalInfo->addMediaFromRequest('certificate_scan')
                 ->toMediaCollection('certificate_scan', 'local');
         }
 
         if ($request->hasFile('bank_card_scan')) {
-            $request->user()->personalInfo->clearMediaCollection('melli_card_scan', 'local');
-            $request->user()->personalInfo->addMediaFromRequest('bank_card_scan')
+            $personalInfo->clearMediaCollection('bank_card_scan');
+            $personalInfo->addMediaFromRequest('bank_card_scan')
                 ->toMediaCollection('bank_card_scan', 'local');
         }
 

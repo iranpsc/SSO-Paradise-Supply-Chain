@@ -72,6 +72,12 @@ class AppServiceProvider extends ServiceProvider
                 ]);
         });
 
+        // Integer client IDs (existing oauth_clients use bigIncrements).
+        Passport::$clientUuids = false;
+
+        // Published Passport authorize view (Passport 13 is headless by default).
+        Passport::authorizationView('vendor.passport.authorize');
+
         Passport::enablePasswordGrant();
 
         Passport::tokensExpireIn(now()->addMinutes(60));
