@@ -200,28 +200,41 @@
                         const spinner = document.getElementById('connectWallet-spinner');
                         const text = document.getElementById('ConnectWalletTxt');
 
+                        let uiWasReset = false;
+
                         const resetButton = () => {
+                            uiWasReset = true;
                             btn.disabled = false;
                             icon.classList.remove('hidden');
                             spinner.classList.add('hidden');
                             text.innerText = "ورود با connectWallet";
                         };
 
-                        btn.disabled = true;
-                        icon.classList.add('hidden');
-                        spinner.classList.remove('hidden');
-                        text.innerText = "در حال اتصال...";
+                        const setConnecting = () => {
+                            uiWasReset = false;
+                            btn.disabled = true;
+                            icon.classList.add('hidden');
+                            spinner.classList.remove('hidden');
+                            text.innerText = "در حال اتصال...";
+                        };
+
+                        setConnecting();
+
+                        const uiTimeout = setTimeout(() => {
+                            resetButton();
+                        }, 5000);
 
                         try {
                             const {
                                 address,
                                 signature
-                            } = await Promise.race([
-                                window.connectWalletConnect(),
-                                new Promise((_, reject) =>
-                                    setTimeout(() => reject(new Error("TIMEOUT")), 40000)
-                                ),
-                            ]);
+                            } = await window.connectWalletConnect();
+
+                            clearTimeout(uiTimeout);
+
+                            if (uiWasReset && btn.disabled) {
+                                return;
+                            }
 
                             text.innerText = "در حال تایید...";
 
@@ -234,15 +247,9 @@
                                 signature
                             });
                         } catch (error) {
+                            clearTimeout(uiTimeout);
                             console.error(error);
-
-                            // فقط دکمه را ریست کن، Alert نمایش نده
                             resetButton();
-
-                            // اگر خطا از Timeout نبود و خواستی بعداً لاگ بگیری
-                            if (error.message !== "TIMEOUT") {
-                                // اینجا می‌توانی فقط لاگ بگیری
-                            }
                         }
                     }
                 </script>
