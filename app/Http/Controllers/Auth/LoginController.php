@@ -78,7 +78,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $request->user()?->tokens()->delete();
 
         $this->guard()->logout();
 

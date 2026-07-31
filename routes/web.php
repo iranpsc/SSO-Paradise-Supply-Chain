@@ -7,7 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PersonalInfoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\Web3AuthController;
 
 /*
@@ -31,7 +30,7 @@ Route::post('/web3/verify', [Web3AuthController::class, 'verifySignature'])
     ->middleware('throttle:web3')
     ->name('web3.verify');
 
-Route::middleware(['auth', 'verified', 'auth.session'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::middleware('throttle:web3')->group(function () {
         Route::get('/web3/link/nonce', [Web3AuthController::class, 'getLinkNonce'])->name('web3.link.nonce');
@@ -41,7 +40,6 @@ Route::middleware(['auth', 'verified', 'auth.session'])->group(function () {
     Route::singleton('personal-info', PersonalInfoController::class);
     Route::get('/change-password', [NewPasswordController::class, 'showForm'])->name('password.edit');
     Route::put('/change-password', [NewPasswordController::class, 'update'])->name('password.new');
-    Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 });
 
 Auth::routes();

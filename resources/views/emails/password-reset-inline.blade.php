@@ -57,7 +57,7 @@
 
                             <!-- Button -->
                             <div style="text-align:center;margin:30px 0 10px 0;">
-                                <a href="{{ $resetUrl }}" style="display:inline-block;padding:12px 30px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">{{ __('Reset Password') }}</a>
+                                <a href="{!! $resetUrl !!}" style="display:inline-block;padding:12px 30px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:16px;">{{ __('Reset Password') }}</a>
                             </div>
 
                             <!-- Expire info -->
@@ -69,7 +69,7 @@
                             <div style="font-size:14px;margin:0 0 10px 0;">
                                 <strong>{{ __('Alternative access:') }}</strong> {{ __('If the button above doesn\'t work, copy and paste this URL into your browser:') }}
                             </div>
-                            <div style="background-color:#f8f9fa;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;word-break:break-all;direction:ltr;text-align:left;margin:0 0 25px 0;">{{ $resetUrl }}</div>
+                            <div style="background-color:#f8f9fa;padding:10px;border-radius:4px;font-family:monospace;font-size:12px;word-break:break-all;direction:ltr;text-align:left;margin:0 0 25px 0;">{!! $resetUrl !!}</div>
 
                             <!-- Warning -->
                             <div style="background-color:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:10px;border-radius:4px;margin:0 0 25px 0;font-size:14px;">

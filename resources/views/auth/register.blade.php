@@ -12,10 +12,20 @@
                         <div class="flex flex-col gap-7">
                             @csrf
 
-                            <input type="hidden" name="client_id" value="{{ request()->query('client_id') }}">
-                            <input type="hidden" name="redirect_uri" value="{{ request()->query('redirect_uri') }}">
-                            <input type="hidden" name="referral" value="{{ request()->query('referral') }}">
-                            <input type="hidden" name="back_url" value="{{ request()->query('back_url') }}">
+                            <input type="hidden" name="client_id" value="{{ old('client_id', request('client_id')) }}">
+                            <input type="hidden" name="redirect_uri" value="{{ old('redirect_uri', request('redirect_uri')) }}">
+                            <input type="hidden" name="referral" value="{{ old('referral', request('referral')) }}">
+                            <input type="hidden" name="back_url" value="{{ old('back_url', request('back_url')) }}">
+
+                            @if ($errors->hasAny(['client_id', 'redirect_uri', 'referral', 'back_url']))
+                                <div class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-[#EB5757] space-y-1" role="alert">
+                                    @foreach (['client_id', 'redirect_uri', 'referral', 'back_url'] as $field)
+                                        @error($field)
+                                            <p>{{ $message }}</p>
+                                        @enderror
+                                    @endforeach
+                                </div>
+                            @endif
 
                             <x-form.text :label="__('Name')" for="name" name="name" required autofocus />
 
@@ -80,7 +90,7 @@
                              document
                                  .getElementById("connect-wallet-btn")
                                  .classList.add("hidden");
-                         } 
+                         }
                         async function connectWallet() {
                             const btn = document.getElementById('connect-wallet-btn');
                             const icon = document.getElementById('wallet-icon');
@@ -264,19 +274,6 @@
                 "availableLanguage": "Persian"
             },
             "email": "Cq@irpsc.com",
-
-            {
-                {
-                    --"foundingDate": "2020-01-01",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "streetAddress": "خیابان مثال، پلاک 1",
-                        "addressLocality": "شهر مثال",
-                        "postalCode": "12345",
-                        "addressCountry": "IR"
-                    }, --
-                }
-            }
             "potentialAction": {
                 "@@type": "LoginAction",
                 "target": "https://accounts.irpsc.com/login",

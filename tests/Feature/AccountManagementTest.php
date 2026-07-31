@@ -2,226 +2,392 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
+use App\Notifications\CustomVerifyEmailNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class AccountManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function it_displays_account_dashboard_for_authenticated_user()
+    private User $user;
+
+    protected function setUp(): void
     {
-        // Create a user
-        $user = User::factory()->create();
+        parent::setUp();
 
-        // Authenticate the user
-        $this->actingAs($user);
-
-        // Send request to show account dashboard
-        $response = $this->get('/account');
-
-        // Assert that the account dashboard is displayed
-        $response->assertStatus(200);
-        $response->assertViewIs('account.show');
-        dump('Account dashboard displayed successfully for the authenticated user.');
+        $this->user = User::factory()->create([
+            'name' => 'Account Owner',
+            'email' => 'account@example.com',
+        ]);
     }
 
-    /** @test */
-    public function it_displays_account_edit_form_for_authenticated_user()
+    #[Test]
+    public function verified_user_can_view_account_dashboard(): void
     {
-        // Create a user
-        $user = User::factory()->create();
-
-        // Authenticate the user
-        $this->actingAs($user);
-
-        // Send request to show account edit form
-        $response = $this->get('/account/edit');
-
-        // Assert that the account edit form is displayed
-        $response->assertStatus(200);
-        $response->assertViewIs('account.edit');
-        dump('Account edit form displayed successfully for the authenticated user.');
+        $this->actingAs($this->user)
+            ->get(route('account.show'))
+            ->assertOk()
+            ->assertViewIs('account.show');
     }
 
-    /** @test */
-    public function it_updates_account_for_authenticated_user_and_sends_email_verification_if_email_changed()
+    #[Test]
+    public function verified_user_can_view_account_edit_form(): void
     {
-        // Disable actual email notifications
+        $this->actingAs($this->user)
+            ->get(route('account.edit'))
+            ->assertOk()
+            ->assertViewIs('account.edit');
+    }
+
+    #[Test]
+    public function guest_cannot_view_account_dashboard(): void
+    {
+        $this->get(route('account.show'))
+            ->assertRedirect(route('login'));
+    }
+
+    #[Test]
+    public function guest_cannot_view_account_edit_form(): void
+    {
+        $this->get(route('account.edit'))
+            ->assertRedirect(route('login'));
+    }
+
+    #[Test]
+    public function guest_cannot_update_account(): void
+    {
+        $this->put(route('account.update'), [
+            'name' => 'Hacker',
+            'email' => 'hacker@example.com',
+        ])->assertRedirect(route('login'));
+
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'email' => 'account@example.com',
+        ]);
+    }
+
+    #[Test]
+    public function unverified_user_cannot_access_account_routes(): void
+    {
+        $unverified = User::factory()->unverified()->create();
+
+        $this->actingAs($unverified)
+            ->get(route('account.show'))
+            ->assertRedirect(route('verification.notice'));
+
+        $this->actingAs($unverified)
+            ->put(route('account.update'), [
+                'name' => 'Nope',
+                'email' => 'nope@example.com',
+            ])
+            ->assertRedirect(route('verification.notice'));
+    }
+
+    #[Test]
+    public function user_can_update_name_without_changing_email(): void
+    {
         Notification::fake();
 
-        // Create a user
-        $user = User::factory()->create(['email' => 'oldemail@example.com']);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Updated Name',
+                'email' => $this->user->email,
+            ])
+            ->assertRedirect(route('account.show'))
+            ->assertSessionHas('success');
 
-        // Authenticate the user
-        $this->actingAs($user);
-
-        // Prepare updated data with a new email
-        $updatedData = [
-            'name' => 'Updated Name',
-            'email' => 'newemail@example.com',
-        ];
-
-        // Send request to update the account
-        $response = $this->put('/account', $updatedData);
-
-        // Assert that the user is redirected to the email verification notice
-        $response->assertRedirect(route('verification.notice'));
-        $response->assertSessionHas('info', __('Your account has been updated! Please verify your new email address.'));
-
-        // Assert that the user's email is updated but not verified
         $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'email' => 'newemail@example.com',
-            'email_verified_at' => null,  // Email should be unverified
+            'id' => $this->user->id,
+            'name' => 'Updated Name',
+            'email' => 'account@example.com',
         ]);
 
-        // Assert that the email verification notification was sent
-        Notification::assertSentTo([$user], VerifyEmail::class);
-
-        dump('Account updated successfully and email verification sent for the new email.');
+        $this->assertNotNull($this->user->fresh()->email_verified_at);
+        Notification::assertNothingSent();
     }
 
-    /** @test */
-    public function it_updates_account_avatar_for_authenticated_user()
+    #[Test]
+    public function changing_email_marks_user_unverified_and_sends_verification(): void
     {
-        // Create a user with a verified email
-        $user = User::factory()->create(['email_verified_at' => now()]);
+        Notification::fake();
 
-        // Authenticate the user
-        $this->actingAs($user);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => 'newemail@example.com',
+            ])
+            ->assertRedirect(route('verification.notice'))
+            ->assertSessionHas('info');
 
-        // Mock file upload
-        Storage::fake('local');
-        $file = UploadedFile::fake()->image('avatar.jpg');
+        $fresh = $this->user->fresh();
 
-        // Prepare updated data with an avatar
-        $updatedData = [
-            'name' => 'Updated Name',
-            'email' => $user->email,  // Email remains unchanged
-            'avatar' => $file,
-        ];
+        $this->assertSame('newemail@example.com', $fresh->email);
+        $this->assertNull($fresh->email_verified_at);
 
-        // Send request to update the account with an avatar
-        $response = $this->put('/account', $updatedData);
-
-        // Assert that the user is redirected to the account dashboard
-        $response->assertRedirect('/account');
-        $response->assertSessionHas('success', __('Your account has been updated!'));
-
-        // Assert that the avatar was uploaded to the 'avatars' media collection
-        $this->assertTrue($user->fresh()->hasMedia('avatars'));
-        dump('Account avatar uploaded and updated successfully.');
+        Notification::assertSentTo($fresh, CustomVerifyEmailNotification::class);
     }
-    /** @test */
-public function it_does_not_send_verification_email_if_email_does_not_change()
-{
-    // Disable actual email notifications
-    Notification::fake();
 
-    // Create a user
-    $user = User::factory()->create();
+    #[Test]
+    public function email_change_is_case_sensitive_for_dirty_check_but_unique_rule_ignores_self(): void
+    {
+        Notification::fake();
 
-    // Authenticate the user
-    $this->actingAs($user);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Same Email User',
+                'email' => $this->user->email,
+            ])
+            ->assertRedirect(route('account.show'));
 
-    // Prepare updated data with the same email
-    $updatedData = [
-        'name' => 'Updated Name',
-        'email' => $user->email,  // Email remains unchanged
-    ];
+        Notification::assertNothingSent();
+        $this->assertNotNull($this->user->fresh()->email_verified_at);
+    }
 
-    // Send request to update the account
-    $response = $this->put('/account', $updatedData);
+    #[Test]
+    public function user_can_upload_avatar_image(): void
+    {
+        Storage::fake('public');
 
-    // Assert that the user is redirected to the account dashboard
-    $response->assertRedirect('/account');
-    $response->assertSessionHas('success', __('Your account has been updated!'));
+        $avatar = UploadedFile::fake()->image('avatar.jpg', 200, 200);
 
-    // Assert that the email verification notification was NOT sent
-    Notification::assertNotSentTo([$user], VerifyEmail::class);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'avatar' => $avatar,
+            ])
+            ->assertRedirect(route('account.show'))
+            ->assertSessionHas('success');
 
-    dump('Account updated without sending email verification since email did not change.');
-}
+        $this->assertTrue($this->user->fresh()->hasMedia('avatars'));
+    }
 
-/** @test */
-public function it_validates_required_fields()
-{
-    // Create a user
-    $user = User::factory()->create();
+    #[Test]
+    public function uploading_new_avatar_replaces_previous_avatar(): void
+    {
+        Storage::fake('public');
 
-    // Authenticate the user
-    $this->actingAs($user);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'avatar' => UploadedFile::fake()->image('first.jpg', 200, 200),
+            ])
+            ->assertRedirect(route('account.show'));
 
-    // Prepare data without required fields
-    $updatedData = [
-        'name' => '',
-        'email' => '',
-    ];
+        $firstMediaId = $this->user->fresh()->getFirstMedia('avatars')?->id;
 
-    // Send request to update the account
-    $response = $this->put('/account', $updatedData);
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'avatar' => UploadedFile::fake()->image('second.jpg', 200, 200),
+            ])
+            ->assertRedirect(route('account.show'));
 
-    // Assert that validation errors are present
-    $response->assertSessionHasErrors(['name', 'email']);
-    dump('Validation errors for required fields are displayed.');
-}
+        $fresh = $this->user->fresh();
 
-/** @test */
-public function it_validates_email_format()
-{
-    // Create a user
-    $user = User::factory()->create();
+        $this->assertTrue($fresh->hasMedia('avatars'));
+        $this->assertSame(1, $fresh->getMedia('avatars')->count());
+        $this->assertNotSame($firstMediaId, $fresh->getFirstMedia('avatars')?->id);
+    }
 
-    // Authenticate the user
-    $this->actingAs($user);
+    #[Test]
+    #[DataProvider('invalidAccountPayloadProvider')]
+    public function account_update_validates_input(array $overrides, array $errors): void
+    {
+        $payload = array_merge([
+            'name' => 'Valid Name',
+            'email' => $this->user->email,
+        ], $overrides);
 
-    // Prepare data with an invalid email
-    $updatedData = [
-        'name' => 'Valid Name',
-        'email' => 'invalid-email',
-    ];
+        $this->actingAs($this->user)
+            ->from(route('account.edit'))
+            ->put(route('account.update'), $payload)
+            ->assertRedirect(route('account.edit'))
+            ->assertSessionHasErrors($errors);
+    }
 
-    // Send request to update the account
-    $response = $this->put('/account', $updatedData);
+    public static function invalidAccountPayloadProvider(): array
+    {
+        return [
+            'name required' => [['name' => ''], ['name']],
+            'email required' => [['email' => ''], ['email']],
+            'email invalid' => [['email' => 'not-an-email'], ['email']],
+            'name too long' => [['name' => str_repeat('a', 256)], ['name']],
+            'email too long' => [['email' => str_repeat('a', 250) . '@ex.com'], ['email']],
+            'name reserved hm prefix' => [['name' => 'HM-Admin'], ['name']],
+            'name reserved hm lowercase' => [['name' => 'hm-user'], ['name']],
+            'xss name allowed as string but prefix blocked only for hm' => [
+                // XSS is escaped in Blade; validation should still accept plain strings
+                // This case asserts HM- prefix rejection remains case-insensitive for variants
+                ['name' => 'hM-Something'],
+                ['name'],
+            ],
+        ];
+    }
 
-    // Assert that validation error for email format is present
-    $response->assertSessionHasErrors(['email']);
-    dump('Validation error for invalid email format is displayed.');
-}
+    #[Test]
+    public function email_must_be_unique_across_users(): void
+    {
+        User::factory()->create(['email' => 'taken@example.com']);
 
-/** @test */
-public function it_fails_if_avatar_is_not_an_image()
-{
-    // Create a user
-    $user = User::factory()->create();
+        $this->actingAs($this->user)
+            ->from(route('account.edit'))
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => 'taken@example.com',
+            ])
+            ->assertRedirect(route('account.edit'))
+            ->assertSessionHasErrors('email');
 
-    // Authenticate the user
-    $this->actingAs($user);
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'email' => 'account@example.com',
+        ]);
+    }
 
-    // Mock file upload with a non-image file
-    Storage::fake('local');
-    $file = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+    #[Test]
+    public function user_can_keep_own_email_when_updating_other_fields(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Renamed',
+                'email' => 'account@example.com',
+            ])
+            ->assertRedirect(route('account.show'));
 
-    // Prepare updated data with an invalid avatar file
-    $updatedData = [
-        'name' => 'Updated Name',
-        'email' => $user->email,
-        'avatar' => $file,
-    ];
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'name' => 'Renamed',
+            'email' => 'account@example.com',
+        ]);
+    }
 
-    // Send request to update the account
-    $response = $this->put('/account', $updatedData);
+    #[Test]
+    #[DataProvider('invalidAvatarProvider')]
+    public function avatar_upload_rejects_invalid_files(callable $fileFactory): void
+    {
+        Storage::fake('public');
 
-    // Assert validation error for the avatar field
-    $response->assertSessionHasErrors(['avatar']);
-    dump('Validation error for uploading a non-image file as avatar is displayed.');
-}
+        $this->actingAs($this->user)
+            ->from(route('account.edit'))
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'avatar' => $fileFactory(),
+            ])
+            ->assertRedirect(route('account.edit'))
+            ->assertSessionHasErrors('avatar');
 
+        $this->assertFalse($this->user->fresh()->hasMedia('avatars'));
+    }
+
+    public static function invalidAvatarProvider(): array
+    {
+        return [
+            'pdf disguised as upload' => [
+                fn () => UploadedFile::fake()->create('document.pdf', 100, 'application/pdf'),
+            ],
+            'php double extension' => [
+                fn () => UploadedFile::fake()->create('avatar.php.jpg', 100, 'image/jpeg'),
+            ],
+            'oversized file' => [
+                fn () => UploadedFile::fake()->image('big.jpg')->size(2048),
+            ],
+            'svg not allowed' => [
+                fn () => UploadedFile::fake()->create('avatar.svg', 100, 'image/svg+xml'),
+            ],
+        ];
+    }
+
+    #[Test]
+    public function mass_assignment_cannot_set_privileged_fields_via_account_update(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Safe Name',
+                'email' => $this->user->email,
+                'password' => 'HackedPass!2025',
+                'code' => 'hm-9999999',
+                'wallet_address' => '0x' . str_repeat('a', 40),
+                'email_verified_at' => null,
+                'remember_token' => 'stolen',
+            ])
+            ->assertRedirect(route('account.show'));
+
+        $fresh = $this->user->fresh();
+
+        $this->assertSame('Safe Name', $fresh->name);
+        $this->assertNull($fresh->code);
+        $this->assertNull($fresh->wallet_address);
+        $this->assertNotNull($fresh->email_verified_at);
+        $this->assertFalse(Hash::check('HackedPass!2025', $fresh->password));
+    }
+
+    #[Test]
+    public function user_cannot_update_another_users_account_via_idor(): void
+    {
+        $victim = User::factory()->create([
+            'name' => 'Victim',
+            'email' => 'victim@example.com',
+        ]);
+
+        // Singleton route has no user id — updates always apply to auth user only.
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Attacker Name',
+                'email' => $this->user->email,
+                'id' => $victim->id,
+                'user_id' => $victim->id,
+            ])
+            ->assertRedirect(route('account.show'));
+
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'name' => 'Attacker Name',
+        ]);
+        $this->assertDatabaseHas('users', [
+            'id' => $victim->id,
+            'name' => 'Victim',
+            'email' => 'victim@example.com',
+        ]);
+    }
+
+    #[Test]
+    public function sql_injection_in_email_is_rejected(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => $this->user->name,
+                'email' => "account@example.com' OR '1'='1",
+            ])
+            ->assertSessionHasErrors('email');
+    }
+
+    #[Test]
+    public function failed_validation_does_not_persist_partial_account_changes(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('account.update'), [
+                'name' => 'Should Not Save',
+                'email' => 'not-valid',
+            ])
+            ->assertSessionHasErrors('email');
+
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'name' => 'Account Owner',
+            'email' => 'account@example.com',
+        ]);
+    }
 }

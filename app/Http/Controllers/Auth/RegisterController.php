@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Passport\Client;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Rules\RedirectUriBelongsToClient;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -64,7 +64,12 @@ class RegisterController extends Controller
                 'max:40',
             ],
             'client_id' => ['nullable', 'exists:oauth_clients,id'],
-            'redirect_uri' => ['nullable', 'url', Client::whereJsonContains('redirect', $data['redirect_uri'])->exists()],
+            'redirect_uri' => [
+                'nullable',
+                'bail',
+                'url',
+                new RedirectUriBelongsToClient,
+            ],
             'back_url' => ['nullable', 'url'],
             'referral' => ['nullable', 'string', 'exists:users,code'],
         ]);
@@ -82,7 +87,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'referral' => $data['referral'],
+            'referral' => ! empty($data['referral']) ? $data['referral'] : null,
         ]);
     }
 
