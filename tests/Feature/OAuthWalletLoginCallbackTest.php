@@ -78,6 +78,23 @@ class OAuthWalletLoginCallbackTest extends TestCase
         $this->assertStringNotContainsString('wallet_login=', $location);
     }
 
+    #[Test]
+    public function email_login_clears_stale_wallet_login_session_flag(): void
+    {
+        $user = User::factory()->create([
+            'password' => bcrypt(self::VALID_PASSWORD),
+        ]);
+
+        $this->withSession(['wallet_login' => true])
+            ->post('/login', [
+                'email' => $user->email,
+                'password' => self::VALID_PASSWORD,
+            ])
+            ->assertRedirect('/home');
+
+        $this->assertFalse(session()->has('wallet_login'));
+    }
+
     private function authorizeUrl(Client $client): string
     {
         return '/oauth/authorize?'.http_build_query([
