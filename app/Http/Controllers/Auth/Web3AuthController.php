@@ -118,6 +118,7 @@ class Web3AuthController extends Controller
     {
         Auth::login($user);
         $request->session()->regenerate();
+        $request->session()->put('wallet_login', true);
 
         if (!$user->hasVerifiedEmail()) {
             if ($request->expectsJson()) {

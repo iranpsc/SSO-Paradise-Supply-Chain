@@ -63,6 +63,8 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        $request->session()->forget('wallet_login');
+
         if (!$user->hasVerifiedEmail()) {
             return redirect()->route('verification.notice');
         }
