@@ -2,13 +2,16 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use App\Http\Controllers\Auth\Web3AuthController;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Elliptic\EC;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use kornrunner\Keccak;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class Web3AuthTest extends TestCase
 {
@@ -16,10 +19,30 @@ class Web3AuthTest extends TestCase
 
     private EC $ec;
 
+    /**
+     * @var array<string, mixed>
+     */
+    private array $metarangPayload = [
+        'already_registered' => false,
+        'user_code' => 'hm-123',
+    ];
+
+    private int $metarangStatus = 200;
+
+    private ?\Throwable $metarangError = null;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->ec = new EC('secp256k1');
+
+        Http::fake(function () {
+            if ($this->metarangError !== null) {
+                throw $this->metarangError;
+            }
+
+            return Http::response($this->metarangPayload, $this->metarangStatus);
+        });
     }
 
     #[Test]
@@ -33,8 +56,8 @@ class Web3AuthTest extends TestCase
         $response->assertJsonStructure(['nonce']);
 
         $nonce = $response->json('nonce');
-        $this->assertStringContainsString('Sign in to ' . config('app.name'), $nonce);
-        $this->assertStringContainsString('Wallet: ' . $address, $nonce);
+        $this->assertStringContainsString('Sign in to '.config('app.name'), $nonce);
+        $this->assertStringContainsString('Wallet: '.$address, $nonce);
 
         $this->assertEquals($nonce, Cache::get("web3_nonce_login_{$address}"));
 
@@ -57,7 +80,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonceResponse->assertStatus(200);
@@ -92,7 +115,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -118,7 +141,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -137,7 +160,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -164,7 +187,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -190,7 +213,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -218,7 +241,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         User::whereKey($existingUser->id)->update(['wallet_address' => strtolower($address)]);
 
@@ -234,7 +257,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -259,7 +282,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -286,7 +309,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonceResponse = $this->getJson("/web3/nonce?address={$address}");
         $nonce = $nonceResponse->json('nonce');
@@ -340,7 +363,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $user = User::factory()->unverified()->create([
             'wallet_address' => strtolower($address),
@@ -368,7 +391,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         User::factory()->unverified()->create([
             'wallet_address' => strtolower($address),
@@ -388,7 +411,7 @@ class Web3AuthTest extends TestCase
     {
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->getJson("/web3/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($this->ec->genKeyPair(), $nonce);
@@ -409,7 +432,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}")->json('nonce');
         $badSignature = $this->signMessage($this->ec->genKeyPair(), $nonce);
@@ -430,7 +453,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($key, $nonce);
@@ -454,7 +477,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($key, $nonce);
@@ -479,7 +502,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($key, $nonce);
@@ -505,7 +528,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->actingAs($user)->getJson("/web3/link/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($key, $nonce);
@@ -528,7 +551,7 @@ class Web3AuthTest extends TestCase
 
         $key = $this->ec->genKeyPair();
         $publicKey = $key->getPublic()->encode('hex');
-        $address = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
 
         $nonce = $this->getJson("/web3/nonce?address={$address}")->json('nonce');
         $signature = $this->signMessage($key, $nonce);
@@ -547,7 +570,7 @@ class Web3AuthTest extends TestCase
     #[Test]
     public function signature_validation_rejects_malformed_components(): void
     {
-        $controller = app(\App\Http\Controllers\Auth\Web3AuthController::class);
+        $controller = app(Web3AuthController::class);
         $method = new \ReflectionMethod($controller, 'isValidWalletSignature');
 
         $address = '0x90f8bfac9c63c35718a7a77e94b002d274950e89';
@@ -596,10 +619,223 @@ class Web3AuthTest extends TestCase
         ));
     }
 
+    #[Test]
+    public function new_wallet_login_asks_metarang_before_creating_a_user(): void
+    {
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertOk();
+
+        Http::assertSent(function ($request) use ($address) {
+            return $request->method() === 'POST'
+                && str_ends_with($request->url(), '/api/wallets/registered')
+                && $request['wallet_address'] === strtolower($address);
+        });
+
+        $this->assertDatabaseHas('users', [
+            'wallet_address' => strtolower($address),
+        ]);
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    #[Test]
+    public function already_registered_wallet_updates_existing_user_instead_of_creating(): void
+    {
+        $existing = User::factory()->create([
+            'code' => 'hm-123',
+            'name' => 'Existing Member',
+            'email' => 'existing@example.com',
+            'wallet_address' => null,
+        ]);
+
+        $this->metarangPayload = [
+            'already_registered' => true,
+            'user_code' => 'hm-123',
+        ];
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])
+            ->assertOk()
+            ->assertJson(['message' => 'Authenticated successfully']);
+
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('personal_infos', 1);
+        $this->assertDatabaseHas('users', [
+            'id' => $existing->id,
+            'code' => 'hm-123',
+            'name' => 'Existing Member',
+            'email' => 'existing@example.com',
+            'wallet_address' => strtolower($address),
+        ]);
+        $this->assertAuthenticatedAs($existing->fresh());
+    }
+
+    #[Test]
+    public function metarang_failure_rolls_back_and_does_not_create_a_user(): void
+    {
+        $this->metarangPayload = ['message' => 'upstream error'];
+        $this->metarangStatus = 500;
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])
+            ->assertStatus(502)
+            ->assertJson(['message' => 'Unable to complete wallet login. Please try again.']);
+
+        $this->assertDatabaseMissing('users', [
+            'wallet_address' => strtolower($address),
+        ]);
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function metarang_connection_failure_rolls_back_and_does_not_create_a_user(): void
+    {
+        $this->metarangError = new ConnectionException('Connection refused');
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertStatus(502);
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function metarang_failure_does_not_mutate_existing_users(): void
+    {
+        $existing = User::factory()->create([
+            'code' => 'hm-2000001',
+            'wallet_address' => null,
+        ]);
+
+        $this->metarangPayload = ['message' => 'upstream error'];
+        $this->metarangStatus = 500;
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertStatus(502);
+
+        $this->assertNull($existing->fresh()->wallet_address);
+        $this->assertDatabaseCount('users', 1);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function registered_wallet_without_matching_user_code_does_not_create_a_user(): void
+    {
+        $this->metarangPayload = [
+            'already_registered' => true,
+            'user_code' => 'hm-123',
+        ];
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertStatus(502);
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function browser_verify_returns_session_errors_when_metarang_fails(): void
+    {
+        $this->metarangPayload = ['message' => 'upstream error'];
+        $this->metarangStatus = 500;
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->from('/login')
+            ->post('/web3/verify', [
+                'address' => $address,
+                'signature' => $signature,
+            ])
+            ->assertRedirect('/login')
+            ->assertSessionHasErrors('wallet');
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function existing_wallet_user_logs_in_without_calling_metarang(): void
+    {
+        $key = $this->ec->genKeyPair();
+        $publicKey = $key->getPublic()->encode('hex');
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+
+        $user = User::factory()->create([
+            'wallet_address' => strtolower($address),
+        ]);
+
+        $nonce = $this->getJson("/web3/nonce?address={$address}")->json('nonce');
+        $signature = $this->signMessage($key, $nonce);
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertOk();
+
+        Http::assertNotSent(fn ($request) => str_contains($request->url(), '/api/wallets/registered'));
+        $this->assertAuthenticatedAs($user);
+        $this->assertDatabaseCount('users', 1);
+    }
+
+    #[Test]
+    public function invalid_metarang_response_does_not_create_a_user(): void
+    {
+        $this->metarangPayload = ['unexpected' => true];
+
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])->assertStatus(502);
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    /**
+     * @return array{0: string, 1: string}
+     */
+    private function signedWalletLogin(): array
+    {
+        $key = $this->ec->genKeyPair();
+        $publicKey = $key->getPublic()->encode('hex');
+        $address = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey, 2)), 256), -40);
+
+        $nonce = $this->getJson("/web3/nonce?address={$address}")->json('nonce');
+        $signature = $this->signMessage($key, $nonce);
+
+        return [$address, $signature];
+    }
+
     private function signMessage($key, string $nonce): string
     {
         $msgLength = strlen($nonce);
-        $messagePrefix = "\x19Ethereum Signed Message:\n" . $msgLength . $nonce;
+        $messagePrefix = "\x19Ethereum Signed Message:\n".$msgLength.$nonce;
         $msgHash = Keccak::hash($messagePrefix, 256);
 
         $sig = $key->sign($msgHash);
@@ -618,6 +854,6 @@ class Web3AuthTest extends TestCase
 
         $v = dechex($recoveryParam + 27);
 
-        return '0x' . $r . $s . $v;
+        return '0x'.$r.$s.$v;
     }
 }

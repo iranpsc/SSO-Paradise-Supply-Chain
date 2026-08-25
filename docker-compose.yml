@@ -29,6 +29,7 @@ x-app-environment: &app-environment
   MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-null}
   MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-info@sso.com}
   MAIL_FROM_NAME: ${MAIL_FROM_NAME:-SSO}
+  Metarang_API: ${Metarang_API:-}
 
 services:
   app:
