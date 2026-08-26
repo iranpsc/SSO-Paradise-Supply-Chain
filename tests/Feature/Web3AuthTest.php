@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\Auth\Web3AuthController;
 use App\Models\User;
+use App\Services\MetarangWalletClient;
 use Elliptic\EC;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\ConnectionException;
@@ -812,6 +813,68 @@ class Web3AuthTest extends TestCase
             'address' => $address,
             'signature' => $signature,
         ])->assertStatus(502);
+
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    #[Test]
+    public function wallet_login_uses_user_created_during_metarang_lookup(): void
+    {
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->mock(MetarangWalletClient::class, function ($mock) use ($address) {
+            $mock->shouldReceive('lookupRegistration')
+                ->once()
+                ->with(strtolower($address))
+                ->andReturnUsing(function () use ($address) {
+                    User::factory()->create([
+                        'wallet_address' => strtolower($address),
+                        'name' => 'Race Winner',
+                    ]);
+
+                    return [
+                        'already_registered' => false,
+                        'user_code' => null,
+                    ];
+                });
+        });
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])
+            ->assertOk()
+            ->assertJson(['message' => 'Authenticated successfully']);
+
+        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseHas('users', [
+            'wallet_address' => strtolower($address),
+            'name' => 'Race Winner',
+        ]);
+        $this->assertAuthenticated();
+    }
+
+    #[Test]
+    public function wallet_login_rejects_registered_payload_without_a_user_code(): void
+    {
+        [$address, $signature] = $this->signedWalletLogin();
+
+        $this->mock(MetarangWalletClient::class, function ($mock) {
+            $mock->shouldReceive('lookupRegistration')
+                ->once()
+                ->andReturn([
+                    'already_registered' => true,
+                    'user_code' => '',
+                ]);
+        });
+
+        $this->postJson('/web3/verify', [
+            'address' => $address,
+            'signature' => $signature,
+        ])
+            ->assertStatus(502)
+            ->assertJson(['message' => 'Unable to complete wallet login. Please try again.']);
 
         $this->assertDatabaseCount('users', 0);
         $this->assertGuest();
