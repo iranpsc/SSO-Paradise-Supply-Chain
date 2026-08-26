@@ -106,6 +106,19 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Fake Metarang so wallet login can create a user without a live HTTP call.
+     */
+    protected function fakeUnregisteredMetarangWallet(): void
+    {
+        Http::fake([
+            rtrim((string) config('services.metarang.url'), '/').'/api/wallets/registered' => Http::response([
+                'already_registered' => false,
+                'user_code' => 'hm-123',
+            ], 200),
+        ]);
+    }
+
+    /**
      * Create an OAuth client with the given redirect URI(s).
      *
      * @param  string|array<int, string>  $redirectUris

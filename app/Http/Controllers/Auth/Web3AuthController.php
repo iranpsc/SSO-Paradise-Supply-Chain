@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\MetarangWalletLookupException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\MetarangWalletClient;
 use Elliptic\EC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +64,7 @@ class Web3AuthController extends Controller
         return response()->json(['nonce' => $nonce]);
     }
 
-    public function verifySignature(Request $request)
+    public function verifySignature(Request $request, MetarangWalletClient $metarangWallets)
     {
         $request->validate([
             'address' => ['required', 'string', 'regex:/^0x[a-fA-F0-9]{40}$/'],
@@ -72,7 +74,7 @@ class Web3AuthController extends Controller
         $address = strtolower($request->address);
         $nonce = Cache::pull($this->loginNonceCacheKey($address));
 
-        if (!$nonce) {
+        if (! $nonce) {
             Log::warning('Web3 login rejected: nonce missing or expired', [
                 'address' => $address,
                 'ip' => $request->ip(),
@@ -85,7 +87,7 @@ class Web3AuthController extends Controller
             );
         }
 
-        if (!$this->isValidWalletSignature($address, $request->signature, $nonce)) {
+        if (! $this->isValidWalletSignature($address, $request->signature, $nonce)) {
             Log::warning('Web3 login rejected: invalid signature', [
                 'address' => $address,
                 'ip' => $request->ip(),
@@ -100,18 +102,81 @@ class Web3AuthController extends Controller
             return $this->respondToWalletLink($request, $this->attachWallet($authenticatedUser, $address));
         }
 
-        $user = User::where('wallet_address', $address)->first();
-        if (!$user) {
-            $user = new User();
-            $user->wallet_address = $address;
-            $user->name = 'User_' . substr($address, 2, 6);
-            $user->email_verified_at = now();
-            $user->code = $this->generateCode();
-            $user->save();
-            $user->personalInfo()->create();
+        try {
+            $user = $this->resolveWalletUser($address, $metarangWallets);
+        } catch (MetarangWalletLookupException $e) {
+            Log::warning('Web3 login rejected: Metarang wallet lookup failed', [
+                'address' => $address,
+                'ip' => $request->ip(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->walletLoginError(
+                $request,
+                'Unable to complete wallet login. Please try again.',
+                502
+            );
         }
 
         return $this->completeWalletLogin($request, $user);
+    }
+
+    private function resolveWalletUser(string $address, MetarangWalletClient $metarangWallets): User
+    {
+        return DB::transaction(function () use ($address, $metarangWallets) {
+            $user = User::where('wallet_address', $address)->lockForUpdate()->first();
+
+            if ($user) {
+                return $user;
+            }
+
+            $registration = $metarangWallets->lookupRegistration($address);
+
+            $user = User::where('wallet_address', $address)->lockForUpdate()->first();
+
+            if ($user) {
+                return $user;
+            }
+
+            if ($registration['already_registered']) {
+                $userCode = $registration['user_code'];
+
+                if (! is_string($userCode) || $userCode === '') {
+                    throw new MetarangWalletLookupException('Metarang did not return a user code for the registered wallet.');
+                }
+
+                return $this->attachWalletToRegisteredUser($address, $userCode);
+            }
+
+            return $this->createWalletUser($address);
+        });
+    }
+
+    private function attachWalletToRegisteredUser(string $address, string $userCode): User
+    {
+        $user = User::where('code', $userCode)->lockForUpdate()->first();
+
+        if (! $user) {
+            throw new MetarangWalletLookupException('Registered wallet user was not found.');
+        }
+
+        $user->wallet_address = $address;
+        $user->save();
+
+        return $user;
+    }
+
+    private function createWalletUser(string $address): User
+    {
+        $user = new User;
+        $user->wallet_address = $address;
+        $user->name = 'User_'.substr($address, 2, 6);
+        $user->email_verified_at = now();
+        $user->code = $this->generateCode();
+        $user->save();
+        $user->personalInfo()->create();
+
+        return $user;
     }
 
     private function completeWalletLogin(Request $request, User $user)
@@ -120,7 +185,7 @@ class Web3AuthController extends Controller
         $request->session()->regenerate();
         $request->session()->put('wallet_login', true);
 
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => 'Authenticated successfully',
@@ -161,7 +226,7 @@ class Web3AuthController extends Controller
         $user = $request->user();
         $nonce = Cache::pull($this->linkNonceCacheKey($user->id, $address));
 
-        if (!$nonce) {
+        if (! $nonce) {
             Log::warning('Web3 wallet link rejected: nonce missing or expired', [
                 'user_id' => $user->id,
                 'address' => $address,
@@ -171,7 +236,7 @@ class Web3AuthController extends Controller
             return response()->json(['message' => 'Nonce expired or not found. Please try again.'], 422);
         }
 
-        if (!$this->isValidWalletSignature($address, $request->signature, $nonce)) {
+        if (! $this->isValidWalletSignature($address, $request->signature, $nonce)) {
             Log::warning('Web3 wallet link rejected: invalid signature', [
                 'user_id' => $user->id,
                 'address' => $address,
@@ -225,21 +290,21 @@ class Web3AuthController extends Controller
     private function buildLoginMessage(string $address): string
     {
         return implode("\n", [
-            'Sign in to ' . config('app.name') . ' at ' . $this->applicationDomain() . '.',
+            'Sign in to '.config('app.name').' at '.$this->applicationDomain().'.',
             '',
-            'Wallet: ' . $address,
-            'Nonce: ' . Str::random(32),
+            'Wallet: '.$address,
+            'Nonce: '.Str::random(32),
         ]);
     }
 
     private function buildLinkMessage(int $userId, string $address): string
     {
         return implode("\n", [
-            'Link wallet to your ' . config('app.name') . ' account at ' . $this->applicationDomain() . '.',
+            'Link wallet to your '.config('app.name').' account at '.$this->applicationDomain().'.',
             '',
-            'Account ID: ' . $userId,
-            'Wallet: ' . $address,
-            'Nonce: ' . Str::random(32),
+            'Account ID: '.$userId,
+            'Wallet: '.$address,
+            'Nonce: '.Str::random(32),
         ]);
     }
 
@@ -252,12 +317,12 @@ class Web3AuthController extends Controller
 
     private function loginNonceCacheKey(string $address): string
     {
-        return 'web3_nonce_login_' . $address;
+        return 'web3_nonce_login_'.$address;
     }
 
     private function linkNonceCacheKey(int $userId, string $address): string
     {
-        return 'web3_nonce_link_' . $userId . '_' . $address;
+        return 'web3_nonce_link_'.$userId.'_'.$address;
     }
 
     private function isValidWalletSignature(string $address, string $signature, string $nonce): bool
@@ -266,7 +331,7 @@ class Web3AuthController extends Controller
         $s = substr($signature, 66, 64);
         $v = hexdec(substr($signature, 130, 2));
 
-        if (!ctype_xdigit($r) || !ctype_xdigit($s)) {
+        if (! ctype_xdigit($r) || ! ctype_xdigit($s)) {
             return false;
         }
 
@@ -284,7 +349,7 @@ class Web3AuthController extends Controller
         }
 
         $msgLength = strlen($nonce);
-        $messagePrefix = "\x19Ethereum Signed Message:\n" . $msgLength . $nonce;
+        $messagePrefix = "\x19Ethereum Signed Message:\n".$msgLength.$nonce;
         $msgHash = Keccak::hash($messagePrefix, 256);
 
         try {
@@ -294,7 +359,7 @@ class Web3AuthController extends Controller
                 's' => $s,
             ], $recoveryParam);
 
-            $derivedAddress = '0x' . substr(Keccak::hash(hex2bin(substr($publicKey->encode('hex'), 2)), 256), -40);
+            $derivedAddress = '0x'.substr(Keccak::hash(hex2bin(substr($publicKey->encode('hex'), 2)), 256), -40);
 
             return strtolower($derivedAddress) === $address;
         } catch (\Exception $e) {
@@ -311,13 +376,13 @@ class Web3AuthController extends Controller
     {
         $lastCode = User::orderBy('code', 'desc')->first()?->code;
 
-        if (!$lastCode) {
+        if (! $lastCode) {
             return 'hm-2000000';
         }
 
         $lastCodeNumber = intval(substr($lastCode, 3));
         $newCodeNumber = $lastCodeNumber + 1;
-        $newCode = 'hm-' . str_pad($newCodeNumber, 7, '0', STR_PAD_LEFT);
+        $newCode = 'hm-'.str_pad($newCodeNumber, 7, '0', STR_PAD_LEFT);
 
         return $newCode;
     }

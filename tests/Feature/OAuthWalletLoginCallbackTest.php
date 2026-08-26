@@ -20,6 +20,7 @@ class OAuthWalletLoginCallbackTest extends TestCase
     {
         parent::setUp();
         $this->ec = new EC('secp256k1');
+        $this->fakeUnregisteredMetarangWallet();
     }
 
     #[Test]
