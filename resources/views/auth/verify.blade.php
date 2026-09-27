@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const alertModal = document.getElementById('alert-modal');
 
     const STORAGE_KEY = 'verify_timer_end';
-    const AUTO_SENT_KEY = 'verify_auto_sent';
     const DURATION = 60;
 
     let interval = null;
@@ -174,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ---------- منطق لود صفحه ----------
     const storedEndTime = Number(localStorage.getItem(STORAGE_KEY));
-    const hasAutoSent = localStorage.getItem(AUTO_SENT_KEY);
 
     // Check if form was just submitted (show modal if session has 'resent')
     @if(session('resent'))
@@ -187,15 +185,6 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         // تایمر جدید
         startTimer(DURATION);
-
-        if (!hasAutoSent) {
-            localStorage.setItem(AUTO_SENT_KEY, '1');
-            setTimeout(() => {
-                if (resendForm) {
-                    resendForm.submit();
-                }
-            }, 300);
-        }
     }
 
     // ---------- ارسال دستی از فرم اصلی ----------
