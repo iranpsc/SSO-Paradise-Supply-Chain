@@ -172,8 +172,7 @@ class Web3AuthController extends Controller
         $user->wallet_address = $address;
         $user->name = 'User_'.substr($address, 2, 6);
         $user->email_verified_at = now();
-        $user->code = $this->generateCode();
-        $user->save();
+        $user->assignMemberCode();
         $user->personalInfo()->create();
 
         return $user;
@@ -365,25 +364,5 @@ class Web3AuthController extends Controller
         } catch (\Exception $e) {
             return false;
         }
-    }
-
-    /**
-     * Generate user code.
-     *
-     * @return string
-     */
-    public function generateCode()
-    {
-        $lastCode = User::orderBy('code', 'desc')->first()?->code;
-
-        if (! $lastCode) {
-            return 'hm-2000000';
-        }
-
-        $lastCodeNumber = intval(substr($lastCode, 3));
-        $newCodeNumber = $lastCodeNumber + 1;
-        $newCode = 'hm-'.str_pad($newCodeNumber, 7, '0', STR_PAD_LEFT);
-
-        return $newCode;
     }
 }

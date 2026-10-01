@@ -15,7 +15,7 @@ class Client extends PassportClient
      */
     public function skipsAuthorization(Authenticatable $user, array $scopes): bool
     {
-        return true;
+        return $this->firstParty() && $this->confidential();
     }
 
     /**

@@ -13,12 +13,39 @@ class PassportClientTest extends TestCase
     use RefreshDatabase;
 
     #[Test]
-    public function skips_authorization_always_returns_true(): void
+    public function confidential_first_party_clients_skip_authorization(): void
     {
         $client = new Client;
-        $user = User::factory()->make();
+        $client->setRawAttributes([
+            'user_id' => null,
+            'secret' => 'hashed-secret',
+        ], true);
 
-        $this->assertTrue($client->skipsAuthorization($user, []));
+        $this->assertTrue($client->skipsAuthorization(User::factory()->make(), []));
+    }
+
+    #[Test]
+    public function third_party_clients_require_authorization(): void
+    {
+        $client = new Client;
+        $client->setRawAttributes([
+            'user_id' => 5,
+            'secret' => 'hashed-secret',
+        ], true);
+
+        $this->assertFalse($client->skipsAuthorization(User::factory()->make(), []));
+    }
+
+    #[Test]
+    public function public_first_party_clients_require_authorization(): void
+    {
+        $client = new Client;
+        $client->setRawAttributes([
+            'user_id' => null,
+            'secret' => null,
+        ], true);
+
+        $this->assertFalse($client->skipsAuthorization(User::factory()->make(), []));
     }
 
     #[Test]

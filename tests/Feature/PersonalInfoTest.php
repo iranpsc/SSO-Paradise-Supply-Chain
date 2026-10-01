@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\PersonalInfo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Passport\Passport;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -426,34 +427,35 @@ class PersonalInfoTest extends TestCase
             'is_verified' => false,
         ]);
 
-        $unverifiedResponse = $this->getJson('/api/users/' . $this->user->id);
-        $unverifiedResponse->assertOk()
+        Passport::actingAs($this->user);
+
+        $this->postJson('/api/me')
+            ->assertOk()
             ->assertJsonPath('data.name', $this->user->name)
             ->assertJsonMissingPath('data.password')
             ->assertJsonMissingPath('data.remember_token');
 
-        // Support both wrapped and unwrapped resource shapes.
-        $name = $unverifiedResponse->json('data.name') ?? $unverifiedResponse->json('name');
-        $this->assertSame($this->user->name, $name);
-
         $this->user->personalInfo->update(['is_verified' => true]);
 
-        $verifiedResponse = $this->getJson('/api/users/' . $this->user->id);
-        $verifiedName = $verifiedResponse->json('data.name') ?? $verifiedResponse->json('name');
-        $this->assertSame('Verified Person', $verifiedName);
+        $this->postJson('/api/me')
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Verified Person');
     }
 
     #[Test]
     public function api_user_endpoint_does_not_expose_sensitive_fields(): void
     {
-        $response = $this->getJson('/api/users/' . $this->user->id)->assertOk();
+        Passport::actingAs($this->user);
 
-        $payload = $response->json('data') ?? $response->json();
+        $response = $this->postJson('/api/me')->assertOk();
+        $payload = $response->json('data');
 
         $this->assertArrayNotHasKey('password', $payload);
         $this->assertArrayNotHasKey('remember_token', $payload);
         $this->assertArrayNotHasKey('nonce', $payload);
         $this->assertArrayNotHasKey('national_code', $payload);
         $this->assertArrayNotHasKey('mobile', $payload);
+
+        $this->getJson('/api/users/'.$this->user->id)->assertNotFound();
     }
 }

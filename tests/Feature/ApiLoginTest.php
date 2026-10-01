@@ -193,17 +193,9 @@ class ApiLoginTest extends TestCase
     }
 
     #[Test]
-    public function public_users_show_endpoint_does_not_expose_sensitive_fields(): void
+    public function public_users_show_endpoint_is_not_available(): void
     {
-        $response = $this->getJson('/api/users/' . $this->user->id);
-
-        $response->assertOk()
-            ->assertJsonStructure([
-                'data' => ['id', 'name', 'code', 'avatar'],
-            ])
-            ->assertJsonMissingPath('data.password')
-            ->assertJsonMissingPath('data.email')
-            ->assertJsonMissingPath('data.wallet_address');
+        $this->getJson('/api/users/'.$this->user->id)->assertNotFound();
     }
 
     #[Test]

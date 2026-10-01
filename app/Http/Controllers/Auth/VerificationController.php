@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -45,46 +44,25 @@ class VerificationController extends Controller
 
     protected function verified(Request $request)
     {
-        $request->user()->update([
-            'code' => $this->generateCode(),
-        ]);
+        $request->user()->assignMemberCode();
 
-        $backUrl = Cache::pull('back_url_' . $request->user()->id);
-        $backUrl .= $backUrl ? '?verified=1' : '';
+        $backUrl = Cache::pull('back_url_'.$request->user()->id);
 
-        // Validate the back URL domain
-        if ($backUrl) {
-            $parsedUrl = parse_url($backUrl);
-            $domain = isset($parsedUrl['scheme']) && isset($parsedUrl['host'])
-                ? $parsedUrl['scheme'] . '://' . $parsedUrl['host']
-                : null;
-
-            if ($domain !== 'https://metarang.com') {
-                return redirect()->route('home')->with('warning', 'Invalid redirect URL.');
-            }
+        if (! is_string($backUrl) || $backUrl === '') {
+            return redirect()->route('home');
         }
 
-        return $backUrl ? redirect()->away($backUrl) : redirect()->route('home');
-    }
+        $parsedUrl = parse_url($backUrl);
+        $domain = isset($parsedUrl['scheme'], $parsedUrl['host'])
+            ? $parsedUrl['scheme'].'://'.$parsedUrl['host']
+            : null;
 
-    /**
-     * Generate user code.
-     *
-     * @return string
-     */
-    public function generateCode()
-    {
-        $lastCode = User::orderBy('code', 'desc')->first()->code;
-
-        if (is_null($lastCode)) {
-            $lastCode = 'hm-2000000';
+        if ($domain !== 'https://metarang.com') {
+            return redirect()->route('home')->with('warning', 'Invalid redirect URL.');
         }
 
-        $lastCode = substr($lastCode, 3);
-        $lastCode = intval($lastCode);
-        $lastCode++;
-        $lastCode = str_pad($lastCode, 6, '0', STR_PAD_LEFT);
-        $code = 'hm-' . $lastCode;
-        return $code;
+        $separator = str_contains($backUrl, '?') ? '&' : '?';
+
+        return redirect()->away($backUrl.$separator.'verified=1');
     }
 }
