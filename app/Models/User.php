@@ -6,10 +6,13 @@ use App\Notifications\CustomResetPasswordNotification;
 use App\Notifications\CustomVerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
+use RuntimeException;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -30,7 +33,6 @@ class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable,
         'mobile',
         'referral',
         'wallet_address',
-        'nonce',
     ];
 
     /**
@@ -41,7 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable,
     protected $hidden = [
         'password',
         'remember_token',
-        'nonce',
     ];
 
     /**
@@ -93,5 +94,50 @@ class User extends Authenticatable implements MustVerifyEmail, OAuthenticatable,
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmailNotification);
+    }
+
+    /**
+     * Persist the next member code, retrying if a concurrent request claimed it.
+     */
+    public function assignMemberCode(int $maxAttempts = 5): static
+    {
+        $originalCode = $this->code;
+
+        for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+            $this->code = static::allocateMemberCode();
+
+            try {
+                $this->save();
+
+                return $this;
+            } catch (UniqueConstraintViolationException) {
+                $this->code = $originalCode;
+            }
+        }
+
+        throw new RuntimeException('Unable to allocate a unique member code.');
+    }
+
+    /**
+     * Next hm- code, based on the highest numeric suffix already stored.
+     */
+    public static function allocateMemberCode(): string
+    {
+        $allocate = function (): string {
+            $max = static::query()
+                ->whereNotNull('code')
+                ->lockForUpdate()
+                ->pluck('code')
+                ->map(fn ($code) => (int) substr((string) $code, 3))
+                ->max();
+
+            return 'hm-'.($max === null ? 2000000 : ((int) $max) + 1);
+        };
+
+        if (DB::transactionLevel() > 0) {
+            return $allocate();
+        }
+
+        return DB::transaction($allocate);
     }
 }

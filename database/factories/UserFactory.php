@@ -34,7 +34,6 @@ class UserFactory extends Factory
             'code' => null,
             'referral' => null,
             'wallet_address' => null,
-            'nonce' => null,
         ];
     }
 

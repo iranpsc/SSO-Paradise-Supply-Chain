@@ -148,6 +148,23 @@ class EmailVerificationTest extends TestCase
     }
 
     #[Test]
+    public function verification_appends_verified_flag_with_ampersand_when_back_url_has_query(): void
+    {
+        $user = User::factory()->unverified()->create();
+        Cache::put('back_url_'.$user->id, 'https://metarang.com/app?from=sso', now()->addHour());
+
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
+        $this->actingAs($user)
+            ->get($url)
+            ->assertRedirect('https://metarang.com/app?from=sso&verified=1');
+    }
+
+    #[Test]
     public function verification_rejects_disallowed_back_url_domains(): void
     {
         $user = User::factory()->unverified()->create();

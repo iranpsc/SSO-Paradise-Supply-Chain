@@ -3,7 +3,7 @@ name: sso
 x-app-environment: &app-environment
   APP_NAME: ${APP_NAME:-SSO}
   APP_ENV: ${APP_ENV:-local}
-  APP_DEBUG: ${APP_DEBUG:-true}
+  APP_DEBUG: ${APP_DEBUG:-false}
   APP_URL: ${APP_URL:-http://localhost:8080}
   APP_KEY: ${APP_KEY:-}
   LOG_CHANNEL: stderr
@@ -16,7 +16,7 @@ x-app-environment: &app-environment
   REDIS_CLIENT: phpredis
   REDIS_HOST: redis
   REDIS_PORT: "6379"
-  REDIS_PASSWORD: ${REDIS_PASSWORD:-null}
+  REDIS_PASSWORD: ${REDIS_PASSWORD:-local-redis-password}
   CACHE_DRIVER: redis
   SESSION_DRIVER: redis
   QUEUE_CONNECTION: redis
@@ -46,8 +46,6 @@ services:
       <<: *app-environment
       CONTAINER_ROLE: app
       RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
-    ports:
-      - "${APP_PORT:-8080}:80"
     expose:
       - "80"
     volumes:
@@ -59,6 +57,7 @@ services:
         condition: service_healthy
     networks:
       - sso
+      - dokploy-network
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1/up"]
       interval: 15s
@@ -89,6 +88,7 @@ services:
     command: php artisan queue:work redis --sleep=1 --tries=3 --backoff=3 --max-time=3600 --max-jobs=1000
     networks:
       - sso
+      - dokploy-network
     healthcheck:
       test: ["CMD-SHELL", "pgrep -f 'queue:work' >/dev/null || exit 1"]
       interval: 30s
@@ -119,6 +119,7 @@ services:
     command: php artisan schedule:work
     networks:
       - sso
+      - dokploy-network
     healthcheck:
       test: ["CMD-SHELL", "pgrep -f 'schedule:work' >/dev/null || exit 1"]
       interval: 30s
@@ -134,8 +135,6 @@ services:
       MYSQL_USER: ${DOCKER_DB_USERNAME:-sso}
       MYSQL_PASSWORD: ${DOCKER_DB_PASSWORD:-sso}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
-    ports:
-      - "${MYSQL_PORT:-3306}:3306"
     expose:
       - "3306"
     volumes:
@@ -145,6 +144,7 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     networks:
       - sso
+      - dokploy-network
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
       interval: 5s
@@ -155,17 +155,18 @@ services:
   redis:
     image: redis:7.4-alpine
     restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-local-redis-password}
+    command: ["sh", "-c", "exec redis-server --appendonly yes --requirepass \"$$REDIS_PASSWORD\""]
     expose:
       - "6379"
     volumes:
       - ${SSO_DATA_DIR:-/opt/sso}/redis:/data
     networks:
       - sso
+      - dokploy-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -173,14 +174,12 @@ services:
   mailpit:
     image: axllent/mailpit:v1.21
     restart: unless-stopped
-    ports:
-      - "${MAILPIT_SMTP_PORT:-1025}:1025"
-      - "${MAILPIT_UI_PORT:-8025}:8025"
     expose:
       - "1025"
       - "8025"
     networks:
       - sso
+      - dokploy-network
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8025/livez"]
       interval: 10s
@@ -190,3 +189,5 @@ services:
 networks:
   sso:
     driver: bridge
+  dokploy-network:
+    external: true

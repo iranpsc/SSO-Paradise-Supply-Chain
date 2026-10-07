@@ -78,8 +78,6 @@ class AppServiceProvider extends ServiceProvider
         // Published Passport authorize view (Passport 13 is headless by default).
         Passport::authorizationView('vendor.passport.authorize');
 
-        Passport::enablePasswordGrant();
-
         Passport::tokensExpireIn(now()->addMinutes(60));
         Passport::refreshTokensExpireIn(now()->addMinutes(120));
         Passport::personalAccessTokensExpireIn(now()->addMinutes(60));

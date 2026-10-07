@@ -26,9 +26,3 @@ Route::post('me', [LoginController::class, 'me'])->middleware('auth:api');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/users/{user}', function (Request $request, User $user) {
-    $user->load('personalInfo');
-
-    return new UserResource($user);
-});

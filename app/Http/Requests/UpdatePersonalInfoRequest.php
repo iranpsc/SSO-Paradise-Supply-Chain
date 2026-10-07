@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SecureImage;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -19,7 +21,7 @@ class UpdatePersonalInfoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -39,9 +41,9 @@ class UpdatePersonalInfoRequest extends FormRequest
             'company_national_number' => [$companyRequired, 'nullable', 'string', 'max:255'],
             'company_tax_number' => [$companyRequired, 'nullable', 'string', 'max:255'],
             'company_executive_name' => [$companyRequired, 'nullable', 'string', 'max:255'],
-            'melli_card_scan' => ['required', 'image', 'max:1024'],
-            'certificate_scan' => ['required', 'image', 'max:1024'],
-            'bank_card_scan' => ['required', 'image', 'max:1024'],
+            'melli_card_scan' => ['required', new SecureImage(['image/jpeg', 'image/png', 'image/webp']), 'max:2048'],
+            'certificate_scan' => ['required', new SecureImage(['image/jpeg', 'image/png', 'image/webp']), 'max:2048'],
+            'bank_card_scan' => ['required', new SecureImage(['image/jpeg', 'image/png', 'image/webp']), 'max:2048'],
         ];
     }
 }
