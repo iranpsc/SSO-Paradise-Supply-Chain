@@ -34,6 +34,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY vite.config.js tailwind.config.js postcss.config.js ./
 COPY resources ./resources
+COPY public ./public
 RUN npm run build
 
 
