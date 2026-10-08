@@ -159,7 +159,9 @@ Start the stack:
 docker compose up -d --build
 ```
 
-The app is available at `http://localhost:8080`. Laravel's health endpoint is `/up`. Mailpit UI is `http://localhost:8025`.
+No service publishes a port on the host. App `80`, MySQL `3306`, Redis `6379`, and Mailpit `1025`/`8025` are exposed only to other containers on the Docker network. Laravel's health endpoint is `/up` inside the app container. Attach a domain in Dokploy to reach the app from outside.
+
+On each `docker compose up`, the `migrate` service runs `php artisan migrate --force` and exits before app, queue, and scheduler start. The app entrypoint runs migrations again whenever that container starts.
 
 Useful commands:
 
@@ -232,11 +234,11 @@ On production, point `MAIL_*` at a real SMTP server. Mailpit in Compose is for l
 
 - Attach your domain to the **`app`** service.
 - Forward Traefik / Dokploy to **container port `80`** (Apache). Do not put nginx in front of the app; Dokploy already terminates TLS.
-- Keep MySQL (`3306`) and Redis (`6379`) off the public internet if the host firewall allows it. Prefer connecting to them only on the Docker network.
+- MySQL (`3306`), Redis (`6379`), and Mailpit are not published on the host. Other containers reach them by service name on the Docker network.
 
 ### 5. Deploy and verify
 
-Deploy from Dokploy. The `app` entrypoint waits for MySQL, runs migrations, creates Passport keys if they are missing, and links `public/storage`.
+Deploy from Dokploy. The one-shot `migrate` service runs migrations after MySQL is healthy, then exits. The `app` entrypoint runs them again on every app container start, creates Passport keys if they are missing, and links `public/storage`. An exited `migrate` container is expected.
 
 Check:
 

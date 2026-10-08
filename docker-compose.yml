@@ -4,7 +4,7 @@ x-app-environment: &app-environment
   APP_NAME: ${APP_NAME:-SSO}
   APP_ENV: ${APP_ENV:-local}
   APP_DEBUG: ${APP_DEBUG:-false}
-  APP_URL: ${APP_URL:-http://localhost:8080}
+  APP_URL: ${APP_URL:-http://localhost}
   APP_KEY: ${APP_KEY:-}
   LOG_CHANNEL: stderr
   DB_CONNECTION: mysql
@@ -31,12 +31,39 @@ x-app-environment: &app-environment
   MAIL_FROM_NAME: ${MAIL_FROM_NAME:-SSO}
   Metarang_API: ${Metarang_API:-}
 
+x-app-build: &app-build
+  context: .
+  dockerfile: Dockerfile
+
+x-app-image: &app-image
+  image: sso-app:local
+  pull_policy: never
+
 services:
+  migrate:
+    <<: *app-image
+    restart: "no"
+    init: true
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      <<: *app-environment
+      CONTAINER_ROLE: migrate
+      RUN_MIGRATIONS: "true"
+    volumes:
+      - ${SSO_DATA_DIR:-/opt/sso}/storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - sso
+    healthcheck:
+      disable: true
+
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: sso-app:local
+    <<: *app-image
+    build: *app-build
     restart: unless-stopped
     init: true
     env_file:
@@ -51,6 +78,8 @@ services:
     volumes:
       - ${SSO_DATA_DIR:-/opt/sso}/storage:/var/www/html/storage
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       mysql:
         condition: service_healthy
       redis:
@@ -66,7 +95,7 @@ services:
       start_period: 45s
 
   queue:
-    image: sso-app:local
+    <<: *app-image
     restart: unless-stopped
     init: true
     env_file:
@@ -79,6 +108,8 @@ services:
     volumes:
       - ${SSO_DATA_DIR:-/opt/sso}/storage:/var/www/html/storage
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       mysql:
         condition: service_healthy
       redis:
@@ -97,7 +128,7 @@ services:
       start_period: 30s
 
   scheduler:
-    image: sso-app:local
+    <<: *app-image
     restart: unless-stopped
     init: true
     env_file:
@@ -110,6 +141,8 @@ services:
     volumes:
       - ${SSO_DATA_DIR:-/opt/sso}/storage:/var/www/html/storage
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       mysql:
         condition: service_healthy
       redis:

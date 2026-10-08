@@ -49,16 +49,22 @@ if [ "${WAIT_FOR_DB:-true}" = "true" ] && [ -n "${DB_HOST:-}" ]; then
     done
 fi
 
-if [ "${RUN_PACKAGE_DISCOVER:-true}" = "true" ]; then
+if [ "${RUN_PACKAGE_DISCOVER:-auto}" = "true" ] || { [ "${RUN_PACKAGE_DISCOVER:-auto}" = "auto" ] && [ ! -f bootstrap/cache/packages.php ]; }; then
     run_as_www_data php artisan package:discover --ansi
 fi
 
-if [ "${CONTAINER_ROLE:-app}" = "app" ] && [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
+if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
+    echo "Running database migrations..."
     run_as_www_data php artisan migrate --force --no-interaction
 fi
 
 if [ ! -f storage/oauth-private.key ] || [ ! -f storage/oauth-public.key ]; then
     run_as_www_data php artisan passport:keys --no-interaction
+fi
+
+if [ "${CONTAINER_ROLE:-app}" = "migrate" ]; then
+    echo "Migrations finished."
+    exit 0
 fi
 
 run_as_www_data php artisan storage:link --force --no-interaction >/dev/null 2>&1 || true
