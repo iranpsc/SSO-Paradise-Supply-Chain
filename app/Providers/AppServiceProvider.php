@@ -7,6 +7,7 @@ use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -71,6 +72,10 @@ class AppServiceProvider extends ServiceProvider
                     'expireTime' => $expireTime,
                 ]);
         });
+
+        if($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
 
         // Integer client IDs (existing oauth_clients use bigIncrements).
         Passport::$clientUuids = false;
