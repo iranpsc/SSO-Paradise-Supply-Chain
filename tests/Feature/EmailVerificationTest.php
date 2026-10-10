@@ -218,7 +218,7 @@ class EmailVerificationTest extends TestCase
     }
 
     #[Test]
-    public function user_cannot_verify_another_users_email_via_idor(): void
+    public function signed_url_verifies_the_addressed_user_not_the_authenticated_session(): void
     {
         $victim = User::factory()->unverified()->create(['email' => 'victim@example.com']);
         $attacker = User::factory()->unverified()->create(['email' => 'attacker@example.com']);
@@ -229,14 +229,21 @@ class EmailVerificationTest extends TestCase
             ['id' => $victim->id, 'hash' => sha1($victim->email)]
         );
 
-        $this->actingAs($attacker)->get($url)->assertForbidden();
+        $this->actingAs($attacker)
+            ->get($url)
+            ->assertRedirect(route('home'));
 
-        $this->assertNull($victim->fresh()->email_verified_at);
+        $victim->refresh();
+
+        $this->assertNotNull($victim->email_verified_at);
+        $this->assertNotNull($victim->code);
+        $this->assertStringStartsWith('hm-', $victim->code);
         $this->assertNull($attacker->fresh()->email_verified_at);
+        $this->assertAuthenticatedAs($attacker);
     }
 
     #[Test]
-    public function guest_cannot_verify_email(): void
+    public function guest_can_verify_email_with_valid_signed_url(): void
     {
         $user = User::factory()->unverified()->create();
 
@@ -246,8 +253,14 @@ class EmailVerificationTest extends TestCase
             ['id' => $user->id, 'hash' => sha1($user->email)]
         );
 
-        $this->get($url)->assertRedirect(route('login'));
-        $this->assertNull($user->fresh()->email_verified_at);
+        $this->get($url)->assertRedirect(route('home'));
+
+        $user->refresh();
+
+        $this->assertNotNull($user->email_verified_at);
+        $this->assertNotNull($user->code);
+        $this->assertStringStartsWith('hm-', $user->code);
+        $this->assertGuest();
     }
 
     #[Test]
