@@ -180,11 +180,14 @@ document.addEventListener('DOMContentLoaded', function () {
     @endif
 
     if (storedEndTime && storedEndTime > Date.now()) {
-        // تایمر قبلاً شروع شده → ادامه بده
         runTimer(storedEndTime);
     } else {
-        // تایمر جدید
-        startTimer(DURATION);
+        localStorage.removeItem(STORAGE_KEY);
+        render(0);
+
+        @if(session('resent'))
+            startTimer(DURATION);
+        @endif
     }
 
     // ---------- ارسال دستی از فرم اصلی ----------
