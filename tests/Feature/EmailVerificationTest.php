@@ -218,32 +218,28 @@ class EmailVerificationTest extends TestCase
     }
 
     #[Test]
-    public function signed_url_verifies_the_addressed_user_not_the_authenticated_session(): void
+    public function signed_url_does_not_verify_a_different_authenticated_user(): void
     {
-        $victim = User::factory()->unverified()->create(['email' => 'victim@example.com']);
-        $attacker = User::factory()->unverified()->create(['email' => 'attacker@example.com']);
+        $addressed = User::factory()->unverified()->create(['email' => 'addressed@example.com']);
+        $authenticated = User::factory()->unverified()->create(['email' => 'authenticated@example.com']);
 
         $url = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
-            ['id' => $victim->id, 'hash' => sha1($victim->email)]
+            ['id' => $addressed->id, 'hash' => sha1($addressed->email)]
         );
 
-        $this->actingAs($attacker)
+        $this->actingAs($authenticated)
             ->get($url)
-            ->assertRedirect(route('home'));
+            ->assertForbidden();
 
-        $victim->refresh();
-
-        $this->assertNotNull($victim->email_verified_at);
-        $this->assertNotNull($victim->code);
-        $this->assertStringStartsWith('hm-', $victim->code);
-        $this->assertNull($attacker->fresh()->email_verified_at);
-        $this->assertAuthenticatedAs($attacker);
+        $this->assertNull($addressed->fresh()->email_verified_at);
+        $this->assertNull($authenticated->fresh()->email_verified_at);
+        $this->assertAuthenticatedAs($authenticated);
     }
 
     #[Test]
-    public function guest_can_verify_email_with_valid_signed_url(): void
+    public function guest_is_redirected_to_login_before_email_verification(): void
     {
         $user = User::factory()->unverified()->create();
 
@@ -253,13 +249,9 @@ class EmailVerificationTest extends TestCase
             ['id' => $user->id, 'hash' => sha1($user->email)]
         );
 
-        $this->get($url)->assertRedirect(route('home'));
+        $this->get($url)->assertRedirect(route('login'));
 
-        $user->refresh();
-
-        $this->assertNotNull($user->email_verified_at);
-        $this->assertNotNull($user->code);
-        $this->assertStringStartsWith('hm-', $user->code);
+        $this->assertNull($user->fresh()->email_verified_at);
         $this->assertGuest();
     }
 
