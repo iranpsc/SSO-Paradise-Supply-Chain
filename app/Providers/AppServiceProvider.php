@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Passport::enablePasswordGrant();
+        
         // Customize password reset notification URL
         ResetPassword::createUrlUsing(function ($user, string $token) {
             return url(route('password.reset', [
