@@ -16,27 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $trustedProxies = getenv('TRUSTED_PROXIES');
-        $proxies = is_string($trustedProxies) && $trustedProxies !== ''
-            ? array_values(array_filter(
-                array_map('trim', explode(',', $trustedProxies)),
-                fn (string $proxy) => $proxy !== '' && $proxy !== '*'
-            ))
-            : [];
-
-        $middleware->trustProxies(
-            at: $proxies === [] ? [
-                '127.0.0.1',
-                '10.0.0.0/8',
-                '172.16.0.0/12',
-                '192.168.0.0/16',
-            ] : $proxies,
-            headers: Request::HEADER_X_FORWARDED_FOR |
-                Request::HEADER_X_FORWARDED_HOST |
-                Request::HEADER_X_FORWARDED_PORT |
-                Request::HEADER_X_FORWARDED_PROTO |
-                Request::HEADER_X_FORWARDED_AWS_ELB,
-        );
+        $middleware->trustProxies(at: "*");
 
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
