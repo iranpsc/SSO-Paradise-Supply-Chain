@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.7.0 (2026-11-05)
+
+
+### Features
+
+* LICENSE file ([#47](https://github.com/iranpsc/SSO-Paradise-Supply-Chain/issues/47)) ([a61d765](https://github.com/iranpsc/SSO-Paradise-Supply-Chain/commit/a61d765fc7a26e628164b3afb6408ce93ba90bf0))
+
 ### 1.6.15 (2026-06-11)
 
 ### 1.6.14 (2026-06-11)
