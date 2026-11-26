@@ -1,6 +1,6 @@
-# syntax=docker/dockerfile:1
+# syntax=docker.iranserver.com/docker/dockerfile:1
 
-FROM composer:2 AS vendor
+FROM docker.iranserver.com/library/composer:2 AS vendor
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ COPY database/seeders ./database/seeders
 RUN composer dump-autoload --optimize --no-dev --classmap-authoritative --no-scripts
 
 
-FROM node:22-alpine AS frontend
+FROM docker.iranserver.com/library/node:22-alpine AS frontend
 
 WORKDIR /app
 
@@ -38,7 +38,7 @@ COPY public ./public
 RUN npm run build
 
 
-FROM php:8.4-apache-bookworm AS app
+FROM docker.iranserver.com/library/php:8.4-apache-bookworm AS app
 
 WORKDIR /var/www/html
 
@@ -55,7 +55,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         gosu \
         procps
 
-COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=docker.iranserver.com/mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
         bcmath \
         exif \
