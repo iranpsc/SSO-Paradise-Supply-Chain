@@ -3,16 +3,30 @@
 namespace Tests\Unit\Providers;
 
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AppServiceProviderMailCallbacksTest extends TestCase
 {
     use RefreshDatabase;
+
+    #[Test]
+    public function production_boot_forces_https_for_generated_urls(): void
+    {
+        $this->app->detectEnvironment(fn () => 'production');
+        URL::useOrigin('http://example.test');
+
+        $provider = new AppServiceProvider($this->app);
+        $provider->boot();
+
+        $this->assertSame('https://example.test/login', route('login'));
+    }
 
     #[Test]
     public function reset_password_create_url_callback_builds_reset_route(): void
