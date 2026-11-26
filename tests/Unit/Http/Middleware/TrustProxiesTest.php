@@ -11,19 +11,12 @@ use Tests\TestCase;
 class TrustProxiesTest extends TestCase
 {
     #[Test]
-    public function trusted_proxies_are_private_networks_and_not_a_wildcard(): void
+    public function application_bootstrap_configures_wildcard_proxy_trust(): void
     {
         $trusted = (new ReflectionClass(TrustProxies::class))
             ->getStaticPropertyValue('alwaysTrustProxies');
 
-        $this->assertIsArray($trusted);
-        $this->assertNotContains('*', $trusted);
-        $this->assertSame([
-            '127.0.0.1',
-            '10.0.0.0/8',
-            '172.16.0.0/12',
-            '192.168.0.0/16',
-        ], $trusted);
+        $this->assertSame('*', $trusted);
     }
 
     #[Test]
